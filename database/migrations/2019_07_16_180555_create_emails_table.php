@@ -21,6 +21,7 @@ class CreateEmailsTable extends Migration
             $table->string('email')->nullable();
             $table->string('industry')->nullable();
             $table->string('status');
+            $table->string('type');//find or verify?
             $table->string('country')->nullable();
             $table->string('state')->nullable();
             $table->string('city')->nullable();

@@ -17,7 +17,7 @@
 
                            
                         </div>
-                         <button class="btn btn-success"  onclick="find_email_ajax()">
+                         <button class="btn btn-success" style="width:80px; height:40px" id="find_email_button" onclick="find_email_ajax()">
                                 Find
                             </button>
                         <div class="email-finder-result">
@@ -35,6 +35,9 @@
 <script type="text/javascript">
 function find_email_ajax()
 {
+
+    $('#find_email_button').html('<i class="fa fa-refresh fa-spin"></i>');
+    $('#find_email_button').attr('disabled',true);
     var first_name=document.getElementById("first-name-field").value;
     var last_name=document.getElementById("last-name-field").value;
     var domain=document.getElementById("domain-field").value;
@@ -50,10 +53,13 @@ function find_email_ajax()
             {
                 document.getElementsByClassName("email-finder-result-emails")[0].innerHTML="Emails: "+response['emails'];
             }
-            
+            $('#find_email_button').html('Find');
+            $('#find_email_button').attr('disabled',false);
         },
         error: function(jqXHR, textStatus, errorThrown) {
-             document.getElementsByClassName("email-finder-result-container")[0].innerHTML="Something Went Wrong";
+            document.getElementsByClassName("email-finder-result-container")[0].innerHTML="Something Went Wrong";
+            $('#find_email_button').html('Find');
+            $('#find_email_button').attr('disabled',false);
         },
         timeout: 10000 // sets timeout to 3 seconds
     });

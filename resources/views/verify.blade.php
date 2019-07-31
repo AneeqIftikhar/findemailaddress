@@ -13,7 +13,7 @@
 
                            
                         </div>
-                         <button class="btn btn-success"  onclick="verify_email_ajax()">
+                         <button class="btn btn-success"  style="width:80px; height:40px" id="verify_email_button" onclick="verify_email_ajax()">
                                 Verify
                             </button>
                         <div class="email-verifier-result">
@@ -29,6 +29,8 @@
 <script type="text/javascript">
 function verify_email_ajax()
 {
+    $('#verify_email_button').html('<i class="fa fa-refresh fa-spin"></i>');
+    $('#verify_email_button').attr('disabled',true);
     var email=document.getElementById("email-field").value;
     document.getElementsByClassName("email-verifier-result-container")[0].innerHTML="<h4>Result</h4>";
     $.ajax({
@@ -37,8 +39,12 @@ function verify_email_ajax()
         data: {'email' : email,"_token": "{{ csrf_token() }}"}, 
         success: function(response){ // What to do if we succeed
             document.getElementsByClassName("email-verifier-result-container")[0].innerHTML+=response;
+            $('#verify_email_button').html('Verify');
+            $('#verify_email_button').attr('disabled',false);
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            $('#verify_email_button').html('Verify');
+            $('#verify_email_button').attr('disabled',false);
         }
     });
 }

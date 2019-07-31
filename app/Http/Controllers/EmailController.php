@@ -63,6 +63,9 @@ class EmailController extends Controller
          // {
          //    echo "Not Found";
          // }
+         $user=Auth::user();
+         $user->credits=($user->credits)-3;
+         $user->save();
          return json_encode(array('status'=>$status,'emails'=>$result));
 
 
@@ -94,6 +97,10 @@ class EmailController extends Controller
          {
             echo "Not Found";
          }
+         $user=Auth::user();
+         $user->credits=($user->credits)-1;
+         $user->save();
+
          return $server_output;
    	}
 
@@ -141,12 +148,21 @@ class EmailController extends Controller
 
 
       }
-      function getUserFiles(Request $request)
+      public function getUserFiles(Request $request)
       {
          $files=Auth::user()->userFiles()->get();
          return view('list',compact('files'));
       }
-      
+      public function getUserFoundEmails(Request $request)
+      {
+         $emails=Auth::user()->emails()->get();
+         return view('find_history',compact('emails'));
+      }
+      public function getUserVerifiedEmails(Request $request)
+      {
+         $emails=Auth::user()->emails()->get();
+         return view('verify_history',compact('emails'));
+      }
 
       public function getEmailsFromFile(Request $request,$id)
       {
@@ -178,5 +194,20 @@ class EmailController extends Controller
             return back()->with('error_message','Request Not Allowed');
          }
          
+       }
+       public function downloadFoundRecords(Request $request,$records)
+       {
+         $user=Auth::user();
+         // $user_file=UserFiles::where('id',$id)->first();
+         // if($user_file && $user_file->user_id==$user->id)
+         // {
+         //    $email_export=new EmailsExport();
+         //    $email_export->set_details($id,$records);
+         //    return Excel::download($email_export, 'emails.'.$type);         
+         // }
+         // else
+         // {
+         //    return back()->with('error_message','Request Not Allowed');
+         // }
        }
 }

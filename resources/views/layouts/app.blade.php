@@ -53,6 +53,20 @@
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    History <span class="caret"></span>
+                                </a>
+                                
+                                <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{URL::route('find_history')}}">Find
+                                        <small id="fileHelp" class="form-text text-muted">History of Found Emails</small>
+                                    </a>
+                                    <a class="dropdown-item" href="{{URL::route('verify_history')}}">Verify
+                                        <small id="fileHelp" class="form-text text-muted">History of Verified Emails</small></a>
+                                    
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     Batch (coming soon) <span class="caret"></span>
                                 </a>
                                 
@@ -66,7 +80,10 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Uploads(coming soon)</a>
+                                <a class="nav-link" href="#">Files (coming soon)</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Advanced Search (coming soon)</a>
                             </li>
                            <!--  <li class="nav-item">
                                 <a class="nav-link" href="leads">Get Leads</a>
@@ -95,8 +112,8 @@
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="#">{{session('package_name')}} Plan</a>
                                     <a class="dropdown-item" href="#">Credits Left {{ Auth::user()->credits }}</a>
-                                    <a class="dropdown-item" href="#">Account Settings</a>
-                                    <a class="dropdown-item" href="#">Usage</a>
+                                    <a class="dropdown-item" href="{{URL::route('account_settings')}}">Account Settings</a>
+                                    <a class="dropdown-item" href="{{URL::route('usage_policy')}}">Usage Policy</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
