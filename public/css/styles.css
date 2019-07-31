@@ -1,0 +1,19 @@
+.email-finder-result .email-finder-message {
+    margin-top: 20px;
+    color: rgb(136, 136, 136);
+}
+
+.input-group input {
+	margin: 2px !important;
+}
+
+
+
+#files_table tr:hover {
+    background-color: #eee;
+}
+
+
+#files_table td:hover {
+    cursor: pointer;
+}
