@@ -14,11 +14,19 @@ use App\UserFiles;
 use Auth;
 use App\Emails;
 use App\Exports\EmailsExport;
+use App\Rules\BlackListDomains;
 class EmailController extends Controller
 {
    	function find_email_ajax(Request $request)
    	{
-   		$endpoint = "http://3.213.137.104:4500/find";
+         $this->validate($request, [
+             'first_name' => ['required', 'string', 'max:50'],
+             'last_name' => ['required', 'string', 'max:50'],
+             'domain' => ['required', 'string', 'max:50', new BlackListDomains],
+         ]);
+         $user=Auth::user();
+                 
+   		$endpoint = "http://192.168.18.8:4500/find";
          $postdata='data=[{"'.'firstName":"'.$request->first_name.'", "'.'lastName":"'.$request->last_name.'", "'.'domainName": "'.$request->domain.'"}]';
          $ch = curl_init();
 
@@ -52,20 +60,33 @@ class EmailController extends Controller
                   $status='success';
                   array_push($result,$json_output[$i]->email);
 
+                  
+
+
                }
             }
          }
-         // if($json_output[0]->status!="fail" && $json_output[0]->status!="error")
-         // {
-         //    echo "Found";
-         // }
-         // else
-         // {
-         //    echo "Not Found";
-         // }
-         $user=Auth::user();
-         $user->credits=($user->credits)-3;
+         
+         
+         $user->credits=($user->credits)-1;
          $user->save();
+         $emails_db = new Emails;
+         $emails_db->first_name = strtolower($request->first_name);
+         $emails_db->last_name = strtolower($request->last_name);
+         $emails_db->domain = strtolower($request->domain);
+         if($result && count($result)>0)
+         {
+            $emails_db->email = $result[0];
+            $emails_db->status = $status;
+         }
+         else
+         {
+            $emails_db->status = 'not_found';
+         }
+         $emails_db->user_id = $user->id;
+         $emails_db->type = 'find';
+         $emails_db->save(); 
+
          return json_encode(array('status'=>$status,'emails'=>$result));
 
 
@@ -73,7 +94,10 @@ class EmailController extends Controller
    	function verify_email_ajax(Request $request)
    	{
    		
-         $endpoint = "http://3.213.137.104:4500/verify";
+         $this->validate($request, [
+             'email' => ['required', 'string', 'email', 'max:255',new BlackListDomains],
+         ]);
+         $endpoint = "http://192.168.18.8:4500/verify";
          $postdata='data=["'.$request->email.'"]';
    		$ch = curl_init();
 
@@ -100,6 +124,20 @@ class EmailController extends Controller
          $user=Auth::user();
          $user->credits=($user->credits)-1;
          $user->save();
+
+         $emails_db = new Emails;
+         $emails_db->email = $request->email;
+         // if($json_output[0]->status!="fail" && $json_output[0]->status!="error")
+         // {
+         //    $emails_db->status = 'valid';
+         // }
+         // else
+         // {
+         //    $emails_db->status = 'not_found';
+         // }
+         $emails_db->user_id = $user->id;
+         $emails_db->type = 'verify';
+         $emails_db->save(); 
 
          return $server_output;
    	}
@@ -155,12 +193,12 @@ class EmailController extends Controller
       }
       public function getUserFoundEmails(Request $request)
       {
-         $emails=Auth::user()->emails()->get();
+         $emails=Auth::user()->emails()->where('type','find')->get();
          return view('find_history',compact('emails'));
       }
       public function getUserVerifiedEmails(Request $request)
       {
-         $emails=Auth::user()->emails()->get();
+         $emails=Auth::user()->emails()->where('type','verify')->get();
          return view('verify_history',compact('emails'));
       }
 
@@ -186,7 +224,7 @@ class EmailController extends Controller
          if($user_file && $user_file->user_id==$user->id)
          {
             $email_export=new EmailsExport();
-            $email_export->set_details($id,$records);
+            $email_export->set_details($id,$records,'file',$user_file->type);
             return Excel::download($email_export, 'emails.'.$type);         
          }
          else
@@ -195,19 +233,16 @@ class EmailController extends Controller
          }
          
        }
-       public function downloadFoundRecords(Request $request,$records)
+       public function downloadFoundRecords(Request $request,$type,$records)
        {
-         $user=Auth::user();
-         // $user_file=UserFiles::where('id',$id)->first();
-         // if($user_file && $user_file->user_id==$user->id)
-         // {
-         //    $email_export=new EmailsExport();
-         //    $email_export->set_details($id,$records);
-         //    return Excel::download($email_export, 'emails.'.$type);         
-         // }
-         // else
-         // {
-         //    return back()->with('error_message','Request Not Allowed');
-         // }
+         $email_export=new EmailsExport();
+         $email_export->set_details(0,$records,'all_db','find');
+         return Excel::download($email_export, 'emails.'.$type);
+       }
+       public function downloadVerifiedRecords(Request $request,$type,$records)
+       {
+         $email_export=new EmailsExport();
+         $email_export->set_details(0,$records,'all_db','verify');
+         return Excel::download($email_export, 'emails.'.$type);
        }
 }

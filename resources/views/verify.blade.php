@@ -5,21 +5,40 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header"><h3>Verify Email</h3></div>
-
-                <div class="card-body">
-                        <div class="input-group main-input-group">
-                            <input autocomplete="off" autofocus="autofocus" class="form-control" id="email-field" placeholder="johndoe@company.com" required="required" type="email" value="">
-
-                           
+                <div class="card-body p-0 py-4">
+                    <div class="row m-0 mb-4">
+                        <div class="col-12 px-4">
+                            <h3 class="mb-4">Verify Email</h3>
+                            <div class="input-group mb-3">
+                                <input type="email" id="email-field" class="form-control" placeholder="{{ __('Email') }}" aria-label="{{ __('Email') }}" style="height: 52px;">
+                                <div class="input-group-append">
+                                    <button class="btn btn-success" type="button" id="verify_email_button" style="min-width: 120px; font-weight: 700;" onclick="verify_email_ajax()">Verify</button>
+                                </div>
+                            </div>
+                            <span class="invalid-feedback-custom">
+                                <strong id="email_error"></strong>
+                            </span>
                         </div>
-                         <button class="btn btn-success"  style="width:80px; height:40px" id="verify_email_button" onclick="verify_email_ajax()">
-                                Verify
-                            </button>
-                        <div class="email-verifier-result">
-                            <div class="email-verifier-message">Enter an email address to verify its accuracy.</div>
-                            <div class="email-verifier-result-container"></div>
+                    </div>
+                    
+                    <div id="verify_response" style="display:none">
+                        <div class="row m-0 response mt-4">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2 pl-4">Format</div>
+                            <div id="verify_format" class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2 text-right"></div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2">Type</div>
+                            <div id="verify_type" class="col-lg-3 col-md-3 col-sm-6 col-xs-6 text-right p-2 pr-4">PROFFESSIONAL</div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2 pl-4">Server Status</div>
+                            <div id="verify_status" class="col-lg-3 col-md-3 col-sm-6 col-xs-6 text-right p-2"></div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2">Email Status</div>
+                            <div id="verify_email_status"class="col-lg-3 col-md-3 col-sm-6 col-xs-6 text-right p-2 pr-4"></div>
                         </div>
+                    </div>
+                    <div class="row m-0" id="verify_help_text">
+                        <div class="col-12 px-4 pt-0 pb-0">
+                            Enter an email address to verify its accuracy.
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -31,21 +50,47 @@ function verify_email_ajax()
 {
     $('#verify_email_button').html('<i class="fa fa-refresh fa-spin"></i>');
     $('#verify_email_button').attr('disabled',true);
+    $('#verify_response').css('display','none');
+    document.getElementById('email_error').innerHTML='';
+
+
     var email=document.getElementById("email-field").value;
-    document.getElementsByClassName("email-verifier-result-container")[0].innerHTML="<h4>Result</h4>";
+    
     $.ajax({
         method: 'POST', 
         url: 'verify_email', 
         data: {'email' : email,"_token": "{{ csrf_token() }}"}, 
         success: function(response){ // What to do if we succeed
-            document.getElementsByClassName("email-verifier-result-container")[0].innerHTML+=response;
+            // document.getElementsByClassName("email-verifier-result-container")[0].innerHTML="<h4>Result</h4>";
+            // document.getElementsByClassName("email-verifier-result-container")[0].innerHTML+=response;
+            $('#verify_response').css('display','block');
+            $('#verify_help_text').css('display','none');
             $('#verify_email_button').html('Verify');
             $('#verify_email_button').attr('disabled',false);
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            if( jqXHR.status === 422 )
+            {
+                $errors = jqXHR.responseJSON;
+
+                 $.each( $errors.errors , function( key, value ) {
+                    if(key=='email')
+                    {   
+                        document.getElementById('email_error').innerHTML=value[0];
+                    }
+                   
+                    
+                });
+            }
+            else
+            {
+                // document.getElementsByClassName("email-verifier-result-container")[0].innerHTML="Something Went Wrong";
+                console.log(jqXHR);
+            }
             $('#verify_email_button').html('Verify');
             $('#verify_email_button').attr('disabled',false);
-        }
+        },
+        timeout: 12000
     });
 }
 

@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Package;
 use App\UserPackagesLogs;
+use Illuminate\Validation\Rule;
+use App\Rules\BlackListDomains;
 class RegisterController extends Controller
 {
     /*
@@ -49,11 +51,15 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+
+        
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users',new BlackListDomains],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+            'company_name' => ['string', 'max:100'],
+            'phone' => ['string', 'max:100']]
+        );
     }
 
     /**

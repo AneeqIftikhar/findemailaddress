@@ -19,16 +19,16 @@
                                     <span><i class="fas fa-download fa-lg"></i></span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-left">
-                                <a class="dropdown-item" href="{{URL::route('downloadfoundrecords',['records'=>'all'])}}">
+                                <a class="dropdown-item" href="{{URL::route('downloadverifiedrecords',['type'=>'csv','records'=>'all'])}}">
                                   Download ALL (CSV)
                                 </a>
-                                <a class="dropdown-item" href="{{URL::route('downloadfoundrecords',['records'=>'all'])}}">
+                                <a class="dropdown-item" href="{{URL::route('downloadverifiedrecords',['type'=>'csv','records'=>'all'])}}">
                                   Download ALL (XLS)
                                 </a>
-                                <a class="dropdown-item" href="{{URL::route('downloadfoundrecords',['records'=>'valid'])}}">
+                                <a class="dropdown-item" href="{{URL::route('downloadverifiedrecords',['type'=>'csv','records'=>'valid'])}}">
                                   Download Valid (CSV)
                                 </a>
-                                <a class="dropdown-item" href="{{URL::route('downloadfoundrecords',['records'=>'valid'])}}">
+                                <a class="dropdown-item" href="{{URL::route('downloadverifiedrecords',['type'=>'csv','records'=>'valid'])}}">
                                   Download Valid (XLS)
                                 </a>
                               </div>
@@ -43,7 +43,6 @@
                    <table class="table" id="emails_table">
                       <thead class="black white-text">
                         <tr>
-                            <th scope="col">Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">Status</th>
                         </tr>
@@ -105,15 +104,13 @@ function populate_emails(filter)
           var newRow   = tableRef.insertRow();
 
 
-          newCell  = newRow.insertCell(0);
-          newText  = document.createTextNode(data[i]['first_name']+" "+data[i]['last_name']);
-          newCell.appendChild(newText);
+        
 
-          newCell  = newRow.insertCell(1);
+          newCell  = newRow.insertCell(0);
           newText  = document.createTextNode(data[i]['email']);
           newCell.appendChild(newText);
 
-          newCell  = newRow.insertCell(2);
+          newCell  = newRow.insertCell(1);
           newText  = document.createTextNode(data[i]['status']);
           newCell.appendChild(newText);
         }
@@ -121,16 +118,11 @@ function populate_emails(filter)
         {
           var newRow   = tableRef.insertRow();
 
-
           newCell  = newRow.insertCell(0);
-          newText  = document.createTextNode(data[i]['first_name']+" "+data[i]['last_name']);
-          newCell.appendChild(newText);
-
-          newCell  = newRow.insertCell(1);
           newText  = document.createTextNode(data[i]['email']);
           newCell.appendChild(newText);
 
-          newCell  = newRow.insertCell(2);
+          newCell  = newRow.insertCell(1);
           newText  = document.createTextNode(data[i]['status']);
           newCell.appendChild(newText);
         }

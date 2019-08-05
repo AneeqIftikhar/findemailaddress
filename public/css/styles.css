@@ -3,8 +3,14 @@
     color: rgb(136, 136, 136);
 }
 
-.input-group input {
-	margin: 2px !important;
+.response{
+	border-top: 1px solid #e6e6e6;
+}
+
+.response>div{
+	border-bottom: 1px solid #e6e6e6;
+    background: #fafbfb;
+    font-weight: 700;
 }
 
 
@@ -16,4 +22,11 @@
 
 #files_table td:hover {
     cursor: pointer;
+}
+
+.invalid-feedback-custom{
+	    width: 100%;
+    margin-top: .25rem;
+    font-size: 80%;
+    color: #e3342f;
 }

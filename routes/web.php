@@ -56,5 +56,6 @@ Route::post('batch','EmailController@import')->name('batch')->middleware('verifi
 Route::get('downloadcsv/{id}/{type}/{records}','EmailController@downloadExcel')->name('downloadcsv')->middleware('verified');
 
 
-Route::get('downloadfoundrecords/{records}','EmailController@downloadFoundRecords')->name('downloadfoundrecords')->middleware('verified');
+Route::get('downloadfoundrecords/{type}/{records}','EmailController@downloadFoundRecords')->name('downloadfoundrecords')->middleware('verified');
+Route::get('downloadverifiedrecords/{type}/{records}','EmailController@downloadVerifiedRecords')->name('downloadverifiedrecords')->middleware('verified');
 
