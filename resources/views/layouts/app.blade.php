@@ -110,27 +110,22 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    <div class="row">
-                                       
-                                            <div class = "col-4" >
+                                    <table>
+                                        <tr>
+                                            <td style="padding: 2px;">
                                                 <i class="fas fa-user-circle fa-3x"></i>
-                                            </div>
-
-                                            <div class = "col-6">
-                                                <div class='row'>
-                                                    <strong>{{ Auth::user()->name }}</strong>
-                                                </div>
-                                            
-                                                <div class='row'>
-                                                    <span>{{session('package_name')}} Plan</span>
-                                                </div>
-                                                
-                                            </div>
-                                            <div class='col-2' style="padding-top: 15px;">
+                                            </td>
+                                            <td style="padding: 2px;">
+                                                <strong>{{ Auth::user()->name }}</strong>
+                                                <br>
+                                                <span>{{session('package_name')}} Plan</span>
+                                            </td>
+                                            <td style="padding: 2px;">
                                                 <i class="fas fa-angle-down fa-sm"></i>
-                                            </div>
-                                        
-                                    </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    
                                     
                                     
                                     
