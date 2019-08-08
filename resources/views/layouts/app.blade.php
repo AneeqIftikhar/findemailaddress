@@ -20,12 +20,12 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet" type="text/css" >
-
+    <link href="{{ asset('fontawesome/css/all.css') }}" rel="stylesheet" type="text/css" >
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <!-- Place your kit's code here -->
-    <script src="https://kit.fontawesome.com/5099c5b4c2.js"></script>
+    <!-- <script src="https://kit.fontawesome.com/5099c5b4c2.js"></script> -->
 
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -50,14 +50,14 @@
                             
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="{{URL::route('find')}}">Find Email</a>
+                                <a class="nav-link" href="{{URL::route('find')}}"><span style="padding: 5px;"><i class="fas fa-search fa-sm"></i></span>Find</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{URL::route('verify')}}">Verify Email</a>
+                                <a class="nav-link" href="{{URL::route('verify')}}"><span style="padding: 5px;"><i class="fas fa-user-check fa-sm"></i></span>Verify</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    History <span class="caret"></span>
+                                    <span style="padding: 5px;"><i class="fas fa-server fa-sm"></i></span>History <span class="caret"></span>
                                 </a>
                                 
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
@@ -71,7 +71,7 @@
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    Batch (coming soon) <span class="caret"></span>
+                                    <span style="padding: 5px;"><i class="fas fa-file-import fa-sm"></i></span>Batch (coming soon) <span class="caret"></span>
                                 </a>
                                 
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
@@ -84,11 +84,11 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Files (coming soon)</a>
+                                <a class="nav-link" href="#"><span style="padding: 5px;"><i class="fas fa-folder-open fa-sm"></i></span>Files (coming soon)</a>
                             </li>
-                            <li class="nav-item">
+                           <!--  <li class="nav-item">
                                 <a class="nav-link" href="#">Advanced Search (coming soon)</a>
-                            </li>
+                            </li> -->
                            <!--  <li class="nav-item">
                                 <a class="nav-link" href="leads">Get Leads</a>
                             </li> -->
@@ -109,19 +109,68 @@
                             @endif
                         @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                <a id="navbarDropdown" class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <div class="row">
+                                       
+                                            <div class = "col-4" >
+                                                <i class="fas fa-user-circle fa-3x"></i>
+                                            </div>
+
+                                            <div class = "col-6">
+                                                <div class='row'>
+                                                    <strong>{{ Auth::user()->name }}</strong>
+                                                </div>
+                                            
+                                                <div class='row'>
+                                                    <span>{{session('package_name')}} Plan</span>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class='col-2' style="padding-top: 15px;">
+                                                <i class="fas fa-angle-down fa-sm"></i>
+                                            </div>
+                                        
+                                    </div>
+                                    
+                                    
+                                    
                                 </a>
                                 
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">{{session('package_name')}} Plan</a>
-                                    <a class="dropdown-item" href="#">Credits Left {{ Auth::user()->credits }}</a>
-                                    <a class="dropdown-item" href="{{URL::route('account_settings')}}">Account Settings</a>
-                                    <a class="dropdown-item" href="{{URL::route('usage_policy')}}">Usage Policy</a>
+
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class='row'>
+                                                        <div class="col-12">
+                                                            <strong>{{session('package_name')}} Plan</strong>
+                                                        </div>
+                                                    </div>
+                                                     <div class="row">
+                                                        <div class="col-12">
+                                                            <span>Credits Left {{ Auth::user()->credits }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <button class="btn btn-primary">Upgrade Account</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+
+                                        
+                                        
+                                        
+                                    
+                                    <a class="dropdown-item" href="{{URL::route('account_settings')}}"><span style="padding-right: 5px;"><i class="fas fa-user-cog fa-sm"></i></span>Account Settings</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        <span style="padding-right: 5px;"><i class="fas fa-sign-out-alt fa-sm"></i></span>{{ __('Logout') }}
+
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
