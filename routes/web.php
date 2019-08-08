@@ -11,11 +11,15 @@
 |
 */
 
+Auth::routes(['verify' => true]);
+
+
 Route::get('/', function () {
-    return view('welcome');
+    // return view('auth/login');
+    return Redirect::to('https://findemailaddress.co');
 });
 
-Auth::routes(['verify' => true]);
+
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
 
@@ -59,3 +63,6 @@ Route::get('downloadcsv/{id}/{type}/{records}','EmailController@downloadExcel')-
 Route::get('downloadfoundrecords/{type}/{records}','EmailController@downloadFoundRecords')->name('downloadfoundrecords')->middleware('verified');
 Route::get('downloadverifiedrecords/{type}/{records}','EmailController@downloadVerifiedRecords')->name('downloadverifiedrecords')->middleware('verified');
 
+
+Route::post('update_personal_info','UserController@update_personal_info')->middleware('verified');
+Route::post('update_password','UserController@update_password')->middleware('verified');

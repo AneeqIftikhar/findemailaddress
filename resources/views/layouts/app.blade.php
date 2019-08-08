@@ -12,7 +12,7 @@
     <!-- Scripts -->
     <script src="{{ asset('js/jquery-3.3.1.min.js') }}" ></script> 
     <script src="{{ asset('js/app.js') }}" defer></script>
-    @stack('scripts')
+    
    
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
 
@@ -21,11 +21,15 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet" type="text/css" >
 
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <!-- Place your kit's code here -->
     <script src="https://kit.fontawesome.com/5099c5b4c2.js"></script>
 
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    @stack('scripts')
 
 </head>
 <body>

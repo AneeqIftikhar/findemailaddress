@@ -27,6 +27,16 @@
 .invalid-feedback-custom{
 	    width: 100%;
     margin-top: .25rem;
+    margin-bottom: .25rem;
     font-size: 80%;
     color: #e3342f;
 }
+
+.valid-feedback-custom{
+	width: 100%;
+    margin-top: .25rem;
+    margin-bottom: .25rem;
+    font-size: 80%;
+    color: #228B22;
+}
+
