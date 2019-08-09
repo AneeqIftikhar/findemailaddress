@@ -46,52 +46,73 @@
 </div>
 @endsection
 <script type="text/javascript">
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
 function verify_email_ajax()
 {
-    $('#verify_email_button').html('<i class="fa fa-refresh fa-spin"></i>');
-    $('#verify_email_button').attr('disabled',true);
-    $('#verify_response').css('display','none');
+   
     document.getElementById('email_error').innerHTML='';
 
 
     var email=document.getElementById("email-field").value;
-    
-    $.ajax({
-        method: 'POST', 
-        url: 'verify_email', 
-        data: {'email' : email,"_token": "{{ csrf_token() }}"}, 
-        success: function(response){ // What to do if we succeed
-            // document.getElementsByClassName("email-verifier-result-container")[0].innerHTML="<h4>Result</h4>";
-            // document.getElementsByClassName("email-verifier-result-container")[0].innerHTML+=response;
-            $('#verify_response').css('display','block');
-            $('#verify_help_text').css('display','none');
-            $('#verify_email_button').html('Verify');
-            $('#verify_email_button').attr('disabled',false);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            if( jqXHR.status === 422 )
-            {
-                $errors = jqXHR.responseJSON;
+    if(email==null || email=="")
+    {
+        document.getElementById('email_error').innerHTML="Email can not be Empty";
+    }
+    else if(email.length>50)
+    {
+        document.getElementById('email_error').innerHTML="Email too Long";
+    }
+    else if(!validateEmail(email))
+    {
+        document.getElementById('email_error').innerHTML="Invalid Email";
+    }
+    else
+    {
+        $('#verify_email_button').html('<i class="fa fa-spinner fa-spin"></i>');
+        $('#verify_email_button').attr('disabled',true);
+        $('#verify_response').css('display','none');
+        $.ajax({
+            method: 'POST', 
+            url: 'verify_email', 
+            data: {'email' : email,"_token": "{{ csrf_token() }}"}, 
+            success: function(response){ // What to do if we succeed
+                // document.getElementsByClassName("email-verifier-result-container")[0].innerHTML="<h4>Result</h4>";
+                // document.getElementsByClassName("email-verifier-result-container")[0].innerHTML+=response;
+                $('#verify_response').css('display','block');
+                $('#verify_help_text').css('display','none');
+                $('#verify_email_button').html('Verify');
+                $('#verify_email_button').attr('disabled',false);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                if( jqXHR.status === 422 )
+                {
+                    $errors = jqXHR.responseJSON;
 
-                 $.each( $errors.errors , function( key, value ) {
-                    if(key=='email')
-                    {   
-                        document.getElementById('email_error').innerHTML=value[0];
-                    }
-                   
-                    
-                });
-            }
-            else
-            {
-                // document.getElementsByClassName("email-verifier-result-container")[0].innerHTML="Something Went Wrong";
-                console.log(jqXHR);
-            }
-            $('#verify_email_button').html('Verify');
-            $('#verify_email_button').attr('disabled',false);
-        },
-        timeout: 12000
-    });
+                     $.each( $errors.errors , function( key, value ) {
+                        if(key=='email')
+                        {   
+                            document.getElementById('email_error').innerHTML=value[0];
+                        }
+                       
+                        
+                    });
+                }
+                else
+                {
+                    // document.getElementsByClassName("email-verifier-result-container")[0].innerHTML="Something Went Wrong";
+                    console.log(jqXHR);
+                }
+                $('#verify_email_button').html('Verify');
+                $('#verify_email_button').attr('disabled',false);
+            },
+            timeout: 12000
+        });
+    }
+    
+    
 }
 
 </script>

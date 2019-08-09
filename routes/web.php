@@ -16,7 +16,7 @@ Auth::routes(['verify' => true]);
 
 Route::get('/', function () {
     // return view('auth/login');
-    return Redirect::to('https://findemailaddress.co');
+    return Redirect::to(env('APP_HOME_ADDRESS', 'https://findemailaddress.co'));
 });
 
 

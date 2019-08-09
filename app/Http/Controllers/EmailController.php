@@ -15,6 +15,7 @@ use Auth;
 use App\Emails;
 use App\Exports\EmailsExport;
 use App\Rules\BlackListDomains;
+use App\Rules\IsValidDomain;
 class EmailController extends Controller
 {
    	function find_email_ajax(Request $request)
@@ -22,7 +23,7 @@ class EmailController extends Controller
          $this->validate($request, [
              'first_name' => ['required', 'string', 'max:50'],
              'last_name' => ['required', 'string', 'max:50'],
-             'domain' => ['required', 'string', 'max:50', new BlackListDomains],
+             'domain' => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
          ]);
          $user=Auth::user();
                  

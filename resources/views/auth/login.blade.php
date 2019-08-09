@@ -71,3 +71,16 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script type="text/javascript">
+$(document).ready(function(){
+
+    if(localStorage.getItem("status"))
+    {
+        $.toaster({ priority : 'success', title : 'Success', message : localStorage.getItem("message")});
+        localStorage.clear();
+    }
+});
+</script>
+@endpush

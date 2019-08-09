@@ -12,8 +12,6 @@
     <!-- Scripts -->
     <script src="{{ asset('js/jquery-3.3.1.min.js') }}" ></script> 
     <script src="{{ asset('js/app.js') }}" defer></script>
-    
-   
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
 
     <!-- Fonts -->
@@ -29,7 +27,15 @@
 
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="{{ asset('js/jquery.toaster.js') }}" defer></script>
     @stack('scripts')
+    <script>
+        function updateCreditsLeft()
+        {
+            
+            
+        }
+    </script>
 
 </head>
 <body>
@@ -50,14 +56,14 @@
                             
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="{{URL::route('find')}}"><span style="padding: 5px;"><i class="fas fa-search fa-sm"></i></span>Find</a>
+                                <a class="nav-link" href="{{URL::route('find')}}"><span class="padding_right"><i class="fas fa-search fa-sm"></i></span>Find</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{URL::route('verify')}}"><span style="padding: 5px;"><i class="fas fa-user-check fa-sm"></i></span>Verify</a>
+                                <a class="nav-link" href="{{URL::route('verify')}}"><span class="padding_right"><i class="fas fa-user-check fa-sm"></i></span>Verify</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    <span style="padding: 5px;"><i class="fas fa-server fa-sm"></i></span>History <span class="caret"></span>
+                                    <span class="padding_right"><i class="fas fa-server fa-sm"></i></span>History <span class="caret"></span>
                                 </a>
                                 
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
@@ -71,7 +77,7 @@
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    <span style="padding: 5px;"><i class="fas fa-file-import fa-sm"></i></span>Batch (coming soon) <span class="caret"></span>
+                                    <span class="padding_right"><i class="fas fa-file-import fa-sm"></i></span>Batch (coming soon) <span class="caret"></span>
                                 </a>
                                 
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
@@ -84,7 +90,7 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#"><span style="padding: 5px;"><i class="fas fa-folder-open fa-sm"></i></span>Files (coming soon)</a>
+                                <a class="nav-link" href="#"><span class="padding_right"><i class="fas fa-folder-open fa-sm"></i></span>Files (coming soon)</a>
                             </li>
                            <!--  <li class="nav-item">
                                 <a class="nav-link" href="#">Advanced Search (coming soon)</a>
@@ -109,7 +115,7 @@
                             @endif
                         @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown" class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre onclick="updateCreditsLeft()">
                                     <table>
                                         <tr>
                                             <td style="padding: 2px;">
@@ -142,7 +148,7 @@
                                                         </div>
                                                     </div>
                                                      <div class="row">
-                                                        <div class="col-12">
+                                                        <div class="col-12" id="credits_left">
                                                             <span>Credits Left {{ Auth::user()->credits }}</span>
                                                         </div>
                                                     </div>
@@ -160,11 +166,11 @@
                                         
                                         
                                     
-                                    <a class="dropdown-item" href="{{URL::route('account_settings')}}"><span style="padding-right: 5px;"><i class="fas fa-user-cog fa-sm"></i></span>Account Settings</a>
+                                    <a class="dropdown-item" href="{{URL::route('account_settings')}}"><span class="padding_right"><i class="fas fa-user-cog fa-sm"></i></span>Account Settings</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        <span style="padding-right: 5px;"><i class="fas fa-sign-out-alt fa-sm"></i></span>{{ __('Logout') }}
+                                        <span class="padding_right"><i class="fas fa-sign-out-alt fa-sm"></i></span>{{ __('Logout') }}
 
                                     </a>
 

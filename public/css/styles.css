@@ -39,3 +39,14 @@
     font-size: 80%;
     color: #228B22;
 }
+
+.asteric
+{
+  color: red;
+  vertical-align: top;
+  font-size: 0.5rem;
+ }
+.padding_right
+{
+    padding-right: 10px;
+}

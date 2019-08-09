@@ -95,6 +95,14 @@
 @endsection
 @push('scripts')
 <script type="text/javascript">
+$(document).ready(function(){
+
+    if(localStorage.getItem("status"))
+    {
+        $.toaster({ priority : 'success', title : 'Success', message : localStorage.getItem("message")});
+        localStorage.clear();
+    }
+});
 function update_personal_info()
 {
 	document.getElementById('personal_error').innerHTML='';
@@ -105,39 +113,70 @@ function update_personal_info()
     var full_name=document.getElementById("full_name").value;
     var company_name=document.getElementById("company_name").value;
     var phone=document.getElementById("phone").value;
-    $.ajax({
-        method: 'POST',
-        dataType: 'json', 
-        url: 'update_personal_info', 
-        data: {'full_name' : full_name,'company_name':company_name,'phone':phone,"_token": "{{ csrf_token() }}"}, 
-        success: function(response){ // What to do if we succeed
-            
-            console.log(response['status']);
-            console.log(response['message']);
-            document.getElementById('personal_success').innerHTML=response['message'];
+    var data={};
+    if(full_name ==null || full_name == "")
+    {
+        document.getElementById('personal_error').innerHTML="Full Name Can Not be Empty";
+    }
+    else if (company_name && company_name.length>50)
+    {
+        document.getElementById('personal_error').innerHTML="Company Name too Long";        
+    }
+    else if (phone && phone.length>20)
+    {
+       document.getElementById('personal_error').innerHTML="Phone too Long";  
+    }
+    else
+    {
+        data['full_name']=full_name;
+        if(company_name)
+        {
+            data['company_name']=company_name;
+        }
+        if(phone)
+        {
+            data['phone']=phone;
+        }
+        data['_token']="{{ csrf_token() }}";
+        //var post_data=JSON.parse('{ "full_name":"John ALi", "age":30, "_token":"{{ csrf_token() }}"}');
+        $.ajax({
+            method: 'POST',
+            dataType: 'json', 
+            url: 'update_personal_info', 
+            data: data, 
+            success: function(response){ // What to do if we succeed
+                
+                console.log(response['status']);
+                console.log(response['message']);
+                //document.getElementById('personal_success').innerHTML=;
+                localStorage.setItem("status","Success");
+                localStorage.setItem("message",response['message']);
+                window.location.reload();
 
-            
-           
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            
-            if( jqXHR.status === 422 )
-            {
-                $errors = jqXHR.responseJSON;
+                
+               
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                
+                if( jqXHR.status === 422 )
+                {
+                    $errors = jqXHR.responseJSON;
 
-                 $.each( $errors.errors , function( key, value ) {
-                        document.getElementById('personal_error').innerHTML=value[0];
-                    
-                });
-            }
-            else
-            {
-                console.log(jqXHR);
-            }
+                     $.each( $errors.errors , function( key, value ) {
+                            document.getElementById('personal_error').innerHTML=value[0];
+                        
+                    });
+                }
+                else
+                {
+                    console.log(jqXHR);
+                }
 
-        },
-        timeout: 5000 // sets timeout to 5 seconds
-    });
+            },
+            timeout: 5000 // sets timeout to 5 seconds
+        });
+    }
+    
 }
 function update_password()
 {
@@ -148,13 +187,21 @@ function update_password()
 
     var password=document.getElementById("password").value;
     var c_password=document.getElementById("c_password").value;
-    if(!password)
+    if(password ==null || password == "")
     {
     	document.getElementById('password_error').innerHTML="Password Missing";
     }
-    else if(!c_password)
+    else if(c_password ==null || c_password == "")
     {
     	document.getElementById('password_error').innerHTML="Confirm Password Missing";
+    }
+    else if(password.length<8)
+    {
+        document.getElementById('password_error').innerHTML="Password too Short";
+    }
+    else if(password.length>20)
+    {
+        document.getElementById('password_error').innerHTML="Password too Long";
     }
     if(password!=c_password)
     {
@@ -173,12 +220,26 @@ function update_password()
             console.log(response['message']);
             if(response['status'] && response['status']=='success')
             {
-            	document.getElementById('password_success').innerHTML=response['message'];
+                localStorage.setItem("status","Success");
+                localStorage.setItem("message",response['message']);
+                //window.location.href="{{URL::route('logout')}}";
+                //window.location.reload();
+                $.ajax
+                ({
+                    type: 'POST',
+                    url: 'logout',
+                    data: {"_token": "{{ csrf_token() }}"}, 
+                    success: function()
+                    {
+                        location.reload();
+                    }
+                });
             }
             else
             {
             	document.getElementById('password_error').innerHTML=response['message'];
             }
+
             
            
         },
