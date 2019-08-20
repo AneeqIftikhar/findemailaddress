@@ -52,8 +52,7 @@ class EmailController extends Controller
             {
                if($json_output[0]->status != 'Valid')
                {
-                  $user->credits=($user->credits)-1;
-                  $user->save();
+                  
                   $emails_db = new Emails;
                   $emails_db->first_name = strtolower($request->first_name);
                   $emails_db->last_name = strtolower($request->last_name);
@@ -65,6 +64,8 @@ class EmailController extends Controller
                }
                else
                {
+                  $user->credits=($user->credits)-1;
+                  $user->save();
                   $emails_db = new Emails;
                   $emails_db->first_name = strtolower($request->first_name);
                   $emails_db->last_name = strtolower($request->last_name);
