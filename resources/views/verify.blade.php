@@ -54,7 +54,8 @@ function verify_email_ajax()
 {
    
     document.getElementById('email_error').innerHTML='';
-
+    $('#verify_response').css('display','none');
+    $('#verify_help_text').css('display','block');
 
     var email=document.getElementById("email-field").value;
     if(email==null || email=="")
@@ -67,7 +68,7 @@ function verify_email_ajax()
     }
     else if(!validateEmail(email))
     {
-        document.getElementById('email_error').innerHTML="Invalid Email";
+        document.getElementById('email_error').innerHTML="Invalid Email Address";
     }
     else
     {
@@ -75,16 +76,24 @@ function verify_email_ajax()
         $('#verify_email_button').attr('disabled',true);
         $('#verify_response').css('display','none');
         $.ajax({
-            method: 'POST', 
+            method: 'POST',
+            dataType: 'json',  
             url: 'verify_email', 
             data: {'email' : email,"_token": "{{ csrf_token() }}"}, 
             success: function(response){ // What to do if we succeed
-                // document.getElementsByClassName("email-verifier-result-container")[0].innerHTML="<h4>Result</h4>";
-                // document.getElementsByClassName("email-verifier-result-container")[0].innerHTML+=response;
+
+                console.log(response);
+                document.getElementById('verify_format').innerHTML="Valid";
+                document.getElementById('verify_status').innerHTML=response['server_status'];
+                document.getElementById('verify_email_status').innerHTML=response['email_status'];
                 $('#verify_response').css('display','block');
                 $('#verify_help_text').css('display','none');
                 $('#verify_email_button').html('Verify');
                 $('#verify_email_button').attr('disabled',false);
+
+                
+
+
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 if( jqXHR.status === 422 )
@@ -108,7 +117,7 @@ function verify_email_ajax()
                 $('#verify_email_button').html('Verify');
                 $('#verify_email_button').attr('disabled',false);
             },
-            timeout: 12000
+            timeout: 25000
         });
     }
     

@@ -66,3 +66,7 @@ Route::get('downloadverifiedrecords/{type}/{records}','EmailController@downloadV
 
 Route::post('update_personal_info','UserController@update_personal_info')->middleware('verified');
 Route::post('update_password','UserController@update_password')->middleware('verified');
+
+
+Route::get('2checkout','UserController@test_2checkout');
+Route::post('handleIpn','UserController@handleIpn');

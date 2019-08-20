@@ -35,7 +35,7 @@ class EmailsExport implements FromCollection
                 }
                 else
                 {
-                    return Emails::select('first_name','last_name','domain','email','status')->where('user_file_id', $this->user_file_id)->where('status', 'valid')->get();
+                    return Emails::select('first_name','last_name','domain','email','status')->where('user_file_id', $this->user_file_id)->where('status', 'Valid')->get();
                 }
             }
             else if($this->type=='verify')
@@ -46,7 +46,7 @@ class EmailsExport implements FromCollection
                 }
                 else
                 {
-                    return Emails::select('email','status')->where('user_file_id', $this->user_file_id)->where('status', 'valid')->get();
+                    return Emails::select('email','status')->where('user_file_id', $this->user_file_id)->where('status', 'Valid')->get();
                 }
             }
 
@@ -64,7 +64,7 @@ class EmailsExport implements FromCollection
                 }
                 else
                 {
-                    return Emails::select('first_name','last_name','domain','email','status')->where('user_id', $user->id)->where('type', 'find')->where('status', 'valid')->get();
+                    return Emails::select('first_name','last_name','domain','email','status')->where('user_id', $user->id)->where('type', 'find')->where('status', 'Valid')->get();
                 }
             }
             else if($this->type=='verify')
@@ -75,7 +75,7 @@ class EmailsExport implements FromCollection
                 }
                 else
                 {
-                    return Emails::select('email','status')->where('user_id', $user->id)->where('type', 'verify')->where('status', 'valid')->get();
+                    return Emails::select('email','status')->where('user_id', $user->id)->where('type', 'verify')->where('status', 'Valid')->get();
                 }
             }
         }

@@ -101,7 +101,7 @@ function populate_emails(filter)
       for(var i =0;i<data.length;i++)
       {
         
-        if(filter=="less" && data[i]['status']=='valid')
+        if(filter=="less" && data[i]['status']=='Valid')
         {
           var newRow   = tableRef.insertRow();
 

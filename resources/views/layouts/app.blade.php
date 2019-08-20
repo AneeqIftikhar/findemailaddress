@@ -140,7 +140,7 @@
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
 
                                         <div class="container">
-                                            <div class="row">
+                                            <div class="row" style="padding-bottom: 10px !important;">
                                                 <div class="col-12">
                                                     <div class='row'>
                                                         <div class="col-12">

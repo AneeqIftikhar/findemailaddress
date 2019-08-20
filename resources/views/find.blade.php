@@ -102,16 +102,24 @@ function find_email_ajax()
             url: 'find_email', 
             data: {'first_name' : first_name,'last_name':last_name,'domain':domain,"_token": "{{ csrf_token() }}"}, 
             success: function(response){ // What to do if we succeed
-                
-                console.log(response['status'] && response['emails']);
-                console.log(response['status']);
-                console.log(response['emails']);
+                console.log(response);
+                // console.log(response['status'] && response['emails']);
+                // console.log(response['status']);
+                // console.log(response['emails']);
                 if('status' in response && 'emails' in response)
                 {
                     $('#find_help_text').css('display','none');
                     $('#find_response').css('display','block');
                     document.getElementById('find_status').innerHTML=response['status'];
-                    document.getElementById('find_email').innerHTML=response['emails'][0];
+                    if(response['emails']=='' || response['emails']==null || response['emails']==undefined)
+                    {
+                        document.getElementById('find_email').innerHTML="-";
+                    }
+                    else
+                    {
+                        document.getElementById('find_email').innerHTML=response['emails'];
+                    }
+                    
                 }
                 $('#find_email_button').html('Find');
                 $('#find_email_button').attr('disabled',false);

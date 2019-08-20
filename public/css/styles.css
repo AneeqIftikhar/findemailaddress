@@ -50,3 +50,13 @@
 {
     padding-right: 10px;
 }
+
+.dropdown-item
+{
+    border-top:1px solid LightGray !important;
+
+}
+.dropdown-item:first-child
+{
+    border-top: none !important;
+}
