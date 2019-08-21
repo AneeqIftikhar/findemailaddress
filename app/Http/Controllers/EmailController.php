@@ -81,7 +81,7 @@ class EmailController extends Controller
             } 
             
 
-            return json_encode(array('status'=>$json_output[0]->status,'emails'=>$json_output[0]->email));
+            return json_encode(array('status'=>$json_output[0]->status,'emails'=>$json_output[0]->email,'logs'=>$json_output[0]->logs));
          }
          catch(Exception $e)
          {
