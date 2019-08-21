@@ -136,7 +136,7 @@ function find_email_ajax()
             data: {'first_name' : first_name,'last_name':last_name,'domain':domain,"_token": "{{ csrf_token() }}"}, 
             success: function(response){ // What to do if we succeed
                 console.log(response);
-
+                document.getElementById('email-verifier-result-container').innerHTML=" ";
                 for (var i = 0; i<response['logs'].length;i++)
                 {
                     document.getElementById('email-verifier-result-container').innerHTML+=response['logs'][i]+"<br>";
