@@ -27,7 +27,7 @@
                     <div id="find_response" style="display:none">
                         <div  class="row m-0 response mt-4" >
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2 pl-4">Email</div>
-                        <div id="find_email" class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2 text-right"></div>
+                        <div id="find_email" style="color: grey" class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2 text-right"></div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2">Status</div>
                         <div id="find_status" class="col-lg-3 col-md-3 col-sm-6 col-xs-6 text-right p-2 pr-4"></div>
                     </div>
@@ -47,7 +47,40 @@
     </div>
 </div>
 @endsection
+@push('scripts')
 <script type="text/javascript">
+$( document ).ready(function() {
+   
+    $("#first-name-field").keyup(function(event) {
+        if (event.keyCode === 13) {
+            if(!$("#find_email_button").is('[disabled]'))
+            {
+                $("#find_email_button").click();
+            }
+            
+        }
+    });
+    $("#last-name-field").keyup(function(event) {
+        if (event.keyCode === 13) {
+            if(!$("#find_email_button").is('[disabled]'))
+            {
+                $("#find_email_button").click();
+            }
+            
+        }
+    });
+    $("#domain-field").keyup(function(event) {
+        if (event.keyCode === 13) {
+            if(!$("#find_email_button").is('[disabled]'))
+            {
+                $("#find_email_button").click();
+            }
+            
+        }
+    });
+});
+
+
 function isValidDomain(v) {
   if (!v) return false;
   var re = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
@@ -111,6 +144,18 @@ function find_email_ajax()
                     $('#find_help_text').css('display','none');
                     $('#find_response').css('display','block');
                     document.getElementById('find_status').innerHTML=response['status'];
+                    if(response['status']=="Valid")
+                    {
+                        document.getElementById('find_status').style.color = 'green';
+                    }
+                    else if(response['status']=="Catch All")
+                    {
+                        document.getElementById('find_status').style.color = 'orange';
+                    }
+                    else
+                    {
+                        document.getElementById('find_status').style.color = 'red';
+                    }
                     if(response['emails']=='' || response['emails']==null || response['emails']==undefined)
                     {
                         document.getElementById('find_email').innerHTML="-";
@@ -143,10 +188,11 @@ function find_email_ajax()
                 $('#find_email_button').html('Find');
                 $('#find_email_button').attr('disabled',false);
             },
-            timeout: 25000 // sets timeout to 25 seconds
+            timeout: 60000 // sets timeout to 60 seconds
         });
     }
     
 }
 
 </script>
+@endpush

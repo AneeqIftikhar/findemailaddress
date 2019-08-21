@@ -119,8 +119,14 @@ function populate_emails(filter)
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(3);
-          newText  = document.createTextNode(data[i]['status']);
-          newCell.appendChild(newText);
+
+          container = document.createElement("span");
+          text = document.createTextNode(data[i]['status']);
+
+          container.appendChild(text);
+          container.style.color = "green";
+
+          newCell.appendChild(container);
         }
         else if(filter=="all")
         {
@@ -140,8 +146,26 @@ function populate_emails(filter)
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(3);
-          newText  = document.createTextNode(data[i]['status']);
-          newCell.appendChild(newText);
+
+          container = document.createElement("span");
+          text = document.createTextNode(data[i]['status']);
+
+          container.appendChild(text);
+          if(data[i]['status']=="Valid")
+          {
+            container.style.color = "green";
+          }
+          else if (data[i]['status']=="Catch All")
+          {
+            container.style.color = "orange";
+          }
+          else
+          {
+            container.style.color = "red";
+          }
+          
+
+          newCell.appendChild(container);
         }
         
 

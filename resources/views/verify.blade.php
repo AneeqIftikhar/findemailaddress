@@ -45,7 +45,20 @@
     </div>
 </div>
 @endsection
+@push('scripts')
 <script type="text/javascript">
+$( document ).ready(function() {
+    $("#email-field").keyup(function(event) {
+        if (event.keyCode === 13) {
+            if(!$("#verify_email_button").is('[disabled]'))
+            {
+                $("#verify_email_button").click();
+            }
+            
+        }
+    });
+});
+
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
@@ -83,6 +96,31 @@ function verify_email_ajax()
             success: function(response){ // What to do if we succeed
 
                 console.log(response);
+                if(response['server_status']=="Valid")
+                {
+                    document.getElementById('verify_status').style.color = 'green';
+                }
+                else if(response['server_status']=="Catch All")
+                {
+                    document.getElementById('verify_status').style.color = 'orange';
+                }
+                else
+                {
+                    document.getElementById('verify_status').style.color = 'red';
+                }
+                if(response['email_status']=="Valid")
+                {
+                    document.getElementById('verify_email_status').style.color = 'green';
+                }
+                else if(response['email_status']=="Catch All")
+                {
+                    document.getElementById('verify_email_status').style.color = 'orange';
+                }
+                else
+                {
+                    document.getElementById('verify_email_status').style.color = 'red';
+                }
+                document.getElementById('verify_format').style.color = 'green';
                 document.getElementById('verify_format').innerHTML="Valid";
                 document.getElementById('verify_status').innerHTML=response['server_status'];
                 document.getElementById('verify_email_status').innerHTML=response['email_status'];
@@ -117,7 +155,7 @@ function verify_email_ajax()
                 $('#verify_email_button').html('Verify');
                 $('#verify_email_button').attr('disabled',false);
             },
-            timeout: 25000
+            timeout: 60000
         });
     }
     
@@ -125,3 +163,4 @@ function verify_email_ajax()
 }
 
 </script>
+@endpush

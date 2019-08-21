@@ -36,6 +36,7 @@ class EmailController extends Controller
             curl_setopt($ch, CURLOPT_URL,$endpoint);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS,$postdata);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 50);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
 
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -104,6 +105,7 @@ class EmailController extends Controller
             curl_setopt($ch, CURLOPT_URL,$endpoint);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS,$postdata);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 50);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
 
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
