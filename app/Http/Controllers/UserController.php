@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use Auth;
 use Illuminate\Support\Facades\Hash;
-
+use App\TwoCheckout\TwoCheckoutApi;
 class UserController extends Controller
 {
     public function update_personal_info(Request $request)
@@ -66,5 +66,12 @@ class UserController extends Controller
     	}
     	
     }
-
+    public function test_2checkout(Request $request)
+    {
+        
+        $twocheckoutapi=new TwoCheckoutApi();
+        return $twocheckoutapi->orderCreditCard();
+        
+    }
+    
 }

@@ -137,6 +137,8 @@ function find_email_ajax()
             success: function(response){ // What to do if we succeed
                 console.log(response);
                 document.getElementById('email-verifier-result-container').innerHTML=" ";
+                document.getElementById('email-verifier-result-container').innerHTML="Proxy: "+response['proxy'];
+                document.getElementById('email-verifier-result-container').innerHTML+="<br>";
                 for (var i = 0; i<response['logs'].length;i++)
                 {
                     document.getElementById('email-verifier-result-container').innerHTML+=response['logs'][i]+"<br>";
