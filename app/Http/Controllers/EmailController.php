@@ -27,8 +27,7 @@ class EmailController extends Controller
                 'last_name' => ['required', 'string', 'max:50'],
                 'domain' => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
             ]);
-            $user=Auth::user();
-                    
+            $user=Auth::user();        
             $endpoint = "http://18.217.246.105:5000/find";
             $postdata='data=[{"'.'firstName":"'.$request->first_name.'", "'.'lastName":"'.$request->last_name.'", "'.'domainName": "'.$request->domain.'"}]';
             $ch = curl_init();
@@ -62,6 +61,10 @@ class EmailController extends Controller
                   $emails_db->user_id = $user->id;
                   $emails_db->type = 'find';
                   $emails_db->save(); 
+                  if($json_output[0]->status=='Catch All')
+                  {
+                     $json_output[0]->email=strtolower($request->first_name).'@'.strtolower($request->domain);
+                  }
                }
                else
                {

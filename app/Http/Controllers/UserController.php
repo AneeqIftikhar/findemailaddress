@@ -7,6 +7,7 @@ use App\User;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use App\TwoCheckout\TwoCheckoutApi;
+use App\Orders;
 class UserController extends Controller
 {
     public function update_personal_info(Request $request)
@@ -70,7 +71,44 @@ class UserController extends Controller
     {
         
         $twocheckoutapi=new TwoCheckoutApi();
-        return $twocheckoutapi->orderCreditCard();
+        //return $twocheckoutapi->createCustomer("fname","lname","kh.aneeq@gmail.com","id2");
+        return $twocheckoutapi->getCustomerSubscriptions("4");
+        
+    }
+    public function return_url(Request $request)
+    {
+        $orderRef=$request['refno'];
+        $exists=Orders::where('order_reference',$orderRef)->first();
+        if(!$exists)
+        {
+            $total=$request['total'];
+            $total_currency=$request['total-currency'];
+            $signature=$request['signature'];
+
+            $twocheckoutapi=new TwoCheckoutApi();
+            $order=$twocheckoutapi->getOrderDetails($orderRef);
+
+            $data=[];
+            $data['order_reference']=$order['RefNo'];
+            $data['amount']=$order['NetPrice'];
+            $data['user_id']=$order['CustomerDetails']['ExternalCustomerReference'];
+            $data['order_date']=$order['OrderDate'];
+            $data['recurring_enabled']=$order['RecurringEnabled'];
+            $data['status']=$order['Status'];
+            $data['package_name']=$order['Items'][0]['ProductDetails']['Name'];
+            $new_orders=new Orders();
+            $credits=100;
+            if($order['Items'][0]['ProductDetails']['Name']=="Basic")
+            {
+                $credits=1000;
+            }
+            $user=Auth::user();
+            $user->credits=$user->credits+$credits;
+            $user->save();
+        }
+        
+        
+        return view('upgrade_account');
         
     }
     

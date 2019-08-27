@@ -11,6 +11,7 @@ use App\Package;
 use App\UserPackagesLogs;
 use Illuminate\Validation\Rule;
 use App\Rules\BlackListDomains;
+use App\TwoCheckout\TwoCheckoutApi;
 class RegisterController extends Controller
 {
     /*
@@ -71,12 +72,31 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
 
+
         $free_package=Package::where('name','Free')->first();
         $data['password']=Hash::make($data['password']);
         $data['credits']=$free_package->credits;
         $user = new User($data);
         $user->save();
-        
+        $twocheckoutapi=new TwoCheckoutApi();
+        $name=explode(" ",$user->name);
+        if(count($name)>2)
+        {
+            $first_name=$name[0];
+            $last_name=$name[count($name)-1];
+        }
+        else if (count($name)>1)
+        {
+            $first_name=$name[0];
+            $last_name=$name[1];
+        }
+        else
+        {
+            $first_name=$name[0];
+            $last_name=" ";
+        }
+        $user->two_checout_user_reference=$twocheckoutapi->createCustomer($first_name,$last_name,$user->email,$user->id);
+        $user->save();
 
         $user_package_log = new UserPackagesLogs;
         $user_package_log->package()->associate($free_package);

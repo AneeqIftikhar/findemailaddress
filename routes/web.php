@@ -49,6 +49,11 @@ Route::get('account_settings', function()
     return view('account_settings');
 })->name('account_settings')->middleware('verified');
 
+Route::get('upgrade_account', function()
+{
+    return view('upgrade_account');
+})->name('upgrade_account')->middleware('verified');
+
 Route::get('find_history','EmailController@getUserFoundEmails')->name('find_history')->middleware('verified');
 Route::get('verify_history','EmailController@getUserVerifiedEmails')->name('verify_history')->middleware('verified');
 Route::get('list','EmailController@getUserFiles')->name('list')->middleware('verified');
@@ -70,3 +75,4 @@ Route::post('update_password','UserController@update_password')->middleware('ver
 
 Route::get('2checkout','UserController@test_2checkout');
 Route::post('handleIpn','UserController@handleIpn');
+Route::get('return_url','UserController@return_url');

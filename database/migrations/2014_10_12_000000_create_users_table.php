@@ -22,6 +22,8 @@ class CreateUsersTable extends Migration
             $table->string('phone')->nullable();
             $table->string('company_name')->nullable();
             $table->integer('credits')->default(100);
+            $table->timestamp('last_login')->nullable();
+            $table->string('two_checkout_user_reference')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

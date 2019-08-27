@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -188,6 +189,16 @@ function find_email_ajax()
                             document.getElementById('find_error').innerHTML=value[0];
                         
                     });
+                }
+                else if( jqXHR.status === 419 )
+                {
+                    console.log(jqXHR);
+                    // if(jqXHR.statusText=="unknown status")
+                    // {
+                    //     document.getElementById('find_error').innerHTML="Login Again";
+                    // }
+                    $("#login_again").modal()
+                    
                 }
                 else
                 {

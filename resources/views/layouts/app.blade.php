@@ -35,12 +35,39 @@
             
             
         }
+        function logout_modal()
+        {
+            window.location.href = "{{ route('login') }}";
+            $('#login_again').modal('hide');
+        }
     </script>
 
 </head>
 <body>
+    
     <div id="app">
+        <div class="modal" tabindex="-1" role="dialog" id="login_again">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="alert alert-danger" style="display:none"></div>
+      <div class="modal-header">
+        
+        <h5 class="modal-title">Session Expired</h5>
+                <button type="button" class="close" data-dismiss="modal" onClick="logout_modal()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Login Again To Continue.</p>
+      </div>
+      <div class="modal-footer">
+        <button  class="btn btn-success" onClick="logout_modal()" id="ajaxSubmit">Logout</button>
+        </div>
+    </div>
+  </div>
+</div>
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+
             <div class="container">
                 <a class="navbar-brand" href="{{URL::route('find')}}">
                     {{ config('app.name', 'Laravel') }}
@@ -154,7 +181,7 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <button class="btn btn-primary">Upgrade Account</button>
+                                                            <a href="{{URL::route('upgrade_account')}}" class="btn btn-primary">Upgrade Account</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -189,5 +216,6 @@
             @yield('content')
         </main>
     </div>
+    
 </body>
 </html>
