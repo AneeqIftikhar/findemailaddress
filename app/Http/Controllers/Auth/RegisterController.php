@@ -95,7 +95,7 @@ class RegisterController extends Controller
             $first_name=$name[0];
             $last_name=" ";
         }
-        $user->two_checout_user_reference=$twocheckoutapi->createCustomer($first_name,$last_name,$user->email,$user->id);
+        $user->two_checkout_user_reference=$twocheckoutapi->createCustomer($first_name,$last_name,$user->email,$user->id);
         $user->save();
 
         $user_package_log = new UserPackagesLogs;
