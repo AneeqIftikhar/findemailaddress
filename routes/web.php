@@ -54,6 +54,9 @@ Route::get('upgrade_account', function()
     return view('upgrade_account');
 })->name('upgrade_account')->middleware('verified');
 
+Route::get('subscriptions','UserController@getUserSubscriptions')->name('subscriptions')->middleware('verified');
+
+
 Route::get('find_history','EmailController@getUserFoundEmails')->name('find_history')->middleware('verified');
 Route::get('verify_history','EmailController@getUserVerifiedEmails')->name('verify_history')->middleware('verified');
 Route::get('list','EmailController@getUserFiles')->name('list')->middleware('verified');

@@ -72,7 +72,8 @@ class UserController extends Controller
         
         $twocheckoutapi=new TwoCheckoutApi();
         //return $twocheckoutapi->createCustomer("fname","lname","kh.aneeq@gmail.com","id2");
-        return $twocheckoutapi->getCustomerSubscriptions("4");
+
+        return $twocheckoutapi->getCustomerSubscriptions('676306262');
         
     }
     public function return_url(Request $request)
@@ -110,6 +111,13 @@ class UserController extends Controller
         
         return view('upgrade_account');
         
+    }
+    public function getUserSubscriptions(Request $request)
+    {
+        $user=Auth::user();
+        $twocheckoutapi=new TwoCheckoutApi();
+        $data=$twocheckoutapi->getCustomerSubscriptions($user->two_checkout_user_reference);
+        return view('subscriptions', ['data'=>$data]);
     }
     
 }

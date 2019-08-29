@@ -114,12 +114,12 @@ class TwoCheckoutApi
   		}
     }
 
-    public function getCustomerSubscriptions($user_id)
+    public function getCustomerSubscriptions($user_ref)
     {
       
       try {
           $TwoCheckoutClient = new TwoCheckoutClient();
-          $response = json_decode($TwoCheckoutClient->get('subscriptions/?ExternalCustomerReference='.$user_id)->getBody()->getContents(), true);
+          $response = json_decode($TwoCheckoutClient->get('subscriptions/?AvangateCustomerReference='.$user_ref)->getBody()->getContents(), true);
             return $response;
       } catch (ClientErrorResponseException $exception) {
           $responseBody = $exception->getResponse()->getBody(true);
