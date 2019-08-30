@@ -118,7 +118,7 @@
         firstScriptElement.parentNode.insertBefore(script, firstScriptElement);
     })(document, 'https://secure.avangate.com/checkout/client/twoCoInlineCart.js', 'TwoCoInlineCart',{"app":{"merchant":"250183608226"},"cart":{"host":"https:\/\/secure.2checkout.com","customization":"inline"}});
   $( document ).ready(function() {
-    window.document.getElementById('buy1').addEventListener('click', function(event) {
+    document.getElementById('buy1').addEventListener('click', function(event) {
     event.preventDefault();
     TwoCoInlineCart.products.removeAll();
     TwoCoInlineCart.products.add({
@@ -137,7 +137,7 @@
       TwoCoInlineCart.cart.checkout();
 
     });
-    window.document.getElementById('buy2').addEventListener('click', function(event) {
+    document.getElementById('buy2').addEventListener('click', function(event) {
       event.preventDefault();
     TwoCoInlineCart.products.removeAll();
     TwoCoInlineCart.products.add({
@@ -156,7 +156,7 @@
       TwoCoInlineCart.cart.checkout();
 
     });
-    window.document.getElementById('buy3').addEventListener('click', function(event) {
+    document.getElementById('buy3').addEventListener('click', function(event) {
       event.preventDefault();
     TwoCoInlineCart.products.removeAll();
     TwoCoInlineCart.products.add({

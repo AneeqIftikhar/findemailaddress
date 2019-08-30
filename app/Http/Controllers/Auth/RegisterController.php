@@ -12,6 +12,7 @@ use App\UserPackagesLogs;
 use Illuminate\Validation\Rule;
 use App\Rules\BlackListDomains;
 use App\TwoCheckout\TwoCheckoutApi;
+use Ramsey\Uuid\Uuid;
 class RegisterController extends Controller
 {
     /*
@@ -76,6 +77,7 @@ class RegisterController extends Controller
         $free_package=Package::where('name','Free')->first();
         $data['password']=Hash::make($data['password']);
         $data['credits']=$free_package->credits;
+        $data['user_uuid'] = Uuid::uuid4();
         $user = new User($data);
         $user->save();
         $twocheckoutapi=new TwoCheckoutApi();
@@ -95,7 +97,7 @@ class RegisterController extends Controller
             $first_name=$name[0];
             $last_name=" ";
         }
-        $user->two_checkout_user_reference=$twocheckoutapi->createCustomer($first_name,$last_name,$user->email,$user->id);
+        $user->two_checkout_user_reference=$twocheckoutapi->createCustomer($first_name,$last_name,$user->email,$user->uuid);
         $user->save();
 
         $user_package_log = new UserPackagesLogs;

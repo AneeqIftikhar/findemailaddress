@@ -122,12 +122,12 @@ class TwoCheckoutApi
           $response = json_decode($TwoCheckoutClient->get('subscriptions/?AvangateCustomerReference='.$user_ref)->getBody()->getContents(), true);
             return $response;
       } catch (ClientErrorResponseException $exception) {
-          $responseBody = $exception->getResponse()->getBody(true);
+         $responseBody = json_decode($exception->getResponse()->getBody()->getContents(), true);
           return $responseBody;
       }
       catch (\Exception $exception)
       {
-        $responseBody = $exception->getResponse()->getBody(true);
+        $responseBody = json_decode($exception->getResponse()->getBody()->getContents(), true);
           return $responseBody;
       }
     }
@@ -138,14 +138,14 @@ class TwoCheckoutApi
       try {
           $TwoCheckoutClient = new TwoCheckoutClient();
           $response = json_decode($TwoCheckoutClient->get('orders/'.$order_ref.'/')->getBody()->getContents(), true);
-            return $response;
+          return $response;
       } catch (ClientErrorResponseException $exception) {
-          $responseBody = $exception->getResponse()->getBody(true);
+          $responseBody = json_decode($exception->getResponse()->getBody()->getContents(), true);
           return $responseBody;
       }
       catch (\Exception $exception)
       {
-        $responseBody = $exception->getResponse()->getBody(true);
+        $responseBody = json_decode($exception->getResponse()->getBody()->getContents(), true);
           return $responseBody;
       }
     }      
