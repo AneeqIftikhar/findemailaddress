@@ -148,5 +148,55 @@ class TwoCheckoutApi
         $responseBody = json_decode($exception->getResponse()->getBody()->getContents(), true);
           return $responseBody;
       }
-    }      
+    }
+
+    public function renewSubscription($subscription_ref)
+    {
+      try {
+          $TwoCheckoutClient = new TwoCheckoutClient();
+          $response = json_decode($TwoCheckoutClient->put('subscriptions/'.$subscription_ref.'/renewal/')->getBody()->getContents(), true);
+          return $response;
+      } catch (ClientErrorResponseException $exception) {
+          $responseBody = json_decode($exception->getResponse()->getBody()->getContents(), true);
+          return $responseBody;
+      }
+      catch (\Exception $exception)
+      {
+        $responseBody = json_decode($exception->getResponse()->getBody()->getContents(), true);
+          return $responseBody;
+      }
+    } 
+
+    public function enableRecurringBilling($subscription_ref)
+    {
+      try {
+          $TwoCheckoutClient = new TwoCheckoutClient();
+          $response = json_decode($TwoCheckoutClient->post('subscriptions/'.$subscription_ref.'/renewal/')->getBody()->getContents(), true);
+          return $response;
+      } catch (ClientErrorResponseException $exception) {
+          $responseBody = json_decode($exception->getResponse()->getBody()->getContents(), true);
+          return $responseBody;
+      }
+      catch (\Exception $exception)
+      {
+        $responseBody = json_decode($exception->getResponse(), true);
+          return $responseBody;
+      }
+    }
+    public function disableRecurringBilling($subscription_ref)
+    {
+      try {
+          $TwoCheckoutClient = new TwoCheckoutClient();
+          $response = json_decode($TwoCheckoutClient->delete('subscriptions/'.$subscription_ref.'/renewal/')->getBody()->getContents(), true);
+          return $response;
+      } catch (ClientErrorResponseException $exception) {
+          $responseBody = json_decode($exception->getResponse()->getBody()->getContents(), true);
+          return $responseBody;
+      }
+      catch (\Exception $exception)
+      {
+        $responseBody = json_decode($exception->getResponse()->getBody()->getContents(), true);
+          return $responseBody;
+      }
+    }     
 }

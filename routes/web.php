@@ -27,10 +27,18 @@ Route::get('find', function()
 {
     return view('find');
 })->name('find')->middleware('verified');
+Route::get('find-old', function()
+{
+    return view('find-old');
+})->name('find-old')->middleware('verified');
 Route::get('verify', function()
 {
     return view('verify');
 })->name('verify')->middleware('verified');
+Route::get('verify-old', function()
+{
+    return view('verify-old');
+})->name('verify-old')->middleware('verified');
 Route::get('batch_find', function()
 {
     return view('batch_find');
@@ -79,3 +87,6 @@ Route::post('update_password','UserController@update_password')->middleware('ver
 Route::get('2checkout','UserController@test_2checkout');
 Route::post('handleIpn','UserController@handleIpn');
 Route::get('return_url','UserController@return_url');
+
+Route::post('disableRecurringBilling','UserController@disableRecurringBilling')->name('disableRecurringBilling')->middleware('verified');
+Route::post('enableRecurringBilling','UserController@enableRecurringBilling')->name('enableRecurringBilling')->middleware('verified');

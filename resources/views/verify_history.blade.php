@@ -5,9 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Find Email History</div>
+                <div class="card-header">Verify Email History</div>
 
                 <div class="card-body">
+                  @if (count($emails)>0)
                     <div class="row" style="margin-bottom: 4px">
                         <div class="col-md-6">
                         </div>
@@ -40,7 +41,7 @@
                              
                         </div>
                     </div>
-                   <table class="table" id="emails_table">
+                    <table class="table" id="emails_table">
                       <thead class="black white-text">
                         <tr>
                             <th scope="col">Email</th>
@@ -57,7 +58,9 @@
                          @endforeach -->
                       </tbody>
                     </table>
-
+                  @else
+                    <h5 class="card-title">No Emails Found.</h5>    
+                  @endif
                 </div>
             </div>
         </div>

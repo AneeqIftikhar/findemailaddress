@@ -27,6 +27,7 @@ class EmailController extends Controller
                 'last_name' => ['required', 'string', 'max:50'],
                 'domain' => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
             ]);
+            
             $user=Auth::user();        
             $endpoint = "http://18.217.246.105:5000/find";
             $postdata='data=[{"'.'firstName":"'.$request->first_name.'", "'.'lastName":"'.$request->last_name.'", "'.'domainName": "'.$request->domain.'"}]';
@@ -84,7 +85,7 @@ class EmailController extends Controller
             } 
             
 
-            return json_encode(array('status'=>$json_output[0]->status,'emails'=>$json_output[0]->email,'logs'=>$json_output[0]->logs,'proxy'=>$json_output[0]->proxy));
+            return json_encode(array('status'=>$json_output[0]->status,'emails'=>$json_output[0]->email,'logs'=>$json_output[0]->logs,'proxy'=>$json_output[0]->proxy,'credits_left'=>$user->credits));
          }
          catch(Exception $e)
          {
@@ -142,7 +143,7 @@ class EmailController extends Controller
             $emails_db->type = 'verify';
             $emails_db->save(); 
 
-            return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status));
+            return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status,'credits_left'=>$user->credits));
          }
          catch(Exception $e)
          {

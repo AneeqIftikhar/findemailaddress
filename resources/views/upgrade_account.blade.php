@@ -2,7 +2,11 @@
 
 @section('content')
 <div class="container">
-    
+@if(session()->has('message'))
+    <div class="alert alert-success">
+        {{ session()->get('message') }}
+    </div>
+@endif
 
 <section class="pricing py-5">
   <div class="container">
@@ -32,7 +36,7 @@
         <div class="card mb-5 mb-lg-0">
           <div class="card-body">
             <h5 class="card-title text-muted text-uppercase text-center">Small</h5>
-            <h6 class="card-price text-center">$25<span class="period">/month</span></h6>
+            <h6 class="card-price text-center">$29<span class="period">/month</span></h6>
             <hr>
             <ul class="fa-ul">
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Find & Verify <strong>1000</strong> 
@@ -57,7 +61,7 @@
             <h6 class="card-price text-center">$49<span class="period">/month</span></h6>
             <hr>
             <ul class="fa-ul">
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Find & Verify <strong>5000</strong> Emails</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Find & Verify <strong>2500</strong> Emails</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Only Pay for Verified Emails</li>
               
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Unused credits rollover</li>
@@ -77,7 +81,7 @@
             <h6 class="card-price text-center">$99<span class="period">/month</span></h6>
             <hr>
             <ul class="fa-ul">
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Find & Verify <strong>20000</strong> Emails</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Find & Verify <strong>10000</strong> Emails</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Only Pay for Verified Emails</li>
               
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Unused credits rollover</li>
@@ -167,7 +171,7 @@
       });
     TwoCoInlineCart.cart.setReturnMethod({
         type: 'redirect',
-        url : 'http://localhost/email_finder_verifier/return_url'
+        url : "{{URL::to('return_url')}}"
       });
 
       TwoCoInlineCart.cart.setCustomerReference(user['two_checkout_user_reference']);

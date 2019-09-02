@@ -124,3 +124,20 @@ section.pricing {
     opacity: 1;
   }
 }
+
+
+.my-custom-scrollbar {
+height: 278px;
+}
+.table-wrapper-scroll-y {
+display: block;
+}
+
+
+.my-custom-scrollbar2 {
+
+height: 160px;
+}
+.table-wrapper-scroll-y2 {
+display: block;
+}

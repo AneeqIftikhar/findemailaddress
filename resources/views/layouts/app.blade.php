@@ -176,7 +176,7 @@
                                                     </div>
                                                      <div class="row">
                                                         <div class="col-12" id="credits_left">
-                                                            <span>Credits Left {{ Auth::user()->credits }}</span>
+                                                            Credits Left <span id="credits_left_span">{{ Auth::user()->credits }}</span>
                                                         </div>
                                                     </div>
                                                     <div class="row">

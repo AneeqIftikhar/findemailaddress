@@ -4,7 +4,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <div class="card">
                 <div class="card-body p-0 py-4">
                     <div class="row m-0 mb-4">
@@ -12,31 +12,27 @@
                             <h3 class="mb-4">Find Email</h3>
                             <div class="input-group input-group-lg mb-3">
                                 <input type="text" placeholder="First name" class="form-control" id="first-name-field">
-                            </div>
-                            <div class="input-group input-group-lg mb-3">
                                 <input type="text" placeholder="Last name" class="form-control" id="last-name-field">
-                            </div>
-                            <div class="input-group input-group-lg mb-3">
                                 <input type="text" placeholder="Domain name" class="form-control" id="domain-field">
-                            </div>
-                            <div class="input-group">
-                                <button class="btn btn-success" type="button" id="find_email_button" style="min-width: 120px; font-weight: 700;" onclick="find_email_ajax()">
-                                Find
-                                </button>
+                                <div class="input-group-append">
+                                    <button class="btn btn-success" type="button" id="find_email_button" style="min-width: 120px; font-weight: 700;" onclick="find_email_ajax()">
+                                    Find
+                                    </button>
+                                </div>
                             </div>
                             <span class="invalid-feedback-custom">
                                 <strong id="find_error"></strong>
                             </span>
                         </div>
                     </div>
-                   <!--  <div id="find_response" style="display:none">
+                    <div id="find_response" style="display:none">
                         <div  class="row m-0 response mt-4" >
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2 pl-4">Email</div>
                         <div id="find_email" style="color: grey" class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2 text-right"></div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2">Status</div>
                         <div id="find_status" class="col-lg-3 col-md-3 col-sm-6 col-xs-6 text-right p-2 pr-4"></div>
                     </div>
-                    </div> -->
+                    </div>
                     
                     <div class="row m-0">
                         <div class="col-12 px-4 pt-0 pb-0" id="find_help_text">
@@ -45,47 +41,6 @@
                     </div>
                     <div class="email-verifier-result">
                         <div id="email-verifier-result-container"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body p-0 py-4">
-                    <div class="row m-0 mb-4">
-                        <div class="col-12 px-4">
-                            <h3 class="mb-4">Activity Log</h3>
-                            <div class="table-wrapper-scroll-y my-custom-scrollbar">
-	                            <table id="activity_find_email_table" class="table table-striped">
-	                            	<thead>
-                                        <tr>
-                                          <th scope="col">Name</th>
-                                          <th scope="col">Domain/Email</th>
-                                          <th scope="col">Status</th>
-                                        </tr>
-                                    </thead>
-								  <tbody>
-								    <!-- <tr>
-								      <td>Aneeq Iftikhar</td>
-								      <td>Ripcordsystems.com</td>
-								      <td>Not Found</td>
-								    </tr>
-								    <tr>
-								       <td>Aneeq Iftikhar</td>
-								      <td>dev-rec.com</td>
-								      <td>Valid</td>
-								    </tr>
-								    <tr>
-								       <td>Abdul Aleem</td>
-								      <td>omno.ai</td>
-								      <td>Valid</td>
-								    </tr> -->
-
-								  </tbody>
-								</table>
-							</div>
-                            
-                        </div>
                     </div>
                 </div>
             </div>
@@ -99,19 +54,28 @@ $( document ).ready(function() {
    
     $("#first-name-field").keyup(function(event) {
         if (event.keyCode === 13) {
-            $("#find_email_button").click();
+            if(!$("#find_email_button").is('[disabled]'))
+            {
+                $("#find_email_button").click();
+            }
             
         }
     });
     $("#last-name-field").keyup(function(event) {
         if (event.keyCode === 13) {
-            $("#find_email_button").click();
+            if(!$("#find_email_button").is('[disabled]'))
+            {
+                $("#find_email_button").click();
+            }
             
         }
     });
     $("#domain-field").keyup(function(event) {
         if (event.keyCode === 13) {
-        	$("#find_email_button").click();
+            if(!$("#find_email_button").is('[disabled]'))
+            {
+                $("#find_email_button").click();
+            }
             
         }
     });
@@ -163,29 +127,9 @@ function find_email_ajax()
     }
     else
     {
-    	var tableRef = document.getElementById('activity_find_email_table').getElementsByTagName('tbody')[0];
-    	if(tableRef.rows.length>=5)
-        {
-            tableRef.deleteRow(tableRef.rows.length-1);
-        }
-        var newRow   = tableRef.insertRow(0);
-
-
-	      newCell  = newRow.insertCell(0);
-	      newText  = document.createTextNode(first_name+" "+last_name);
-	      newCell.appendChild(newText);
-
-	      newCell  = newRow.insertCell(1);
-	      newText  = document.createTextNode(domain);
-	      newCell.appendChild(newText);
-
-	      newCell  = newRow.insertCell(2);
-		  spinner = document.createElement("i");
-	      spinner.className="fa fa-spinner fa-spinner fa-spin";
-	      newCell.appendChild(spinner);
-
-
-        
+        $('#find_email_button').html('<i class="fa fa-spinner fa-spin"></i>');
+        $('#find_email_button').attr('disabled',true);
+        $('#find_response').css('display','none');
         $.ajax({
             method: 'POST',
             dataType: 'json', 
@@ -202,33 +146,39 @@ function find_email_ajax()
                 }
                 
                 
-
+                // console.log(response['status'] && response['emails']);
+                // console.log(response['status']);
+                // console.log(response['emails']);
                 if('status' in response && 'emails' in response)
                 {
                     $('#find_help_text').css('display','none');
+                    $('#find_response').css('display','block');
+                    document.getElementById('find_status').innerHTML=response['status'];
                     if(response['status']=="Valid")
                     {
-                    	newRow.cells[2].innerHTML='<div style="color:green">Valid</div>';
+                        var user = {!! auth()->user() !!};
+                        document.getElementById('find_status').style.color = 'green';
                     }
                     else if(response['status']=="Catch All")
                     {
-                    	newRow.cells[2].innerHTML='<div style="color:orange">Catch All</div>';
+                        document.getElementById('find_status').style.color = 'orange';
                     }
                     else
                     {
-                    	newRow.cells[2].innerHTML='<div style="color:red">Not Found</div>';
+                        document.getElementById('find_status').style.color = 'red';
                     }
                     if(response['emails']=='' || response['emails']==null || response['emails']==undefined)
                     {
-                    	newRow.cells[1].innerHTML='<div>-</div>';
+                        document.getElementById('find_email').innerHTML="-";
                     }
                     else
                     {
-                    	newRow.cells[1].innerHTML='<div>'+response['emails']+'</div>';
+                        document.getElementById('find_email').innerHTML=response['emails'];
                     }
-                    document.getElementById('credits_left_span').innerHTML=response['credits_left'];
                     
                 }
+                $('#find_email_button').html('Find');
+                $('#find_email_button').attr('disabled',false);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 
@@ -256,7 +206,6 @@ function find_email_ajax()
                     console.log(jqXHR);
                     if(jqXHR.statusText=="timeout")
                     {
-                    	newRow.cells[2].innerHTML='<div style="color:red">Request Time Out</div>';
                         document.getElementById('find_error').innerHTML="Request Timeout.";
                     }
                 }
@@ -264,7 +213,7 @@ function find_email_ajax()
                 $('#find_email_button').html('Find');
                 $('#find_email_button').attr('disabled',false);
             },
-            timeout: 600000 // sets timeout to 60 seconds
+            timeout: 60000 // sets timeout to 60 seconds
         });
     }
     

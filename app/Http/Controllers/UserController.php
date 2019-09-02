@@ -8,6 +8,9 @@ use Auth;
 use Illuminate\Support\Facades\Hash;
 use App\TwoCheckout\TwoCheckoutApi;
 use App\Orders;
+use App\Package;
+use App\UserPackagesLogs;
+use Session;
 class UserController extends Controller
 {
     public function update_personal_info(Request $request)
@@ -88,28 +91,37 @@ class UserController extends Controller
 
             $twocheckoutapi=new TwoCheckoutApi();
             $order=$twocheckoutapi->getOrderDetails($orderRef);
-
+            $return_user=User::where('user_uuid',$order['CustomerDetails']['ExternalCustomerReference'])->first();
             $data=[];
             $data['order_reference']=$order['RefNo'];
             $data['amount']=$order['NetPrice'];
-            $data['user_id']=$order['CustomerDetails']['ExternalCustomerReference'];
+            $data['user_id']=$return_user->id;
             $data['order_date']=$order['OrderDate'];
             $data['recurring_enabled']=$order['RecurringEnabled'];
             $data['status']=$order['Status'];
             $data['package_name']=$order['Items'][0]['ProductDetails']['Name'];
-            $new_orders=new Orders();
-            $credits=100;
-            if($order['Items'][0]['ProductDetails']['Name']=="Basic")
-            {
-                $credits=1000;
-            }
+            $new_orders=new Orders($data);
+            $new_orders->save();
+            $credits=0;
+
+            $package=Package::where('name',$order['Items'][0]['ProductDetails']['Name'])->first();
+            $credits=$package->credits;
+
             $user=Auth::user();
             $user->credits=$user->credits+$credits;
             $user->save();
+
+            $user_package_log = new UserPackagesLogs;
+            $user_package_log->package()->associate($package);
+            $user_package_log->user()->associate($user);
+            $user_package_log->save();
+
+            Session::put('package_name', $package->name);
+            return view('upgrade_account')->with('message', 'Package Upgraded Successfully');
         }
+        return view('upgrade_account')->with('message', 'View Your Subscriptions in Subscription Tab');
         
         
-        return view('upgrade_account');
         
     }
     public function getUserSubscriptions(Request $request)
@@ -118,6 +130,22 @@ class UserController extends Controller
         $twocheckoutapi=new TwoCheckoutApi();
         $data=$twocheckoutapi->getCustomerSubscriptions($user->two_checkout_user_reference);
         return view('subscriptions', ['data'=>$data]);
+    }
+    public function disableRecurringBilling(Request $request)
+    {
+        $user=Auth::user();
+        $twocheckoutapi=new TwoCheckoutApi();
+        $data=$twocheckoutapi->disableRecurringBilling($request['subscription_ref']);
+        $data=$twocheckoutapi->getCustomerSubscriptions($user->two_checkout_user_reference);
+        return redirect()->back()->with(['data'=>$data]);
+    }
+    public function enableRecurringBilling(Request $request)
+    {
+        $user=Auth::user();
+        $twocheckoutapi=new TwoCheckoutApi();
+        $data=$twocheckoutapi->enableRecurringBilling($request['subscription_ref']);
+        $data=$twocheckoutapi->getCustomerSubscriptions($user->two_checkout_user_reference);
+        return redirect()->back()->with(['data'=>$data]);
     }
     
 }

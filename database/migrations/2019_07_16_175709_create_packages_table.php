@@ -22,16 +22,38 @@ class CreatePackagesTable extends Migration
             $table->integer('credits');
             $table->timestamps();
         });
-        DB::table('packages')->insert(
+        $data=array (
             array(
                 'name' => "Free",
                 'amount' => 0,
                 'credits'=>100,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
+            ),
+            array(
+                'name' => "Basic",
+                'amount' => 29,
+                'credits'=>1000,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ),
+            array(
+                'name' => "Medium",
+                'amount' => 49,
+                'credits'=>2500,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ),
+            array(
+                'name' => "Large",
+                'amount' => 99,
+                'credits'=>10000,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
             )
         );
         
+        DB::table('packages')->insert($data);
         
     }
 

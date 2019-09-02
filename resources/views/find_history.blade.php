@@ -8,7 +8,8 @@
                 <div class="card-header">Find Email History</div>
 
                 <div class="card-body">
-                    <div class="row" style="margin-bottom: 4px">
+                  @if (count($emails)>0)
+                      <div class="row" style="margin-bottom: 4px">
                         <div class="col-md-6">
                         </div>
                         <div class="col-md-6" align="right">
@@ -59,6 +60,10 @@
                          @endforeach -->
                       </tbody>
                     </table>
+                  @else
+                    <h5 class="card-title">No Emails Found.</h5>    
+                  @endif
+                    
 
                 </div>
             </div>
