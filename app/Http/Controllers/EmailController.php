@@ -28,7 +28,9 @@ class EmailController extends Controller
                 'domain' => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
             ]);
             
-            $user=Auth::user();        
+            $user=Auth::user();
+            // return json_encode(array('status'=>"Catch All",'emails'=>'aneeq@dev-rec.com','logs'=>[],'proxy'=>'Proxy','credits_left'=>$user->credits));
+
             $endpoint = "http://18.217.246.105:5000/find";
             $postdata='data=[{"'.'firstName":"'.$request->first_name.'", "'.'lastName":"'.$request->last_name.'", "'.'domainName": "'.$request->domain.'"}]';
             $ch = curl_init();

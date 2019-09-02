@@ -56,7 +56,7 @@
                         <div class="col-12 px-4">
                             <h3 class="mb-4">Activity Log</h3>
                             <div class="table-wrapper-scroll-y my-custom-scrollbar">
-	                            <table id="activity_find_email_table" class="table table-striped">
+	                            <table id="activity_find_email_table" class="table">
 	                            	<thead>
                                         <tr>
                                           <th scope="col">Name</th>
@@ -207,15 +207,18 @@ function find_email_ajax()
                 {
                     $('#find_help_text').css('display','none');
                     if(response['status']=="Valid")
-                    {
+                    {	
+                    	newRow.style.border= "2px solid rgba(0, 255, 0, 0.3)";
                     	newRow.cells[2].innerHTML='<div style="color:green">Valid</div>';
                     }
                     else if(response['status']=="Catch All")
                     {
+                    	newRow.style.border= "2px solid rgba(255, 255, 0, 0.3)";
                     	newRow.cells[2].innerHTML='<div style="color:orange">Catch All</div>';
                     }
                     else
                     {
+                    	newRow.style.border= "2px solid rgba(255, 0, 0, 0.3)";
                     	newRow.cells[2].innerHTML='<div style="color:red">Not Found</div>';
                     }
                     if(response['emails']=='' || response['emails']==null || response['emails']==undefined)
@@ -261,8 +264,6 @@ function find_email_ajax()
                     }
                 }
                 //first_name_error
-                $('#find_email_button').html('Find');
-                $('#find_email_button').attr('disabled',false);
             },
             timeout: 600000 // sets timeout to 60 seconds
         });
