@@ -95,3 +95,7 @@ Route::get('return_url','UserController@return_url');
 
 Route::post('disableRecurringBilling','UserController@disableRecurringBilling')->name('disableRecurringBilling')->middleware('verified');
 Route::post('enableRecurringBilling','UserController@enableRecurringBilling')->name('enableRecurringBilling')->middleware('verified');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

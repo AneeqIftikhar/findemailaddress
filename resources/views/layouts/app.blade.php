@@ -7,11 +7,10 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title> @yield('page') - {{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/jquery-3.3.1.min.js') }}" ></script> 
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
 
     <!-- Fonts -->
@@ -28,25 +27,11 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
-    <script src="{{ asset('js/jquery.toaster.js') }}" defer></script>
-    @stack('scripts')
-    <script>
-        function updateCreditsLeft()
-        {
-            
-            
-        }
-        function logout_modal()
-        {
-            window.location.href = "{{ route('login') }}";
-            $('#login_again').modal('hide');
-        }
-    </script>
 
 </head>
 <body>
     
-    <div id="app">
+    <div>
         <div class="modal" tabindex="-1" role="dialog" id="login_again">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -217,6 +202,27 @@
             @yield('content')
         </main>
     </div>
-    
+    <script src="{{ asset('js/jquery-3.3.1.min.js') }}" ></script> 
+    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/jquery.toaster.js') }}" defer></script>
+    @stack('scripts')
+   
+    @yield('footer')
+     <script>
+        function updateCreditsLeft()
+        {
+            
+            
+        }
+        function logout_modal()
+        {
+            window.location.href = "{{ route('login') }}";
+            $('#login_again').modal('hide');
+        }
+      
+    </script>
 </body>
+ 
 </html>
+
+
