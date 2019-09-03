@@ -205,7 +205,6 @@ function find_email_ajax()
 
                 if('status' in response && 'emails' in response)
                 {
-                    $('#find_help_text').css('display','none');
                     if(response['status']=="Valid")
                     {	
                     	newRow.style.border= "2px solid rgba(0, 255, 0, 0.3)";

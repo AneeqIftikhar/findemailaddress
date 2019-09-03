@@ -62,6 +62,11 @@ Route::get('upgrade_account', function()
     return view('upgrade_account');
 })->name('upgrade_account')->middleware('verified');
 
+Route::get('contact_form', function()
+{
+    return view('contact_form');
+})->name('contact_form')->middleware('verified');
+
 Route::get('subscriptions','UserController@getUserSubscriptions')->name('subscriptions')->middleware('verified');
 
 
