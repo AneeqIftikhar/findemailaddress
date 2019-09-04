@@ -164,24 +164,32 @@ function find_email_ajax()
     else
     {
     	var tableRef = document.getElementById('activity_find_email_table').getElementsByTagName('tbody')[0];
-    	if(tableRef.rows.length>=5)
+    	if(tableRef.rows.length>=8)
         {
+            tableRef.deleteRow(tableRef.rows.length-1);
             tableRef.deleteRow(tableRef.rows.length-1);
         }
         var newRow   = tableRef.insertRow(0);
+        newCell  = newRow.insertCell(0);
+        newCell.style.padding="2px";
+        newCell.colspan=3;
+        newCell.style.border="0px";
 
-
+        var newRow   = tableRef.insertRow(1);
 	      newCell  = newRow.insertCell(0);
 	      newText  = document.createTextNode(first_name+" "+last_name);
+          newCell.style.border="0px";
 	      newCell.appendChild(newText);
 
 	      newCell  = newRow.insertCell(1);
 	      newText  = document.createTextNode(domain);
+          newCell.style.border="0px";
 	      newCell.appendChild(newText);
 
 	      newCell  = newRow.insertCell(2);
 		  spinner = document.createElement("i");
 	      spinner.className="fa fa-spinner fa-spinner fa-spin";
+          newCell.style.border="0px";
 	      newCell.appendChild(spinner);
 
 
@@ -222,7 +230,6 @@ function find_email_ajax()
                     }
                     if(response['emails']=='' || response['emails']==null || response['emails']==undefined)
                     {
-                    	newRow.cells[1].innerHTML='<div>-</div>';
                     }
                     else
                     {

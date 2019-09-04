@@ -178,7 +178,9 @@
 
                                         
                                     <a class="dropdown-item" href="{{URL::route('subscriptions')}}"><span class="padding_right"><i class="fas fa-file-invoice-dollar fa-sm"></i></span>My Subscription</a>
-                                     <a class="dropdown-item" href="{{url('tickets')}}"><span class="padding_right"><i class="fas fa-file-invoice-dollar fa-sm"></i></span>My Tickets</a>
+
+
+                                     <a class="dropdown-item" href="{{url('tickets')}}"><span class="padding_right"><i class="fas fa-ticket-alt fa-sm"></i></span>My Tickets</a>
                                     <a class="dropdown-item" href="{{URL::route('account_settings')}}"><span class="padding_right"><i class="fas fa-user-cog fa-sm"></i></span>Account Settings</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

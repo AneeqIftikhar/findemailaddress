@@ -50,7 +50,7 @@
                         <div class="col-12 px-4">
                             <h3 class="mb-4">Activity Log</h3>
                             <div class="table-wrapper-scroll-y2 my-custom-scrollbar2">
-                                <table id="activity_verify_email_table" class="table table-striped">
+                                <table id="activity_verify_email_table" class="table">
                                     <thead>
                                         <tr>
                                           <th scope="col">Email</th>
@@ -109,25 +109,35 @@ function verify_email_ajax()
     else
     {
         var tableRef = document.getElementById('activity_verify_email_table').getElementsByTagName('tbody')[0];
-        if(tableRef.rows.length>=2)
+        if(tableRef.rows.length>=4)
         {
+            tableRef.deleteRow(tableRef.rows.length-1);
             tableRef.deleteRow(tableRef.rows.length-1);
         }
         var newRow   = tableRef.insertRow(0);
+        newCell  = newRow.insertCell(0);
+        newCell.style.padding="2px";
+        newCell.colspan=3;
+        newCell.style.border="0px";
+
+        var newRow   = tableRef.insertRow(1);
 
 
           newCell  = newRow.insertCell(0);
           newText  = document.createTextNode(email);
+          newCell.style.border="0px";
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(1);
           spinner = document.createElement("i");
           spinner.className="fa fa-spinner fa-spinner fa-spin";
+          newCell.style.border="0px";
           newCell.appendChild(spinner);
 
           newCell  = newRow.insertCell(2);
           spinner = document.createElement("i");
           spinner.className="fa fa-spinner fa-spinner fa-spin";
+          newCell.style.border="0px";
           newCell.appendChild(spinner);
 
         $.ajax({
@@ -140,28 +150,33 @@ function verify_email_ajax()
                 console.log(response);
                 if(response['server_status']=="Valid")
                 {
+                    newRow.style.border= "2px solid rgba(0, 255, 0, 0.3)";
                     newRow.cells[1].innerHTML='<div style="color:green">'+response['server_status']+'</div>';
                 }
                 else if(response['server_status']=="Catch All")
                 {
- 
+                    newRow.style.border= "2px solid rgba(255, 255, 0, 0.3)";
                     newRow.cells[1].innerHTML='<div style="color:orange">'+response['server_status']+'</div>';
                 }
                 else
                 {
+                    newRow.style.border= "2px solid rgba(255, 0, 0, 0.3)";
                     newRow.cells[1].innerHTML='<div style="color:red">'+response['server_status']+'</div>';
                 }
                 if(response['email_status']=="Valid")
                 {
+                    newRow.style.border= "2px solid rgba(0, 255, 0, 0.3)";
                     newRow.cells[2].innerHTML='<div style="color:green">'+response['email_status']+'</div>';
 
                 }
                 else if(response['email_status']=="Catch All")
                 {
+                    newRow.style.border= "2px solid rgba(255, 255, 0, 0.3)";
                     newRow.cells[2].innerHTML='<div style="color:orange">'+response['email_status']+'</div>';
                 }
                 else
                 {
+                    newRow.style.border= "2px solid rgba(255, 0, 0, 0.3)";
                     newRow.cells[2].innerHTML='<div style="color:red">'+response['email_status']+'</div>';
                 }
                 document.getElementById('credits_left_span').innerHTML=response['credits_left'];

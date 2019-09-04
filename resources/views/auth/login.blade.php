@@ -2,6 +2,12 @@
 
 @section('content')
 <div class="container">
+
+@if ($errors->has('session'))
+    <div class="alert alert-danger">{{ $errors->first('session') }}</div>
+@endif
+
+
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
