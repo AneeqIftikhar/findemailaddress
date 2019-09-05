@@ -75,6 +75,8 @@
 @push('scripts')
 <script type="text/javascript">
 $( document ).ready(function() {
+    data = {!! json_encode($emails->toArray(), JSON_HEX_TAG) !!};
+    populate_emails();
     $("#email-field").keyup(function(event) {
         if (event.keyCode === 13) {
             $("#verify_email_button").click();
@@ -82,7 +84,61 @@ $( document ).ready(function() {
         }
     });
 });
+function populate_emails()
+{
+   var tableRef = document.getElementById('activity_verify_email_table').getElementsByTagName('tbody')[0];
+      for(var i = tableRef.rows.length - 1; i >= 0; i--)
+      {
+        tableRef.deleteRow(i);
+      }
+      for(var i = 0;i<data.length;i++)
+      {
+        
+        var newRow   = tableRef.insertRow();
+        newCell  = newRow.insertCell(0);
+        newCell.style.padding="2px";
+        newCell.colspan=3;
+        newCell.style.border="0px";
 
+        var newRow   = tableRef.insertRow();
+          newCell  = newRow.insertCell(0);
+          newText  = document.createTextNode(data[i]['email']);
+          newCell.style.border="0px";
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(1);
+          newText  = document.createTextNode(data[i]['server_status']);
+          newCell.style.border="0px";
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(2);
+
+          container = document.createElement("span");
+          text = document.createTextNode(data[i]['status']);
+
+          container.appendChild(text);
+          if(data[i]['status']=="Valid")
+          {
+            newRow.style.border= "2px solid rgba(0, 255, 0, 0.3)";
+            container.style.color = "green";
+          }
+          else if (data[i]['status']=="Catch All")
+          {
+            newRow.style.border= "2px solid rgba(255, 255, 0, 0.3)";
+            container.style.color = "orange";
+          }
+          else
+          {
+            newRow.style.border= "2px solid rgba(255, 0, 0, 0.3)";
+            container.style.color = "red";
+          }
+          
+
+          newCell.appendChild(container);
+
+       
+      }
+}
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());

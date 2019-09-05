@@ -18,6 +18,21 @@ use App\Rules\BlackListDomains;
 use App\Rules\IsValidDomain;
 class EmailController extends Controller
 {
+
+
+
+      function find_email_page(Request $request)
+      {
+         $user=Auth::user();
+         $emails=Auth::user()->emails()->where('type','find')->orderBy('id', 'DESC')->take(4)->get();
+         return view('find',compact('emails'));
+      }
+      function verify_email_page(Request $request)
+      {
+         $user=Auth::user();
+         $emails=Auth::user()->emails()->where('type','verify')->orderBy('id', 'DESC')->take(2)->get();
+         return view('verify',compact('emails'));
+      }
    	function find_email_ajax(Request $request)
    	{
          try
@@ -142,6 +157,7 @@ class EmailController extends Controller
             $emails_db->email = $request->email;
             $emails_db->user_id = $user->id;
             $emails_db->status = $email_status;
+            $emails_db->server_status = $server_status;
             $emails_db->type = 'verify';
             $emails_db->save(); 
 

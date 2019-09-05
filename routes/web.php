@@ -23,18 +23,15 @@ Route::get('/', function () {
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
 
-Route::get('find', function()
-{
-    return view('find');
-})->name('find')->middleware('verified');
+Route::get('/find', 'EmailController@find_email_page')->name('find')->middleware('verified');
+Route::get('/verify', 'EmailController@verify_email_page')->name('verify')->middleware('verified');
+
+
 Route::get('find-old', function()
 {
     return view('find-old');
 })->name('find-old')->middleware('verified');
-Route::get('verify', function()
-{
-    return view('verify');
-})->name('verify')->middleware('verified');
+
 Route::get('verify-old', function()
 {
     return view('verify-old');
