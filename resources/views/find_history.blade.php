@@ -48,6 +48,7 @@
                             <th scope="col">Domain</th>
                             <th scope="col">Email</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -132,6 +133,12 @@ function populate_emails(filter)
           container.style.color = "green";
 
           newCell.appendChild(container);
+
+          newCell  = newRow.insertCell(4);
+          button = document.createElement("button");
+          button.className="btn btn-primary";
+          button.innerHTML ="Report Bounce";
+          newCell.appendChild(button);
         }
         else if(filter=="all")
         {
@@ -171,11 +178,50 @@ function populate_emails(filter)
           
 
           newCell.appendChild(container);
+
+
+          if(data[i]['status']=="Valid")
+          {
+            newCell.appendChild(container);
+            newCell  = newRow.insertCell(4);
+            button = document.createElement("button");
+            button.className="btn btn-primary";
+            button.innerHTML ="Report Bounce";
+            // button.onclick = 
+            newCell.appendChild(button);
+          }
+          else
+          {
+            newCell.appendChild(container);
+            newCell  = newRow.insertCell(4);
+            text = document.createTextNode(" ");
+            newCell.appendChild(text);
+          }
         }
         
 
        
       }
+}
+function 
+function report_bounce()
+{
+  $.ajax({
+            method: 'POST',
+            dataType: 'json', 
+            url: 'report_bounce', 
+            data: {'first_name' : first_name,'last_name':last_name,'domain':domain,"_token": "{{ csrf_token() }}"}, 
+            success: function(response){ // What to do if we succeed
+                
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                
+                
+                //first_name_error
+            },
+            timeout: 600 // sets timeout to 60 seconds
+        });
 }
 </script>
 @endpush

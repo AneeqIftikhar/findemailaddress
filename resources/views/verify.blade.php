@@ -10,7 +10,7 @@
                         <div class="col-12 px-4">
                             <h3 class="mb-4">Verify Email</h3>
                             <div class="input-group mb-3">
-                                <input type="email" id="email-field" class="form-control" placeholder="{{ __('Email') }}" aria-label="{{ __('Email') }}" style="height: 52px;">
+                                <input type="email" id="email-field" class="form-control" placeholder="{{ __('Email') }}" aria-label="{{ __('Email') }}" style="height: 51px;">
                             </div>
                             <div class="input-group" style="margin-top: 46px">
                                 <button class="btn btn-success" type="button" id="verify_email_button" style="min-width: 120px; font-weight: 700;" onclick="verify_email_ajax()">Verify</button>
@@ -21,19 +21,7 @@
                             </span>
                         </div>
                     </div>
-                    
-                    <!-- <div id="verify_response" style="display:none">
-                        <div class="row m-0 response mt-4">
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2 pl-4">Format</div>
-                            <div id="verify_format" class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2 text-right"></div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2">Type</div>
-                            <div id="verify_type" class="col-lg-3 col-md-3 col-sm-6 col-xs-6 text-right p-2 pr-4">PROFFESSIONAL</div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2 pl-4">Server Status</div>
-                            <div id="verify_status" class="col-lg-3 col-md-3 col-sm-6 col-xs-6 text-right p-2"></div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2">Email Status</div>
-                            <div id="verify_email_status"class="col-lg-3 col-md-3 col-sm-6 col-xs-6 text-right p-2 pr-4"></div>
-                        </div>
-                    </div> -->
+
                     <div class="row m-0" id="verify_help_text">
                         <div class="col-12 px-4 pt-0 pb-0">
                             Enter an email address to verify its accuracy.
@@ -108,28 +96,31 @@ function populate_emails()
 
           newCell  = newRow.insertCell(1);
           newText  = document.createTextNode(data[i]['server_status']);
+          
+          newCell.style.fontWeight="bold";
           newCell.style.border="0px";
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(2);
-
+          newCell.style.border="0px";
           container = document.createElement("span");
           text = document.createTextNode(data[i]['status']);
 
           container.appendChild(text);
+          container.style.fontWeight="bold";
           if(data[i]['status']=="Valid")
           {
-            newRow.style.border= "2px solid rgba(0, 255, 0, 0.3)";
+            newRow.style.border= "1px solid green";
             container.style.color = "green";
           }
           else if (data[i]['status']=="Catch All")
           {
-            newRow.style.border= "2px solid rgba(255, 255, 0, 0.3)";
+            newRow.style.border= "1px solid orange";
             container.style.color = "orange";
           }
           else
           {
-            newRow.style.border= "2px solid rgba(255, 0, 0, 0.3)";
+            newRow.style.border= "1px solid red";
             container.style.color = "red";
           }
           
@@ -206,34 +197,34 @@ function verify_email_ajax()
                 console.log(response);
                 if(response['server_status']=="Valid")
                 {
-                    newRow.style.border= "2px solid rgba(0, 255, 0, 0.3)";
-                    newRow.cells[1].innerHTML='<div style="color:green">'+response['server_status']+'</div>';
+                    newRow.style.border= "1px solid green";
+                    newRow.cells[1].innerHTML='<div style="font-weight:bold;color:green">'+response['server_status']+'</div>';
                 }
                 else if(response['server_status']=="Catch All")
                 {
-                    newRow.style.border= "2px solid rgba(255, 255, 0, 0.3)";
-                    newRow.cells[1].innerHTML='<div style="color:orange">'+response['server_status']+'</div>';
+                    newRow.style.border= "1px solid orange";
+                    newRow.cells[1].innerHTML='<div style="font-weight:bold;color:orange">'+response['server_status']+'</div>';
                 }
                 else
                 {
-                    newRow.style.border= "2px solid rgba(255, 0, 0, 0.3)";
-                    newRow.cells[1].innerHTML='<div style="color:red">'+response['server_status']+'</div>';
+                    newRow.style.border= "1px solid red";
+                    newRow.cells[1].innerHTML='<div style="font-weight:bold;color:red">'+response['server_status']+'</div>';
                 }
                 if(response['email_status']=="Valid")
                 {
-                    newRow.style.border= "2px solid rgba(0, 255, 0, 0.3)";
-                    newRow.cells[2].innerHTML='<div style="color:green">'+response['email_status']+'</div>';
+                    newRow.style.border= "1px solid green";
+                    newRow.cells[2].innerHTML='<div style="font-weight:bold;color:green">'+response['email_status']+'</div>';
 
                 }
                 else if(response['email_status']=="Catch All")
                 {
-                    newRow.style.border= "2px solid rgba(255, 255, 0, 0.3)";
-                    newRow.cells[2].innerHTML='<div style="color:orange">'+response['email_status']+'</div>';
+                    newRow.style.border= "1px solid orange";
+                    newRow.cells[2].innerHTML='<div style="font-weight:bold;color:orange">'+response['email_status']+'</div>';
                 }
                 else
                 {
-                    newRow.style.border= "2px solid rgba(255, 0, 0, 0.3)";
-                    newRow.cells[2].innerHTML='<div style="color:red">'+response['email_status']+'</div>';
+                    newRow.style.border= "1px solid red";
+                    newRow.cells[2].innerHTML='<div style="font-weight:bold;color:red">'+response['email_status']+'</div>';
                 }
                 document.getElementById('credits_left_span').innerHTML=response['credits_left'];
                 // document.getElementById('verify_format').style.color = 'green';

@@ -156,21 +156,22 @@ function populate_emails()
 
           container = document.createElement("span");
           text = document.createTextNode(data[i]['status']);
-
+          newCell.style.border="0px";
           container.appendChild(text);
+          container.style.fontWeight="bold";
           if(data[i]['status']=="Valid")
           {
-            newRow.style.border= "2px solid rgba(0, 255, 0, 0.3)";
+            newRow.style.border= "1px solid green";
             container.style.color = "green";
           }
           else if (data[i]['status']=="Catch All")
           {
-            newRow.style.border= "2px solid rgba(255, 255, 0, 0.3)";
+            newRow.style.border= "1px solid orange";
             container.style.color = "orange";
           }
           else
           {
-            newRow.style.border= "2px solid rgba(255, 0, 0, 0.3)";
+            newRow.style.border= "1px solid red";
             container.style.color = "red";
           }
           
@@ -278,18 +279,18 @@ function find_email_ajax()
                 {
                     if(response['status']=="Valid")
                     {	
-                    	newRow.style.border= "2px solid rgba(0, 255, 0, 0.3)";
-                    	newRow.cells[2].innerHTML='<div style="color:green">Valid</div>';
+                    	newRow.style.border= "1px solid green";
+                    	newRow.cells[2].innerHTML='<div style="font-weight:bold; color:green">Valid</div>';
                     }
                     else if(response['status']=="Catch All")
                     {
-                    	newRow.style.border= "2px solid rgba(255, 255, 0, 0.3)";
-                    	newRow.cells[2].innerHTML='<div style="color:orange">Catch All</div>';
+                    	newRow.style.border= "1px solid orange";
+                    	newRow.cells[2].innerHTML='<div style=" font-weight:bold; color:orange">Catch All</div>';
                     }
                     else
                     {
-                    	newRow.style.border= "2px solid rgba(255, 0, 0, 0.3)";
-                    	newRow.cells[2].innerHTML='<div style="color:red">Not Found</div>';
+                    	newRow.style.border= "1px solid red";
+                    	newRow.cells[2].innerHTML='<div style="font-weight:bold; color:red">Not Found</div>';
                     }
                     if(response['emails']=='' || response['emails']==null || response['emails']==undefined)
                     {

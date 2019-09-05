@@ -53,12 +53,34 @@ class EmailController extends Controller
             curl_setopt($ch, CURLOPT_URL,$endpoint);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS,$postdata);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 50);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 200);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
 
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
             $server_output = curl_exec ($ch);
+
+
+            if ($error_number = curl_errno($ch)) {
+               $emails_db = new Emails;
+               $emails_db->first_name = strtolower($request->first_name);
+               $emails_db->last_name = strtolower($request->last_name);
+               $emails_db->domain = strtolower($request->domain);
+               $emails_db->status = "Not Found";
+               $emails_db->user_id = $user->id;
+               $emails_db->type = 'find';
+               $emails_db->save();
+                if (in_array($error_number, array(CURLE_OPERATION_TIMEDOUT, CURLE_OPERATION_TIMEOUTED))) {
+                  
+
+                  return json_encode(array('status'=>"Not Found",'emails'=>"",'logs'=>[],'proxy'=>[],'credits_left'=>$user->credits,'commands'=>[],'MX'=>"",'Catch All Test'=>"","error"=>"curl timed out")); 
+                }
+                else
+                {
+                   return json_encode(array('status'=>"Not Found",'emails'=>"",'logs'=>[],'proxy'=>[],'credits_left'=>$user->credits,'commands'=>[],'MX'=>"",'Catch All Test'=>"","error"=>curl_error($ch))); 
+                }
+            }
+            
 
             curl_close ($ch);
 

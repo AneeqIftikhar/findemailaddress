@@ -160,12 +160,12 @@
                                                             <strong>{{session('package_name')}} Plan</strong>
                                                         </div>
                                                     </div>
-                                                     <div class="row">
+                                                     <div class="row mb-2">
                                                         <div class="col-12" id="credits_left">
                                                             Credits Left <span id="credits_left_span">{{ Auth::user()->credits }}</span>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
+                                                    <div class="row mb-2">
                                                         <div class="col-12">
                                                             <a href="{{URL::route('upgrade_account')}}" class="btn btn-primary">Upgrade Account</a>
                                                         </div>
@@ -211,10 +211,9 @@
    
     @yield('footer')
      <script>
-        function updateCreditsLeft()
+        function updateCreditsLeft(value)
         {
-            
-            
+            // $('.progress-bar-credits').css('width', value+'%').attr('aria-valuenow', value);
         }
         function logout_modal()
         {
