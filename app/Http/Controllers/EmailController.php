@@ -87,7 +87,7 @@ class EmailController extends Controller
             } 
             
 
-            return json_encode(array('status'=>$json_output[0]->status,'emails'=>$json_output[0]->email,'logs'=>$json_output[0]->logs,'proxy'=>$json_output[0]->proxy,'credits_left'=>$user->credits,'commands'=>$json_output[0]->commands));
+            return json_encode(array('status'=>$json_output[0]->status,'emails'=>$json_output[0]->email,'logs'=>$json_output[0]->logs,'proxy'=>$json_output[0]->proxy,'credits_left'=>$user->credits,'commands'=>$json_output[0]->commands,'MX'=>$json_output[0]->mx,'Catch All Test'=>$json_output[0]->catch_all_test));
          }
          catch(Exception $e)
          {
