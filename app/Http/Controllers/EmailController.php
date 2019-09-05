@@ -87,12 +87,17 @@ class EmailController extends Controller
             // return json_encode($server_output);
 
             $json_output=json_decode($server_output);
-
+            $status="-";
             if($json_output && count($json_output)>0)
             {
+               $status=$json_output[0]->status;
                if($json_output[0]->status != 'Valid')
                {
                   
+                  if($json_output[0]->mx==null || $json_output[0]->mx=='')
+                  {
+                     $status="No Mailbox";
+                  }
                   $emails_db = new Emails;
                   $emails_db->first_name = strtolower($request->first_name);
                   $emails_db->last_name = strtolower($request->last_name);
@@ -105,9 +110,11 @@ class EmailController extends Controller
                   {
                      $json_output[0]->email=strtolower($request->first_name).'@'.strtolower($request->domain);
                   }
+
                }
                else
                {
+                  
                   $user->credits=($user->credits)-1;
                   $user->save();
                   $emails_db = new Emails;
@@ -124,7 +131,7 @@ class EmailController extends Controller
             } 
             
 
-            return json_encode(array('status'=>$json_output[0]->status,'emails'=>$json_output[0]->email,'logs'=>$json_output[0]->logs,'proxy'=>$json_output[0]->proxy,'credits_left'=>$user->credits,'commands'=>$json_output[0]->commands,'MX'=>$json_output[0]->mx,'Catch All Test'=>$json_output[0]->catch_all_test));
+            return json_encode(array('status'=>$status,'emails'=>$json_output[0]->email,'logs'=>$json_output[0]->logs,'proxy'=>$json_output[0]->proxy,'credits_left'=>$user->credits,'commands'=>$json_output[0]->commands,'MX'=>$json_output[0]->mx,'Catch All Test'=>$json_output[0]->catch_all_test));
          }
          catch(Exception $e)
          {
