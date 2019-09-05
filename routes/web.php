@@ -21,7 +21,7 @@ Route::get('/', function () {
 
 
 
-Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
+//Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
 
 Route::get('/find', 'EmailController@find_email_page')->name('find')->middleware('verified');
 Route::get('/verify', 'EmailController@verify_email_page')->name('verify')->middleware('verified');
@@ -95,4 +95,4 @@ Route::post('enableRecurringBilling','UserController@enableRecurringBilling')->n
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
