@@ -159,7 +159,7 @@ function populate_emails()
           newCell.style.border="0px";
           container.appendChild(text);
           container.style.fontWeight="bold";
-          if(data[i]['status']=="Valid")
+          if(data[i]['status']=="Valid" || data[i]['status']=="Multiple Emails")
           {
             newRow.style.border= "1px solid green";
             container.style.color = "green";
@@ -277,7 +277,7 @@ function find_email_ajax()
 
                 if('status' in response && 'emails' in response)
                 {
-                    if(response['status']=="Valid")
+                    if(response['status']=="Valid" || response['status']=="Multiple Emails")
                     {	
                     	newRow.style.border= "1px solid green";
                     	newRow.cells[2].innerHTML='<div style="font-weight:bold; color:green">Valid</div>';
@@ -285,12 +285,12 @@ function find_email_ajax()
                     else if(response['status']=="Catch All")
                     {
                     	newRow.style.border= "1px solid orange";
-                    	newRow.cells[2].innerHTML='<div style=" font-weight:bold; color:orange">Catch All</div>';
+                    	newRow.cells[2].innerHTML='<div style=" font-weight:bold; color:orange">'+response['status']+'</div>';
                     }
                     else
                     {
                     	newRow.style.border= "1px solid red";
-                    	newRow.cells[2].innerHTML='<div style="font-weight:bold; color:red">Not Found</div>';
+                    	newRow.cells[2].innerHTML='<div style="font-weight:bold; color:red">'+response['status']+'</div>';
                     }
                     if(response['emails']=='' || response['emails']==null || response['emails']==undefined)
                     {

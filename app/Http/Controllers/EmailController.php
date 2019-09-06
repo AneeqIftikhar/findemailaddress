@@ -16,6 +16,7 @@ use App\Emails;
 use App\Exports\EmailsExport;
 use App\Rules\BlackListDomains;
 use App\Rules\IsValidDomain;
+use Validator;
 class EmailController extends Controller
 {
 
@@ -102,7 +103,7 @@ class EmailController extends Controller
                   $emails_db->first_name = strtolower($request->first_name);
                   $emails_db->last_name = strtolower($request->last_name);
                   $emails_db->domain = strtolower($request->domain);
-                  $emails_db->status = $json_output[0]->status;
+                  $emails_db->status = $status;
                   $emails_db->user_id = $user->id;
                   $emails_db->type = 'find';
                   $emails_db->save(); 
@@ -141,6 +142,141 @@ class EmailController extends Controller
 
 
    	}
+      function find_email_api(Request $request)
+      {
+         try
+         {
+
+            // $this->validate($request, [
+            //     'first_name' => ['required', 'string', 'max:50'],
+            //     'last_name' => ['required', 'string', 'max:50'],
+            //     'domain' => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
+            // ]);
+              $validator = Validator::make($request->all(), [
+                'first_name' => ['required', 'string', 'max:50'],
+                'last_name' => ['required', 'string', 'max:50'],
+                'domain' => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
+            ]);
+
+            if ($validator->fails()) {
+              $errors = $validator->errors();
+                return response()->json(["errors"=>$errors],422);
+            }
+            $endpoint = "http://18.217.246.105:5000/find";
+            $postdata='data=[{"'.'firstName":"'.$request->first_name.'", "'.'lastName":"'.$request->last_name.'", "'.'domainName": "'.$request->domain.'"}]';
+            $ch = curl_init();
+
+            curl_setopt($ch, CURLOPT_URL,$endpoint);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS,$postdata);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 200);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            $server_output = curl_exec ($ch);
+
+
+            if ($error_number = curl_errno($ch)) {
+
+                if (in_array($error_number, array(CURLE_OPERATION_TIMEDOUT, CURLE_OPERATION_TIMEOUTED))) {
+                  
+
+                  return json_encode(array('status'=>"Not Found",'emails'=>"",'MX'=>"","error"=>"curl timed out")); 
+                }
+                else
+                {
+                   return json_encode(array('status'=>"Not Found",'emails'=>"",'MX'=>"","error"=>curl_error($ch))); 
+                }
+            }
+            
+
+            curl_close ($ch);
+
+            $json_output=json_decode($server_output);
+            $status="-";
+            if($json_output && count($json_output)>0)
+            {
+               $status=$json_output[0]->status;
+               if($json_output[0]->status != 'Valid')
+               {
+                  
+                  if($json_output[0]->mx==null || $json_output[0]->mx=='')
+                  {
+                     $status="No Mailbox";
+                  }
+                  if($json_output[0]->status=='Catch All')
+                  {
+                     $json_output[0]->email=strtolower($request->first_name).'@'.strtolower($request->domain);
+                  }
+
+               }
+
+               
+            } 
+            
+
+            return json_encode(array('status'=>$status,'emails'=>$json_output[0]->email,'MX'=>$json_output[0]->mx));
+         }
+         catch(Exception $e)
+         {
+
+         }
+         
+
+
+      }
+    function verify_email_api(Request $request)
+    {
+      try
+         {
+            // $this->validate($request, [
+            //     'email' => ['required', 'string', 'email', 'max:255',new BlackListDomains],
+            // ]);
+             $validator = Validator::make($request->all(), [
+                 'email' => ['required', 'string', 'email', 'max:255',new BlackListDomains],
+            ]);
+
+            if ($validator->fails()) {
+              $errors = $validator->errors();
+                return response()->json(["errors"=>$errors],422);
+            }
+            $endpoint = "http://18.217.246.105:5000/verify";
+            $postdata='data=["'.$request->email.'"]';
+          $ch = curl_init();
+
+            curl_setopt($ch, CURLOPT_URL,$endpoint);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS,$postdata);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 50);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            $server_output = curl_exec ($ch);
+
+            curl_close ($ch);
+            
+            $email_status="Valid";
+            $server_status="Valid";
+            $json_output=json_decode($server_output);
+            if($json_output[0]->mx==null || $json_output[0]->mx=='')
+            {
+               $server_status=$json_output[0]->status;
+               $email_status="-";
+            }
+            else
+            {
+               $email_status=$json_output[0]->status;
+            }
+
+            return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status));
+         }
+         catch(Exception $e)
+         {
+
+         }
+    }
    	function verify_email_ajax(Request $request)
    	{
    		try

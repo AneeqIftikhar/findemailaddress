@@ -21,3 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('batch','EmailController@import');
 
 Route::get('2checkout','UserController@test_2checkout');
+
+
+Route::post('find_email_api','EmailController@find_email_api');
+Route::post('verify_email_api','EmailController@verify_email_api');
