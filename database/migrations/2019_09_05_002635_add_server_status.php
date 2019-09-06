@@ -15,7 +15,7 @@ class AddServerStatus extends Migration
     {
          Schema::table('emails', function (Blueprint $table) 
         { 
-            $table->timestamp('server_status')->nullable(); 
+            $table->string('server_status')->nullable(); 
         });
     }
 
