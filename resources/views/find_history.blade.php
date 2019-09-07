@@ -203,25 +203,25 @@ function populate_emails(filter)
        
       }
 }
-function 
 function report_bounce()
 {
-  $.ajax({
-            method: 'POST',
-            dataType: 'json', 
-            url: 'report_bounce', 
-            data: {'first_name' : first_name,'last_name':last_name,'domain':domain,"_token": "{{ csrf_token() }}"}, 
-            success: function(response){ // What to do if we succeed
+  // $.ajax({
+  //           method: 'POST',
+  //           dataType: 'json', 
+  //           url: 'report_bounce', 
+  //           data: {'first_name' : first_name,'last_name':last_name,'domain':domain,"_token": "{{ csrf_token() }}"}, 
+  //           success: function(response){ // What to do if we succeed
                 
 
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
+  //           },
+  //           error: function(jqXHR, textStatus, errorThrown) {
                 
                 
-                //first_name_error
-            },
-            timeout: 600 // sets timeout to 60 seconds
-        });
+  //               //first_name_error
+  //           },
+  //           timeout: 600 // sets timeout to 60 seconds
+  //       });
+  alert("In Progress");
 }
 </script>
 @endpush

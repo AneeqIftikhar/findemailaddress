@@ -102,9 +102,9 @@
                                     
                                 </div>
                             </li>
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                                 <a class="nav-link" href="#"><span class="padding_right"><i class="fas fa-folder-open fa-sm"></i></span>Files (coming soon)</a>
-                            </li>
+                            </li> -->
                            <!--  <li class="nav-item">
                                 <a class="nav-link" href="#">Advanced Search (coming soon)</a>
                             </li> -->
