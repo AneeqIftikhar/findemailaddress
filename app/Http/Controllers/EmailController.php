@@ -304,12 +304,9 @@ class EmailController extends Controller
             $server_status="Valid";
             $json_output=json_decode($server_output);
             $user=Auth::user();
-            if($json_output[0]->status=='Valid')
-            {  
-               $user->credits=($user->credits)-1;
-               $user->save();
-            }
-            else if($json_output[0]->mx==null || $json_output[0]->mx=='')
+            $user->credits=($user->credits)-1;
+            $user->save();
+            if($json_output[0]->mx==null || $json_output[0]->mx=='')
             {
                $server_status=$json_output[0]->status;
                $email_status="-";
