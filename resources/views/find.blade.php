@@ -95,6 +95,7 @@
 @endsection
 @push('scripts')
 <script type="text/javascript">
+    var request_counter=0;
 $( document ).ready(function() {
     data = {!! json_encode($emails->toArray(), JSON_HEX_TAG) !!};
     populate_emails();
@@ -190,154 +191,195 @@ function isValidDomain(v) {
 function find_email_ajax()
 {
 
-    
-    document.getElementById('find_error').innerHTML='';
-
-
-    var first_name=document.getElementById("first-name-field").value;
-    var last_name=document.getElementById("last-name-field").value;
-    var domain=document.getElementById("domain-field").value;
-    if(first_name==null || first_name=="")
-    {
-        document.getElementById('find_error').innerHTML="First Name Can not be Empty";
-    }
-    else if(first_name.length>50)
-    {
-        document.getElementById('find_error').innerHTML="First Name too Long";
-    }
-    else if(last_name==null || last_name=="")
-    {
-        document.getElementById('find_error').innerHTML="Last Name Can not be Empty";
-    }
-    else if(last_name.length>50)
-    {
-        document.getElementById('find_error').innerHTML="Last Name too Long";
-    }
-    else if(domain==null || domain=="")
-    {
-        document.getElementById('find_error').innerHTML="Domain Can not be Empty";
-    }
-    else if(domain.length>50)
-    {
-        document.getElementById('find_error').innerHTML="Domain too Long";
-    }
-    else if(!isValidDomain(domain))
-    {
-        document.getElementById('find_error').innerHTML="Invalid Domain";
-    }
-    else
-    {
-    	var tableRef = document.getElementById('activity_find_email_table').getElementsByTagName('tbody')[0];
-    	if(tableRef.rows.length>=8)
-        {
-            tableRef.deleteRow(tableRef.rows.length-1);
-            tableRef.deleteRow(tableRef.rows.length-1);
-        }
-        var newRow   = tableRef.insertRow(0);
-        newCell  = newRow.insertCell(0);
-        newCell.style.padding="2px";
-        newCell.colspan=3;
-        newCell.style.border="0px";
-
-        var newRow   = tableRef.insertRow(1);
-	      newCell  = newRow.insertCell(0);
-	      newText  = document.createTextNode(first_name+" "+last_name);
-          newCell.style.border="0px";
-	      newCell.appendChild(newText);
-
-	      newCell  = newRow.insertCell(1);
-	      newText  = document.createTextNode(domain);
-          newCell.style.border="0px";
-	      newCell.appendChild(newText);
-
-	      newCell  = newRow.insertCell(2);
-		  spinner = document.createElement("i");
-	      spinner.className="fa fa-spinner fa-spinner fa-spin";
-          newCell.style.border="0px";
-	      newCell.appendChild(spinner);
-
 
         
-        $.ajax({
-            method: 'POST',
-            dataType: 'json', 
-            url: 'find_email', 
-            data: {'first_name' : first_name,'last_name':last_name,'domain':domain,"_token": "{{ csrf_token() }}"}, 
-            success: function(response){ // What to do if we succeed
-                console.log(response);
-                document.getElementById('email-verifier-result-container').innerHTML=" ";
-                document.getElementById('email-verifier-result-container').innerHTML="Proxy: "+response['proxy'];
-                document.getElementById('email-verifier-result-container').innerHTML+="<br>";
-                for (var i = 0; i<response['logs'].length;i++)
-                {
-                    document.getElementById('email-verifier-result-container').innerHTML+=response['logs'][i]+"<br>";
-                }
-                
-                
+        document.getElementById('find_error').innerHTML='';
 
-                if('status' in response && 'emails' in response)
-                {
-                    if(response['status']=="Valid" || response['status']=="Multiple Emails")
-                    {	
-                    	newRow.style.border= "1px solid green";
-                    	newRow.cells[2].innerHTML='<div style="font-weight:bold; color:green">Valid</div>';
-                    }
-                    else if(response['status']=="Catch All")
+
+        var first_name=document.getElementById("first-name-field").value;
+        var last_name=document.getElementById("last-name-field").value;
+        var domain=document.getElementById("domain-field").value;
+
+        document.getElementById("first-name-field").value="";
+        document.getElementById("last-name-field").value="";
+        document.getElementById("domain-field").value="";
+
+        if(first_name==null || first_name=="")
+        {
+            document.getElementById('find_error').innerHTML="First Name Can not be Empty";
+        }
+        else if(first_name.length>50)
+        {
+            document.getElementById('find_error').innerHTML="First Name too Long";
+        }
+        else if(last_name==null || last_name=="")
+        {
+            document.getElementById('find_error').innerHTML="Last Name Can not be Empty";
+        }
+        else if(last_name.length>50)
+        {
+            document.getElementById('find_error').innerHTML="Last Name too Long";
+        }
+        else if(domain==null || domain=="")
+        {
+            document.getElementById('find_error').innerHTML="Domain Can not be Empty";
+        }
+        else if(domain.length>50)
+        {
+            document.getElementById('find_error').innerHTML="Domain too Long";
+        }
+        else if(!isValidDomain(domain))
+        {
+            document.getElementById('find_error').innerHTML="Invalid Domain";
+        }
+        else
+        {
+            request_counter++;
+            var tableRef = document.getElementById('activity_find_email_table').getElementsByTagName('tbody')[0];
+            if(tableRef.rows.length>=8)
+            {
+                tableRef.deleteRow(tableRef.rows.length-1);
+                tableRef.deleteRow(tableRef.rows.length-1);
+            }
+            var newRow   = tableRef.insertRow(0);
+            newCell  = newRow.insertCell(0);
+            newCell.style.padding="2px";
+            newCell.colspan=3;
+            newCell.style.border="0px";
+
+            var newRow   = tableRef.insertRow(1);
+              newCell  = newRow.insertCell(0);
+              newText  = document.createTextNode(first_name+" "+last_name);
+              newCell.style.border="0px";
+              newCell.appendChild(newText);
+
+              newCell  = newRow.insertCell(1);
+              newText  = document.createTextNode(domain);
+              newCell.style.border="0px";
+              newCell.appendChild(newText);
+
+              newCell  = newRow.insertCell(2);
+              spinner = document.createElement("i");
+              spinner.className="fa fa-spinner fa-spinner fa-spin";
+              newCell.style.border="0px";
+              newCell.appendChild(spinner);
+
+
+            
+            $.ajax({
+                method: 'POST',
+                dataType: 'json', 
+                url: 'find_email', 
+                data: {'first_name' : first_name,'last_name':last_name,'domain':domain,"_token": "{{ csrf_token() }}"}, 
+                success: function(response){ // What to do if we succeed
+                    console.log(response);
+                    document.getElementById('email-verifier-result-container').innerHTML=" ";
+                    document.getElementById('email-verifier-result-container').innerHTML="Proxy: "+response['proxy'];
+                    document.getElementById('email-verifier-result-container').innerHTML+="<br>";
+                    for (var i = 0; i<response['logs'].length;i++)
                     {
-                    	newRow.style.border= "1px solid orange";
-                    	newRow.cells[2].innerHTML='<div style=" font-weight:bold; color:orange">'+response['status']+'</div>';
+                        document.getElementById('email-verifier-result-container').innerHTML+=response['logs'][i]+"<br>";
                     }
-                    else
-                    {
-                    	newRow.style.border= "1px solid red";
-                    	newRow.cells[2].innerHTML='<div style="font-weight:bold; color:red">'+response['status']+'</div>';
-                    }
-                    if(response['emails']=='' || response['emails']==null || response['emails']==undefined)
-                    {
-                    }
-                    else
-                    {
-                    	newRow.cells[1].innerHTML='<div>'+response['emails']+'</div>';
-                    }
-                    document.getElementById('credits_left_span').innerHTML=response['credits_left'];
                     
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                
-                if( jqXHR.status === 422 )
-                {
-                    $errors = jqXHR.responseJSON;
+                    
 
-                     $.each( $errors.errors , function( key, value ) {
-                            document.getElementById('find_error').innerHTML=value[0];
+                    if('status' in response && 'emails' in response)
+                    {
+                        if(response['status']=="Valid" || response['status']=="Multiple Emails")
+                        {   
+                            newRow.style.border= "1px solid green";
+                            newRow.cells[2].innerHTML='<div style="font-weight:bold; color:green">Valid</div>';
+                        }
+                        else if(response['status']=="Catch All")
+                        {
+                            newRow.style.border= "1px solid orange";
+                            newRow.cells[2].innerHTML='<div style=" font-weight:bold; color:orange">'+response['status']+'</div>';
+                        }
+                        else
+                        {
+                            newRow.style.border= "1px solid red";
+                            newRow.cells[2].innerHTML='<div style="font-weight:bold; color:red">'+response['status']+'</div>';
+                        }
+                        if(response['emails']=='' || response['emails']==null || response['emails']==undefined)
+                        {
+                        }
+                        else
+                        {
+                            newRow.cells[1].innerHTML='<div>'+response['emails']+'</div>';
+                        }
+                        document.getElementById('credits_left_span').innerHTML=response['credits_left'];
                         
-                    });
-                }
-                else if( jqXHR.status === 419 )
-                {
-                    console.log(jqXHR);
-                    // if(jqXHR.statusText=="unknown status")
-                    // {
-                    //     document.getElementById('find_error').innerHTML="Login Again";
-                    // }
-                    $("#login_again").modal()
-                    
-                }
-                else
-                {
-                    console.log(jqXHR);
-                    if(jqXHR.statusText=="timeout")
-                    {
-                    	newRow.cells[2].innerHTML='<div style="color:red">Request Time Out</div>';
-                        document.getElementById('find_error').innerHTML="Request Timeout.";
                     }
-                }
-                //first_name_error
-            },
-            timeout: 600000 // sets timeout to 60 seconds
-        });
-    }
+                    document.getElementById("find_email_button").disabled = false;
+                    request_counter--;
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    
+                    if( jqXHR.status === 422 )
+                    {
+                        $errors = jqXHR.responseJSON;
+
+                         $.each( $errors.errors , function( key, value ) {
+                                document.getElementById('find_error').innerHTML=value[0];
+                            
+                        });
+                        tableRef.deleteRow(0);
+                        tableRef.deleteRow(0);
+                        request_counter--;
+                        document.getElementById("find_email_button").disabled = false;
+                    }
+                    else if( jqXHR.status === 419 )
+                    {
+                        console.log(jqXHR);
+                        // if(jqXHR.statusText=="unknown status")
+                        // {
+                        //     document.getElementById('find_error').innerHTML="Login Again";
+                        // }
+                        $("#login_again").modal()
+                        document.getElementById("find_email_button").disabled = false;
+                        request_counter--;
+                        
+                    }
+                    else if (jqXHR.status === 429)
+                    {
+
+                        tableRef.deleteRow(0);
+                        tableRef.deleteRow(0);
+                        document.getElementById('find_error').innerHTML="Too Many Requests";
+                        document.getElementById("find_email_button").disabled = false;
+                        request_counter--;
+                    }
+                    else if(jqXHR.status === 403)
+                    {
+                        tableRef.deleteRow(0);
+                        tableRef.deleteRow(0);
+                        $("#login_again").modal()
+                        document.getElementById("find_email_button").disabled = false;
+                        request_counter--;
+                    }
+                    else
+                    {
+                        console.log(jqXHR);
+                        if(jqXHR.statusText=="timeout")
+                        {
+                            newRow.cells[2].innerHTML='<div style="color:red">Request Time Out</div>';
+                            document.getElementById('find_error').innerHTML="Request Timeout.";
+                        }
+                        document.getElementById("find_email_button").disabled = false;
+                        request_counter--;
+                    }
+                    
+                    //first_name_error
+                },
+                timeout: 600000 // sets timeout to 60 seconds
+            });
+        }
+
+        if(request_counter==4)
+        {
+            document.getElementById("find_email_button").disabled = true;
+        }
+  
     
 }
 

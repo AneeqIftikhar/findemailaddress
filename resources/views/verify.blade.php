@@ -141,6 +141,7 @@ function verify_email_ajax()
     $('#verify_help_text').css('display','block');
 
     var email=document.getElementById("email-field").value;
+    document.getElementById("email-field").value="";;
     if(email==null || email=="")
     {
         document.getElementById('email_error').innerHTML="Email can not be Empty";
@@ -253,7 +254,26 @@ function verify_email_ajax()
                        
                         
                     });
+                     tableRef.deleteRow(0);
+                        tableRef.deleteRow(0);
                 }
+                else if( jqXHR.status === 419 )
+                    {
+                        console.log(jqXHR);
+
+                        $("#login_again").modal()
+                        document.getElementById("find_email_button").disabled = false;
+                        request_counter--;
+                        
+                    }
+                    else if (jqXHR.status === 429)
+                    {
+
+                        tableRef.deleteRow(0);
+                        tableRef.deleteRow(0);
+                        document.getElementById('verify_error').innerHTML="Too Many Requests";
+                        request_counter--;
+                    }
                 else
                 {
                     // document.getElementsByClassName("email-verifier-result-container")[0].innerHTML="Something Went Wrong";

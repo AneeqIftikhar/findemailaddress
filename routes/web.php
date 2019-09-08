@@ -21,6 +21,7 @@ Route::get('/', function () {
 
 
 
+
 //Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
 
 Route::get('/find', 'EmailController@find_email_page')->name('find')->middleware('verified');
@@ -71,8 +72,7 @@ Route::get('find_history','EmailController@getUserFoundEmails')->name('find_hist
 Route::get('verify_history','EmailController@getUserVerifiedEmails')->name('verify_history')->middleware('verified');
 Route::get('list','EmailController@getUserFiles')->name('list')->middleware('verified');
 Route::get('emails/{id}','EmailController@getEmailsFromFile')->name('emails')->middleware('verified');
-Route::post('find_email','EmailController@find_email_ajax')->middleware('verified');
-Route::post('verify_email','EmailController@verify_email_ajax')->middleware('verified');
+
 Route::post('batch','EmailController@import')->name('batch')->middleware('verified');
 
 Route::get('downloadcsv/{id}/{type}/{records}','EmailController@downloadExcel')->name('downloadcsv')->middleware('verified');
@@ -95,4 +95,8 @@ Route::post('enableRecurringBilling','UserController@enableRecurringBilling')->n
 
 Auth::routes();
 
-//Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['middleware' => ['throttle:8']], function () {
+    Route::post('find_email','EmailController@find_email_ajax');
+    Route::post('verify_email','EmailController@verify_email_ajax');
+});
