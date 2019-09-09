@@ -11,8 +11,16 @@ class AddDataToUserSession
   {
 
   	$package=$loginEvent->user->userPackagesLogs()->orderBy('id', 'DESC')->first();
-  	$package_details=$package->package()->first();
-  	//
-    Session::put('package_name', $package_details->name);
+  	if($package)
+  	{
+  		$package_details=$package->package()->first();
+	  	//
+	    Session::put('package_name', $package_details->name);
+  	}
+  	else
+  	{
+  		Session::put('package_name', "No");
+  	}
+  	
   }
 }

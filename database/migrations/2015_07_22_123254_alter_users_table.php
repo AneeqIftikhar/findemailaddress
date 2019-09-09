@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-
+use Illuminate\Support\Facades\Hash;
 class AlterUsersTable extends Migration
 {
     /**
@@ -16,6 +16,22 @@ class AlterUsersTable extends Migration
             $table->boolean('ticketit_admin')->default(0);
             $table->boolean('ticketit_agent')->default(0);
         });
+
+
+
+        $data=array (
+            array(
+                'name' => "Support",
+                'user_uuid' => '8dbaaa00-ea0e-4aec-89d3-3621b908b09a',
+                'password'=>Hash::make('P@kistan1'),
+                'email'=>'support@findemailaddress.co',
+                'created_at' => date('Y-m-d H:i:s'),
+                'ticketit_admin'=>true,
+                'updated_at' => date('Y-m-d H:i:s')
+            ),
+        );
+        
+        DB::table('users')->insert($data);
     }
 
     /**
