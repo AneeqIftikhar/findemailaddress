@@ -55,10 +55,19 @@ return [
     |
     */
 
+    // 'from' => [
+    //     'address' => env('MAIL_FROM_ADDRESS', 'no-reply@findemailaddress.com'),
+    //     'name' => env('MAIL_FROM_NAME', 'Example'),
+    // ],
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'no-reply@findemailaddress.com'),
+        'name' => env('MAIL_FROM_NAME', ''),
     ],
+    'from_support' => [
+        'address' => env('MAIL_FROM_ADDRESS_SUPPORT', 'no-reply@findemailaddress.com'),
+        'name' => env('MAIL_FROM_NAME_SUPPORT', 'Support FindEMailAddress'),
+    ],
+
 
     /*
     |--------------------------------------------------------------------------

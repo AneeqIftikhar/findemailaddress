@@ -47,7 +47,7 @@ class EmailController extends Controller
             $user=Auth::user();
             // return json_encode(array('status'=>"Catch All",'emails'=>'aneeq@dev-rec.com','logs'=>[],'proxy'=>'Proxy','credits_left'=>$user->credits));
 
-            $endpoint = "http://18.217.246.105:5000/find";
+            $endpoint = "http://3.17.231.9:3000/find";
             $postdata='data=[{"'.'firstName":"'.$request->first_name.'", "'.'lastName":"'.$request->last_name.'", "'.'domainName": "'.$request->domain.'"}]';
             $ch = curl_init();
 
@@ -162,7 +162,7 @@ class EmailController extends Controller
               $errors = $validator->errors();
                 return response()->json(["errors"=>$errors],422);
             }
-            $endpoint = "http://18.217.246.105:5000/find";
+            $endpoint = "http://3.17.231.9:3000/find";
             $postdata='data=[{"'.'firstName":"'.$request->first_name.'", "'.'lastName":"'.$request->last_name.'", "'.'domainName": "'.$request->domain.'"}]';
             $ch = curl_init();
 
@@ -241,7 +241,7 @@ class EmailController extends Controller
               $errors = $validator->errors();
                 return response()->json(["errors"=>$errors],422);
             }
-            $endpoint = "http://18.217.246.105:5000/verify";
+            $endpoint = "http://3.17.231.9:3000/verify";
             $postdata='data=["'.$request->email.'"]';
           $ch = curl_init();
 
@@ -284,7 +284,7 @@ class EmailController extends Controller
             $this->validate($request, [
                 'email' => ['required', 'string', 'email', 'max:255',new BlackListDomains],
             ]);
-            $endpoint = "http://18.217.246.105:5000/verify";
+            $endpoint = "http://3.17.231.9:3000/verify";
             $postdata='data=["'.$request->email.'"]';
       		$ch = curl_init();
 
