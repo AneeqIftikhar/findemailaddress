@@ -2,59 +2,54 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
+<div class="container" style="height: 100%">
+    <div class="row justify-content-center" style="height: 100%">
         <div class="col-md-6">
-            <div class="card">
+            <div class="card" style="height: 100%">
+                <div class="card-header">Find Email</div>
                 <div class="card-body p-0 py-4">
-                    <div class="row m-0 mb-4">
-                        <div class="col-12 px-4">
-                            <h3 class="mb-4">Find Email</h3>
-                            <div class="input-group input-group-lg mb-3">
-                                <input type="text" placeholder="First name" class="form-control" id="first-name-field">
+                    <div style="position: relative;top: 50% !important;transform: translateY(-50%);">
+                        <div class="row m-0 mb-4">
+                            <div class="col-12 px-4">
+                                <div class="input-group input-group-lg mb-3">
+                                    <input type="text" placeholder="First name" class="form-control" id="first-name-field">
+                                </div>
+                                <div class="input-group input-group-lg mb-3">
+                                    <input type="text" placeholder="Last name" class="form-control" id="last-name-field">
+                                </div>
+                                <div class="input-group input-group-lg mb-3">
+                                    <input type="text" placeholder="Domain name" class="form-control" id="domain-field">
+                                </div>
+                                <div class="input-group">
+                                    <button class="btn btn-success" type="button" id="find_email_button" style="min-width: 120px; font-weight: 700;" onclick="find_email_ajax()">
+                                    Find
+                                    </button>
+                                </div>
+                                <span class="invalid-feedback-custom">
+                                    <strong id="find_error"></strong>
+                                </span>
                             </div>
-                            <div class="input-group input-group-lg mb-3">
-                                <input type="text" placeholder="Last name" class="form-control" id="last-name-field">
+                        </div>
+                        
+                        <div class="row m-0">
+                            <div class="col-12 px-4 pt-0 pb-0" id="find_help_text">
+                                Enter first name, last name and the domain name of the email address (for example "ripcordsystems.com").
                             </div>
-                            <div class="input-group input-group-lg mb-3">
-                                <input type="text" placeholder="Domain name" class="form-control" id="domain-field">
-                            </div>
-                            <div class="input-group">
-                                <button class="btn btn-success" type="button" id="find_email_button" style="min-width: 120px; font-weight: 700;" onclick="find_email_ajax()">
-                                Find
-                                </button>
-                            </div>
-                            <span class="invalid-feedback-custom">
-                                <strong id="find_error"></strong>
-                            </span>
+                        </div>
+                        <div class="email-verifier-result">
+                            <div id="email-verifier-result-container"></div>
                         </div>
                     </div>
-                   <!--  <div id="find_response" style="display:none">
-                        <div  class="row m-0 response mt-4" >
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2 pl-4">Email</div>
-                        <div id="find_email" style="color: grey" class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2 text-right"></div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 p-2">Status</div>
-                        <div id="find_status" class="col-lg-3 col-md-3 col-sm-6 col-xs-6 text-right p-2 pr-4"></div>
-                    </div>
-                    </div> -->
                     
-                    <div class="row m-0">
-                        <div class="col-12 px-4 pt-0 pb-0" id="find_help_text">
-                            Enter first name, last name and the domain name of the email address (for example "ripcordsystems.com").
-                        </div>
-                    </div>
-                    <div class="email-verifier-result">
-                        <div id="email-verifier-result-container"></div>
-                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-body p-0 py-4">
+            <div class="card" style="height: 100%">
+                <div class="card-header">Activity Log</div>
+                <div class="card-body p-0 py-4" style="overflow-y: auto; max-height: 70vh;">
                     <div class="row m-0 mb-4">
-                        <div class="col-12 px-4">
-                            <h3 class="mb-4">Activity Log</h3>
+                        <div class="col-12" style="padding-left: 1.4rem!important;">
                             <div class="table-wrapper-scroll-y my-custom-scrollbar">
 	                            <table id="activity_find_email_table" class="table">
 	                            	<thead>
@@ -65,21 +60,7 @@
                                         </tr>
                                     </thead>
 								  <tbody>
-								    <!-- <tr>
-								      <td>Aneeq Iftikhar</td>
-								      <td>Ripcordsystems.com</td>
-								      <td>Not Found</td>
-								    </tr>
-								    <tr>
-								       <td>Aneeq Iftikhar</td>
-								      <td>dev-rec.com</td>
-								      <td>Valid</td>
-								    </tr>
-								    <tr>
-								       <td>Abdul Aleem</td>
-								      <td>omno.ai</td>
-								      <td>Valid</td>
-								    </tr> -->
+
 
 								  </tbody>
 								</table>
@@ -162,17 +143,20 @@ function populate_emails()
           container.style.fontWeight="bold";
           if(data[i]['status']=="Valid" || data[i]['status']=="Multiple Emails")
           {
-            newRow.style.border= "1px solid green";
+            //newRow.style.border= "1px solid green";
+            newRow.style.background="rgba(0,255,0,0.2)";
             container.style.color = "green";
           }
           else if (data[i]['status']=="Catch All")
           {
-            newRow.style.border= "1px solid orange";
+            //newRow.style.border= "1px solid orange";
+            newRow.style.background="rgba(255,165,0,0.2)";
             container.style.color = "orange";
           }
           else
           {
-            newRow.style.border= "1px solid red";
+            //newRow.style.border= "1px solid red";
+            newRow.style.background="rgba(255,0,0,0.2)";
             container.style.color = "red";
           }
           
@@ -236,11 +220,11 @@ function find_email_ajax()
         {
             request_counter++;
             var tableRef = document.getElementById('activity_find_email_table').getElementsByTagName('tbody')[0];
-            if(tableRef.rows.length>=8)
-            {
-                tableRef.deleteRow(tableRef.rows.length-1);
-                tableRef.deleteRow(tableRef.rows.length-1);
-            }
+            // if(tableRef.rows.length>=16)
+            // {
+            //     tableRef.deleteRow(tableRef.rows.length-1);
+            //     tableRef.deleteRow(tableRef.rows.length-1);
+            // }
             var newRow   = tableRef.insertRow(0);
             newCell  = newRow.insertCell(0);
             newCell.style.padding="2px";
@@ -287,17 +271,20 @@ function find_email_ajax()
                     {
                         if(response['status']=="Valid" || response['status']=="Multiple Emails")
                         {   
-                            newRow.style.border= "1px solid green";
+                            //newRow.style.border= "1px solid green";
+                            newRow.style.background="rgba(0,255,0,0.2)";
                             newRow.cells[2].innerHTML='<div style="font-weight:bold; color:green">Valid</div>';
                         }
                         else if(response['status']=="Catch All")
                         {
-                            newRow.style.border= "1px solid orange";
+                            //newRow.style.border= "1px solid orange";
+                            newRow.style.background="rgba(255,165,0,0.2)";
                             newRow.cells[2].innerHTML='<div style=" font-weight:bold; color:orange">'+response['status']+'</div>';
                         }
                         else
                         {
-                            newRow.style.border= "1px solid red";
+                            //newRow.style.border= "1px solid red";
+                            newRow.style.background="rgba(255,0,0,0.1)";
                             newRow.cells[2].innerHTML='<div style="font-weight:bold; color:red">'+response['status']+'</div>';
                         }
                         if(response['emails']=='' || response['emails']==null || response['emails']==undefined)

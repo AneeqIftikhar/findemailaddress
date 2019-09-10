@@ -118,6 +118,7 @@ function populate_emails(filter)
           text = document.createTextNode(data[i]['status']);
           container.appendChild(text);
           container.style.color = "green";
+          container.style.fontWeight="bold";
           newCell.appendChild(container);
         }
         else if(filter=="all")
@@ -147,7 +148,7 @@ function populate_emails(filter)
           {
             container.style.color = "red";
           }
-          
+          container.style.fontWeight="bold";
 
           newCell.appendChild(container);
         }

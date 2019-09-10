@@ -1,3 +1,22 @@
+
+.nav-link
+{
+  padding-right:1rem !important; 
+  padding-left:1rem !important;
+}
+
+
+.dropdown-item
+{
+  padding:1rem 1.5rem !important; 
+}
+
+html,body
+{
+  height: 100vh;
+  margin:0;
+}
+
 .email-finder-result .email-finder-message {
     margin-top: 20px;
     color: rgb(136, 136, 136);
@@ -127,7 +146,8 @@ section.pricing {
 
 
 .my-custom-scrollbar {
-height: 278px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .table-wrapper-scroll-y {
 display: block;
@@ -135,8 +155,8 @@ display: block;
 
 
 .my-custom-scrollbar2 {
-
-height: 160px;
+overflow-y: auto;
+  overflow-x: hidden;
 }
 .table-wrapper-scroll-y2 {
 display: block;

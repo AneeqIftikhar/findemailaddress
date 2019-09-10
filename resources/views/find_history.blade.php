@@ -128,7 +128,7 @@ function populate_emails(filter)
 
           container = document.createElement("span");
           text = document.createTextNode(data[i]['status']);
-
+          container.style.fontWeight="bold";
           container.appendChild(text);
           container.style.color = "green";
 
@@ -138,6 +138,8 @@ function populate_emails(filter)
           button = document.createElement("button");
           button.className="btn btn-primary";
           button.innerHTML ="Report Bounce";
+          var id=data[i]['id'];
+          button.onclick = function() { report_bounce_modal(id); };
           newCell.appendChild(button);
         }
         else if(filter=="all")
@@ -161,7 +163,7 @@ function populate_emails(filter)
 
           container = document.createElement("span");
           text = document.createTextNode(data[i]['status']);
-
+          container.style.fontWeight="bold";
           container.appendChild(text);
           if(data[i]['status']=="Valid")
           {
@@ -203,25 +205,10 @@ function populate_emails(filter)
        
       }
 }
-function report_bounce()
+function report_bounce_modal(id)
 {
-  // $.ajax({
-  //           method: 'POST',
-  //           dataType: 'json', 
-  //           url: 'report_bounce', 
-  //           data: {'first_name' : first_name,'last_name':last_name,'domain':domain,"_token": "{{ csrf_token() }}"}, 
-  //           success: function(response){ // What to do if we succeed
-                
-
-  //           },
-  //           error: function(jqXHR, textStatus, errorThrown) {
-                
-                
-  //               //first_name_error
-  //           },
-  //           timeout: 600 // sets timeout to 60 seconds
-  //       });
-  alert("In Progress");
+  console.log(id);
+  $("#report_bounce").modal()
 }
 </script>
 @endpush

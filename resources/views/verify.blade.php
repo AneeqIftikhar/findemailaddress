@@ -1,18 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
+<div class="container" style="height: 100%">
+    <div class="row justify-content-center" style="height: 100%">
         <div class="col-md-6">
-            <div class="card">
+            <div class="card" style="height: 100%">
+              <div class="card-header">Verify Email</div>
                 <div class="card-body p-0 py-4">
+                  <div style="position: relative;top: 50% !important;transform: translateY(-50%);">
                     <div class="row m-0 mb-4">
                         <div class="col-12 px-4">
-                            <h3 class="mb-4">Verify Email</h3>
                             <div class="input-group mb-3">
                                 <input type="email" id="email-field" class="form-control" placeholder="{{ __('Email') }}" aria-label="{{ __('Email') }}" style="height: 51px;">
                             </div>
-                            <div class="input-group" style="margin-top: 46px">
+                            <div class="input-group mt-4">
                                 <button class="btn btn-success" type="button" id="verify_email_button" style="min-width: 120px; font-weight: 700;" onclick="verify_email_ajax()">Verify</button>
                             </div>
                         
@@ -29,14 +30,15 @@
                     </div>
                     
                 </div>
+              </div>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-body p-0 py-4">
+            <div class="card" style="height: 100%">
+              <div class="card-header">Activity Log</div>
+                <div class="card-body p-0 py-4"  style="overflow-y: auto; max-height: 70vh;">
                     <div class="row m-0 mb-4">
-                        <div class="col-12 px-4">
-                            <h3 class="mb-4">Activity Log</h3>
+                        <div class="col-12" style="padding-left: 1.4rem!important;">
                             <div class="table-wrapper-scroll-y2 my-custom-scrollbar2">
                                 <table id="activity_verify_email_table" class="table">
                                     <thead>
@@ -99,6 +101,18 @@ function populate_emails()
           
           newCell.style.fontWeight="bold";
           newCell.style.border="0px";
+          if(data[i]['server_status']=="Valid")
+          {
+            newCell.style.color = "green";
+          }
+          else if (data[i]['server_status']=="Catch All")
+          {
+            newCell.style.color = "orange";
+          }
+          else
+          {
+            newCell.style.color = "red";
+          }
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(2);
@@ -110,17 +124,20 @@ function populate_emails()
           container.style.fontWeight="bold";
           if(data[i]['status']=="Valid")
           {
-            newRow.style.border= "1px solid green";
+            //newRow.style.border= "1px solid green";
+            newRow.style.background="rgba(0,255,0,0.2)";
             container.style.color = "green";
           }
           else if (data[i]['status']=="Catch All")
           {
-            newRow.style.border= "1px solid orange";
+            //newRow.style.border= "1px solid orange";
+            newRow.style.background="rgba(255,165,0,0.2)";
             container.style.color = "orange";
           }
           else
           {
-            newRow.style.border= "1px solid red";
+            //newRow.style.border= "1px solid red";
+            newRow.style.background="rgba(255,0,0,0.2)";
             container.style.color = "red";
           }
           
@@ -157,11 +174,11 @@ function verify_email_ajax()
     else
     {
         var tableRef = document.getElementById('activity_verify_email_table').getElementsByTagName('tbody')[0];
-        if(tableRef.rows.length>=4)
-        {
-            tableRef.deleteRow(tableRef.rows.length-1);
-            tableRef.deleteRow(tableRef.rows.length-1);
-        }
+        // if(tableRef.rows.length>=4)
+        // {
+        //     tableRef.deleteRow(tableRef.rows.length-1);
+        //     tableRef.deleteRow(tableRef.rows.length-1);
+        // }
         var newRow   = tableRef.insertRow(0);
         newCell  = newRow.insertCell(0);
         newCell.style.padding="2px";
@@ -198,33 +215,39 @@ function verify_email_ajax()
                 console.log(response);
                 if(response['server_status']=="Valid")
                 {
-                    newRow.style.border= "1px solid green";
+                    //newRow.style.border= "1px solid green";
+                    newRow.style.background="rgba(0,255,0,0.2)";
                     newRow.cells[1].innerHTML='<div style="font-weight:bold;color:green">'+response['server_status']+'</div>';
                 }
                 else if(response['server_status']=="Catch All")
                 {
-                    newRow.style.border= "1px solid orange";
+                    //newRow.style.border= "1px solid orange";
+                    newRow.style.background="rgba(255,165,0,0.2)";
                     newRow.cells[1].innerHTML='<div style="font-weight:bold;color:orange">'+response['server_status']+'</div>';
                 }
                 else
                 {
-                    newRow.style.border= "1px solid red";
+                    //newRow.style.border= "1px solid red";
+                    newRow.style.background="rgba(255,0,0,0.2)";
                     newRow.cells[1].innerHTML='<div style="font-weight:bold;color:red">'+response['server_status']+'</div>';
                 }
                 if(response['email_status']=="Valid")
                 {
-                    newRow.style.border= "1px solid green";
+                    //newRow.style.border= "1px solid green";
+                    newRow.style.background="rgba(0,255,0,0.2)";
                     newRow.cells[2].innerHTML='<div style="font-weight:bold;color:green">'+response['email_status']+'</div>';
 
                 }
                 else if(response['email_status']=="Catch All")
                 {
-                    newRow.style.border= "1px solid orange";
+                    //newRow.style.border= "1px solid orange";
+                    newRow.style.background="rgba(255,165,0,0.2)";
                     newRow.cells[2].innerHTML='<div style="font-weight:bold;color:orange">'+response['email_status']+'</div>';
                 }
                 else
                 {
-                    newRow.style.border= "1px solid red";
+                    //newRow.style.border= "1px solid red";
+                    newRow.style.background="rgba(255,0,0,0.2)";
                     newRow.cells[2].innerHTML='<div style="font-weight:bold;color:red">'+response['email_status']+'</div>';
                 }
                 document.getElementById('credits_left_span').innerHTML=response['credits_left'];

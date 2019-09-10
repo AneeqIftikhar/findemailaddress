@@ -31,28 +31,49 @@
 </head>
 <body>
     
-    <div>
+    <div style="display: flex;flex-flow: column;height: 100%">
         <div class="modal" tabindex="-1" role="dialog" id="login_again">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-        <div class="alert alert-danger" style="display:none"></div>
-      <div class="modal-header">
-        
-        <h5 class="modal-title">Session Expired</h5>
-                <button type="button" class="close" data-dismiss="modal" onClick="logout_modal()" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Login Again To Continue.</p>
-      </div>
-      <div class="modal-footer">
-        <button  class="btn btn-success" onClick="logout_modal()" id="ajaxSubmit">Logout</button>
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="alert alert-danger" style="display:none"></div>
+              <div class="modal-header">
+                
+                <h5 class="modal-title">Session Expired</h5>
+                        <button type="button" class="close" data-dismiss="modal" onClick="logout_modal()" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Login Again To Continue.</p>
+              </div>
+              <div class="modal-footer">
+                <button  class="btn btn-success" onClick="logout_modal()" id="ajaxSubmit">Logout</button>
+                </div>
+            </div>
+          </div>
         </div>
-    </div>
-  </div>
-</div>
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+
+        <div class="modal" tabindex="-1" role="dialog" id="report_bounce">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="alert alert-danger" style="display:none"></div>
+              <div class="modal-header">
+                
+                <h5 class="modal-title">Report Bounce</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <input type="text" name="message">
+              </div>
+              <div class="modal-footer">
+                <button  class="btn btn-success" onClick="report_bounce()" id="ajaxSubmit">Report</button>
+                </div>
+            </div>
+          </div>
+        </div>
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm" style="flex:0 1 auto">
 
             <div class="container">
                 <a class="navbar-brand" href="{{URL::route('find')}}">
@@ -132,16 +153,16 @@
                                 <a id="navbarDropdown" class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre onclick="updateCreditsLeft()">
                                     <table>
                                         <tr>
-                                            <td style="padding: 2px;">
+                                            <td style="padding: 2px 12px;">
                                                 <i class="fas fa-user-circle fa-3x"></i>
                                             </td>
-                                            <td style="padding: 2px;">
-                                                <strong>{{ Auth::user()->name }}</strong>
+                                            <td style="padding: 2px; line-height: 19px;">
+                                                <strong >{{ Auth::user()->name }}</strong>
                                                 <br>
-                                                <span>{{session('package_name')}} Plan</span>
+                                                <span class="badge badge-primary" >{{session('package_name')}} Plan</span>
                                             </td>
-                                            <td style="padding: 2px;">
-                                                <i class="fas fa-angle-down fa-sm"></i>
+                                            <td style="padding: 2px 12px;">
+                                                <i class="fas fa-angle-down fa-2x"></i>
                                             </td>
                                         </tr>
                                     </table>
@@ -151,7 +172,7 @@
                                     
                                 </a>
                                 
-                                <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown" style="right:0px">
 
                                         <div class="container">
                                             <div class="row" style="padding-bottom: 10px !important;">
@@ -201,7 +222,7 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-4" style="flex:1 1 auto; background: #292E4B">
             @yield('content')
         </main>
     </div>
