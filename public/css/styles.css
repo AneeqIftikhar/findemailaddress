@@ -243,3 +243,23 @@ display: block;
 {
   color: var(--main-bg-color) !important;
 }
+
+.table-responsive {
+   display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+/*.coming-soon::after
+{
+  background: url(../images/coming-soon.png);
+}*/
+
+.coming-soon {
+padding: 8px 75px 8px 20px;
+background-position: top right;
+background-image:  url(../images/coming-soon.png);
+float: left;
+}

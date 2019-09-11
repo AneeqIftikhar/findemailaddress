@@ -77,6 +77,7 @@
 @push('scripts')
 <script type="text/javascript">
     var request_counter=0;
+    document.cookie = "is_logged_in=true";
 $( document ).ready(function() {
     data = {!! json_encode($emails->toArray(), JSON_HEX_TAG) !!};
     populate_emails();

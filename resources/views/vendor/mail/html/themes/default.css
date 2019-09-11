@@ -1,5 +1,8 @@
 /* Base */
 
+:root {
+  --main-bg-color: rgba(41,46,75,1);
+}
 body,
 body *:not(html):not(style):not(br):not(tr):not(code) {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,

@@ -3,16 +3,14 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Find Email History</div>
 
                 <div class="card-body">
                   @if (count($emails)>0)
-                      <div class="row" style="margin-bottom: 4px">
-                        <div class="col-md-6">
-                        </div>
-                        <div class="col-md-6" align="right">
+                      <div class="row">
+                        <div class="col-md-12 mb-2" align="right">
                         
                              
                               <button class="btn btn-primary nav-item dropdown">
@@ -40,27 +38,26 @@
                               </button>
                              
                         </div>
+                        <div class="col-md-12">
+                          <div class="table-responsive">
+                          <table class="table" id="emails_table">
+                          <thead class="black white-text">
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Domain</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                        </table>
                     </div>
-                   <table class="table" id="emails_table">
-                      <thead class="black white-text">
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Domain</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <!--  @foreach($emails as $email)
-                          <tr class="table-row">    
-                              <td> {{$email->first_name }} {{$email->last_name}} </td>
-                              <td> {{$email->email}} </td>
-                              <td> {{$email->status}} </td>
-                          </tr>
-                         @endforeach -->
-                      </tbody>
-                    </table>
+                        </div>
+                        
+                    </div>
+                    
                   @else
                     <h5 class="card-title">No Emails Found.</h5>    
                   @endif
