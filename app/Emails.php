@@ -53,5 +53,10 @@ class Emails extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function bounce()
+    {
+        return $this->hasMany('App\ReportedBounce', 'email_id', 'id');
+    }
+
     
 }

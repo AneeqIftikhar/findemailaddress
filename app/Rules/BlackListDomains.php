@@ -46,6 +46,6 @@ class BlackListDomains implements Rule
      */
     public function message()
     {
-        return 'The :attribute must be of comapny domain.';
+        return 'The :attribute must be of company domain.';
     }
 }

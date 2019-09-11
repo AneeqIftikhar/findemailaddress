@@ -8,7 +8,7 @@
             <div class="card" style="height: 100%">
                 <div class="card-header">Find Email</div>
                 <div class="card-body p-0 py-4">
-                    <div style="position: relative;top: 50% !important;transform: translateY(-50%);">
+                    <!-- <div style="position: relative;top: 50% !important;transform: translateY(-50%);"> -->
                         <div class="row m-0 mb-4">
                             <div class="col-12 px-4">
                                 <div class="input-group input-group-lg mb-3">
@@ -39,7 +39,7 @@
                         <div class="email-verifier-result">
                             <div id="email-verifier-result-container"></div>
                         </div>
-                    </div>
+                    <!-- </div> -->
                     
                 </div>
             </div>
@@ -136,7 +136,7 @@ function populate_emails()
 
           newCell  = newRow.insertCell(2);
 
-          container = document.createElement("span");
+          container = document.createElement("div");
           text = document.createTextNode(data[i]['status']);
           newCell.style.border="0px";
           container.appendChild(text);
@@ -152,12 +152,23 @@ function populate_emails()
             //newRow.style.border= "1px solid orange";
             newRow.style.background="rgba(255,165,0,0.2)";
             container.style.color = "orange";
+            container.setAttribute('data-toggle', 'tooltip');
+            container.setAttribute('data-placement', 'bottom');
+            container.setAttribute('data-html', 'true');
+            container.setAttribute('title', 'Catch All status means this domain will catch any email sent to a non-existent email address.');
           }
           else
           {
             //newRow.style.border= "1px solid red";
             newRow.style.background="rgba(255,0,0,0.2)";
             container.style.color = "red";
+            if(data[i]['status']=="No Mailbox")
+            {
+                container.setAttribute('data-toggle', 'tooltip');
+                container.setAttribute('data-placement', 'bottom');
+                container.setAttribute('data-html', 'true');
+                container.setAttribute('title', 'No Mailbox status means this domain does not have a mail server setup');
+            }
           }
           
 
@@ -184,9 +195,6 @@ function find_email_ajax()
         var last_name=document.getElementById("last-name-field").value;
         var domain=document.getElementById("domain-field").value;
 
-        document.getElementById("first-name-field").value="";
-        document.getElementById("last-name-field").value="";
-        document.getElementById("domain-field").value="";
 
         if(first_name==null || first_name=="")
         {
@@ -219,6 +227,9 @@ function find_email_ajax()
         else
         {
             request_counter++;
+            document.getElementById("first-name-field").value="";
+            document.getElementById("last-name-field").value="";
+            document.getElementById("domain-field").value="";
             var tableRef = document.getElementById('activity_find_email_table').getElementsByTagName('tbody')[0];
             // if(tableRef.rows.length>=16)
             // {
@@ -314,6 +325,9 @@ function find_email_ajax()
                         tableRef.deleteRow(0);
                         request_counter--;
                         document.getElementById("find_email_button").disabled = false;
+                        document.getElementById("first-name-field").value=first_name;
+                        document.getElementById("last-name-field").value=last_name;
+                        document.getElementById("domain-field").value=domain;
                     }
                     else if( jqXHR.status === 419 )
                     {

@@ -65,11 +65,34 @@
                 </button>
               </div>
               <div class="modal-body">
-                <input type="text" name="message">
+                <form method="POST" action="{{ route('report_bounce') }}" enctype="multipart/form-data" aria-label="{{ __('Report Bounce') }}">
+                    @csrf
+                        
+                        <input type="hidden" name="bounce_email_id" id="bounce_email_id">
+                        <input type="hidden" name="bounce_email_type" id="bounce_email_type">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <textarea rows="3" name="bounce_message" placeholder="Place Your Bounce Email Here" class="form-control" id="bounce_message" required>
+                                </textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <div class="form-group row">
+                                <div class="col-sm-4 col-form-label text-md-right">
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                            
+                    </form>
               </div>
-              <div class="modal-footer">
-                <button  class="btn btn-success" onClick="report_bounce()" id="ajaxSubmit">Report</button>
-                </div>
+              
+                <!-- <button  class="btn btn-success" onClick="report_bounce_ajax()" id="ajaxSubmit">Report</button> -->
+               
             </div>
           </div>
         </div>
@@ -177,17 +200,17 @@
                                         <div class="container">
                                             <div class="row" style="padding-bottom: 10px !important;">
                                                 <div class="col-12">
-                                                    <div class='row'>
+                                                    <div class='row mt-2'>
                                                         <div class="col-12">
                                                             <strong>{{session('package_name')}} Plan</strong>
                                                         </div>
                                                     </div>
-                                                     <div class="row mb-2">
+                                                     <div class="row mt-2">
                                                         <div class="col-12" id="credits_left">
                                                             Credits Left <span id="credits_left_span">{{ Auth::user()->credits }}</span>
                                                         </div>
                                                     </div>
-                                                    <div class="row mb-2">
+                                                    <div class="row mb-2 mt-2">
                                                         <div class="col-12">
                                                             <a href="{{URL::route('upgrade_account')}}" class="btn btn-primary">Upgrade Account</a>
                                                         </div>
@@ -222,17 +245,21 @@
             </div>
         </nav>
 
-        <main class="py-4" style="flex:1 1 auto; background: #292E4B">
+        <main class="py-4" style="flex:1 1 auto;">
             @yield('content')
         </main>
     </div>
     <script src="{{ asset('js/jquery-3.3.1.min.js') }}" ></script> 
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/jquery.toaster.js') }}" defer></script>
+    <script src="{{ asset('js/popper.min.js') }}" defer></script>
     @stack('scripts')
    
     @yield('footer')
      <script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
         function updateCreditsLeft(value)
         {
             // $('.progress-bar-credits').css('width', value+'%').attr('aria-valuenow', value);
@@ -242,7 +269,13 @@
             window.location.href = "{{ route('login') }}";
             $('#login_again').modal('hide');
         }
-      
+        function report_bounce_modal(id,type)
+        {
+          $('#bounce_email_id').val(id);
+          $('#bounce_email_type').val(type);
+          $("#bounce_message").val('');
+          $("#report_bounce").modal();          
+        }
     </script>
 </body>
  

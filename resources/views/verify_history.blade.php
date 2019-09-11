@@ -16,7 +16,7 @@
                         
                              
                               <button class="btn btn-primary nav-item dropdown">
-                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="padding: 0px; color: white">
+                                 <a id="navbarDropdown" class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="padding: 0px; color: white">
                                     <span><i class="fas fa-download fa-lg"></i></span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-left">
@@ -46,6 +46,7 @@
                         <tr>
                             <th scope="col">Email</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -120,6 +121,27 @@ function populate_emails(filter)
           container.style.color = "green";
           container.style.fontWeight="bold";
           newCell.appendChild(container);
+
+          newCell  = newRow.insertCell(2);
+          if(data[i]['bounce'].length>0)
+          {
+            container = document.createElement("span");
+            text = document.createTextNode(data[i]['bounce'][0]['status']);
+            container.style.fontWeight="bold";
+            container.appendChild(text);
+            container.style.color = "green";
+
+            newCell.appendChild(container);
+          }
+          else
+          {
+            button = document.createElement("button");
+            button.className="btn btn-primary";
+            button.innerHTML ="Report Bounce";
+            var id=data[i]['id'];
+            button.onclick = function() { report_bounce_modal(id,'verify'); };
+            newCell.appendChild(button);
+          }
         }
         else if(filter=="all")
         {
@@ -151,6 +173,27 @@ function populate_emails(filter)
           container.style.fontWeight="bold";
 
           newCell.appendChild(container);
+
+          newCell  = newRow.insertCell(2);
+          if(data[i]['bounce'].length>0)
+          {
+            container = document.createElement("span");
+            text = document.createTextNode(data[i]['bounce'][0]['status']);
+            container.style.fontWeight="bold";
+            container.appendChild(text);
+            container.style.color = "green";
+
+            newCell.appendChild(container);
+          }
+          else
+          {
+            button = document.createElement("button");
+            button.className="btn btn-primary";
+            button.innerHTML ="Report Bounce";
+            var id=data[i]['id'];
+            button.onclick = function() { report_bounce_modal(id,'verify'); };
+            newCell.appendChild(button);
+          }
         }
         
 

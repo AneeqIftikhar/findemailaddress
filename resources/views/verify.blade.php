@@ -7,7 +7,7 @@
             <div class="card" style="height: 100%">
               <div class="card-header">Verify Email</div>
                 <div class="card-body p-0 py-4">
-                  <div style="position: relative;top: 50% !important;transform: translateY(-50%);">
+                  <!-- <div style="position: relative;top: 50% !important;transform: translateY(-50%);"> -->
                     <div class="row m-0 mb-4">
                         <div class="col-12 px-4">
                             <div class="input-group mb-3">
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     
-                </div>
+                <!-- </div> -->
               </div>
             </div>
         </div>
@@ -158,7 +158,7 @@ function verify_email_ajax()
     $('#verify_help_text').css('display','block');
 
     var email=document.getElementById("email-field").value;
-    document.getElementById("email-field").value="";;
+    document.getElementById("email-field").value="";
     if(email==null || email=="")
     {
         document.getElementById('email_error').innerHTML="Email can not be Empty";
@@ -173,6 +173,7 @@ function verify_email_ajax()
     }
     else
     {
+        document.getElementById("email-field").value="";
         var tableRef = document.getElementById('activity_verify_email_table').getElementsByTagName('tbody')[0];
         // if(tableRef.rows.length>=4)
         // {
@@ -277,8 +278,9 @@ function verify_email_ajax()
                        
                         
                     });
-                     tableRef.deleteRow(0);
-                        tableRef.deleteRow(0);
+                    tableRef.deleteRow(0);
+                    tableRef.deleteRow(0);
+                    document.getElementById("email-field").value=email;
                 }
                 else if( jqXHR.status === 419 )
                     {

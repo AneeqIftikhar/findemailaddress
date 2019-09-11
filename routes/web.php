@@ -55,10 +55,7 @@ Route::get('account_settings', function()
     return view('account_settings');
 })->name('account_settings')->middleware('verified');
 
-Route::get('upgrade_account', function()
-{
-    return view('upgrade_account');
-})->name('upgrade_account')->middleware('verified');
+
 
 Route::get('contact_form', function()
 {
@@ -66,7 +63,7 @@ Route::get('contact_form', function()
 })->name('contact_form')->middleware('verified');
 
 Route::get('subscriptions','UserController@getUserSubscriptions')->name('subscriptions')->middleware('verified');
-
+Route::get('upgrade_account', 'UserController@getUpgradeAccount')->name('upgrade_account')->middleware('verified');
 
 Route::get('find_history','EmailController@getUserFoundEmails')->name('find_history')->middleware('verified');
 Route::get('verify_history','EmailController@getUserVerifiedEmails')->name('verify_history')->middleware('verified');
@@ -92,6 +89,9 @@ Route::get('return_url','UserController@return_url');
 
 Route::post('disableRecurringBilling','UserController@disableRecurringBilling')->name('disableRecurringBilling')->middleware('verified');
 Route::post('enableRecurringBilling','UserController@enableRecurringBilling')->name('enableRecurringBilling')->middleware('verified');
+Route::post('report_bounce','EmailController@report_bounce')->name('report_bounce')->middleware('verified');
+
+
 
 Auth::routes();
 

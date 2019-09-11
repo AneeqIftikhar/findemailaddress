@@ -25,7 +25,6 @@ class CreateInvalidDomainsTable extends Migration
             array('domain'=>'gmail.com'),
             array('domain'=>'outlook.com'),
             array('domain'=>'hotmail.com'),
-            array('domain'=>'microsoft.com'),
             array('domain'=>'yahoo.com'),
             array('domain'=>'icloud.com'),
             array('domain'=>'zoho.com'),

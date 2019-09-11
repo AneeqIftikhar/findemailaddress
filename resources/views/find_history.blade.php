@@ -16,7 +16,7 @@
                         
                              
                               <button class="btn btn-primary nav-item dropdown">
-                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="padding: 0px; color: white">
+                                 <a id="navbarDropdown" class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="padding: 0px; color: white">
                                     <span><i class="fas fa-download fa-lg"></i></span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-left">
@@ -135,12 +135,26 @@ function populate_emails(filter)
           newCell.appendChild(container);
 
           newCell  = newRow.insertCell(4);
-          button = document.createElement("button");
-          button.className="btn btn-primary";
-          button.innerHTML ="Report Bounce";
-          var id=data[i]['id'];
-          button.onclick = function() { report_bounce_modal(id); };
-          newCell.appendChild(button);
+          if(data[i]['bounce'].length>0)
+          {
+            container = document.createElement("span");
+            text = document.createTextNode(data[i]['bounce'][0]['status']);
+            container.style.fontWeight="bold";
+            container.appendChild(text);
+            container.style.color = "green";
+
+            newCell.appendChild(container);
+          }
+          else
+          {
+            button = document.createElement("button");
+            button.className="btn btn-primary";
+            button.innerHTML ="Report Bounce";
+            var id=data[i]['id'];
+            button.onclick = function() { report_bounce_modal(id,'find'); };
+            newCell.appendChild(button);
+          }
+          
         }
         else if(filter=="all")
         {
@@ -186,11 +200,25 @@ function populate_emails(filter)
           {
             newCell.appendChild(container);
             newCell  = newRow.insertCell(4);
-            button = document.createElement("button");
-            button.className="btn btn-primary";
-            button.innerHTML ="Report Bounce";
-            // button.onclick = 
-            newCell.appendChild(button);
+            if(data[i]['bounce'].length>0)
+            {
+              container = document.createElement("span");
+              text = document.createTextNode(data[i]['bounce'][0]['status']);
+              container.style.fontWeight="bold";
+              container.appendChild(text);
+              container.style.color = "green";
+
+              newCell.appendChild(container);
+            }
+            else
+            {
+              button = document.createElement("button");
+              button.className="btn btn-primary";
+              button.innerHTML ="Report Bounce";
+              var id=data[i]['id'];
+              button.onclick = function() { report_bounce_modal(id,'find'); };
+              newCell.appendChild(button);
+            }
           }
           else
           {
@@ -205,10 +233,6 @@ function populate_emails(filter)
        
       }
 }
-function report_bounce_modal(id)
-{
-  console.log(id);
-  $("#report_bounce").modal()
-}
+
 </script>
 @endpush

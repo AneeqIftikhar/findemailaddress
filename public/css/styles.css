@@ -1,4 +1,8 @@
 
+:root {
+  --main-bg-color: rgba(41,46,75,1);
+}
+
 .nav-link
 {
   padding-right:1rem !important; 
@@ -202,4 +206,40 @@ display: block;
 {
   line-height: 50px;
   top: 0px;
+}
+
+.card-header
+{
+  background: var(--main-bg-color) !important;
+  color: white;
+}
+.card
+{
+   border: 1px solid var(--main-bg-color) !important;
+}
+
+.dropdown-menu 
+{
+  border: 1px solid var(--main-bg-color) !important;
+  padding: 0 0 !important;
+}
+
+.dropdown-item
+{
+  /*border: 1px solid rgba(61, 89, 250,1) !important;*/
+  border-color: var(--main-bg-color) !important;
+
+}
+.modal-header
+{
+  background: var(--main-bg-color) !important;
+  color: white !important;
+}
+.modal-header span
+{
+  color: white !important;
+}
+.nav-link
+{
+  color: var(--main-bg-color) !important;
 }

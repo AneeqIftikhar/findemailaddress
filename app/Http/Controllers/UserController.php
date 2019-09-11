@@ -127,10 +127,18 @@ class UserController extends Controller
     public function getUserSubscriptions(Request $request)
     {
         $user=Auth::user();
+        $user->visited_subscription_page=$user->visited_subscription_page+1;
         $twocheckoutapi=new TwoCheckoutApi();
         $data=$twocheckoutapi->getCustomerSubscriptions($user->two_checkout_user_reference);
         return view('subscriptions', ['data'=>$data]);
     }
+    public function getUpgradeAccount(Request $request)
+    {
+        $user=Auth::user();
+        $user->visited_pricing_page=$user->visited_pricing_page+1;
+        return view('upgrade_account');
+    }
+        
     public function disableRecurringBilling(Request $request)
     {
         $user=Auth::user();

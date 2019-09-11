@@ -22,9 +22,11 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('phone')->nullable();
             $table->string('company_name')->nullable();
-            $table->integer('credits')->default(100);
+            $table->integer('credits')->default(50);
             $table->timestamp('last_login')->nullable();
             $table->string('two_checkout_user_reference')->nullable();
+            $table->integer('visited_subscription_page')->default(0);
+            $table->integer('visited_pricing_page')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

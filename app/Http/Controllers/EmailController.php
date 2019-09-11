@@ -17,6 +17,7 @@ use App\Exports\EmailsExport;
 use App\Rules\BlackListDomains;
 use App\Rules\IsValidDomain;
 use Validator;
+use App\ReportedBounce;
 class EmailController extends Controller
 {
 
@@ -313,7 +314,14 @@ class EmailController extends Controller
             }
             else
             {
-               $email_status=$json_output[0]->status;
+              if($json_output[0]->status==null || $json_output[0]->status=='')
+              {
+                $email_status="Not Found";
+              }
+              else
+              {
+                $email_status=$json_output[0]->status;
+              }
             }
             $emails_db = new Emails;
             $emails_db->email = $request->email;
@@ -322,8 +330,8 @@ class EmailController extends Controller
             $emails_db->server_status = $server_status;
             $emails_db->type = 'verify';
             $emails_db->save(); 
-
-            return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status,'credits_left'=>$user->credits));
+            //return json_encode($json_output[0]);
+            return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status,'credits_left'=>$user->credits,'MX'=>$json_output[0]->mx));
          }
          catch(Exception $e)
          {
@@ -382,12 +390,12 @@ class EmailController extends Controller
       }
       public function getUserFoundEmails(Request $request)
       {
-         $emails=Auth::user()->emails()->where('type','find')->get();
+         $emails=Auth::user()->emails()->where('type','find')->with('bounce')->get();
          return view('find_history',compact('emails'));
       }
       public function getUserVerifiedEmails(Request $request)
       {
-         $emails=Auth::user()->emails()->where('type','verify')->get();
+         $emails=Auth::user()->emails()->where('type','verify')->with('bounce')->get();
          return view('verify_history',compact('emails'));
       }
 
@@ -433,5 +441,30 @@ class EmailController extends Controller
          $email_export=new EmailsExport();
          $email_export->set_details(0,$records,'all_db','verify');
          return Excel::download($email_export, 'emails.'.$type);
+       }
+
+       public function report_bounce(Request $request)
+       {
+            $user=Auth::user();
+            $bounce = new ReportedBounce;
+            $bounce->email_id = $request->bounce_email_id;
+            $bounce->user_id = $user->id;
+            $bounce->status = "Bounce Reported";
+            $bounce->message = $request->bounce_message;
+            $bounce->save(); 
+
+          if($request->bounce_email_type=="find")
+          {
+            $emails=Auth::user()->emails()->where('type','find')->with('bounce')->get();
+            return view('find_history',compact('emails'));
+          }
+          else
+          {
+            $emails=Auth::user()->emails()->where('type','verify')->with('bounce')->get();
+            return view('verify_history',compact('emails'));
+          }
+          
+
+            
        }
 }
