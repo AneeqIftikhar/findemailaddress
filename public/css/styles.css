@@ -263,3 +263,11 @@ background-position: top right;
 background-image:  url(../images/coming-soon.png);
 float: left;
 }
+
+
+
+@media screen and (max-width: 767px) {
+  .activity_log{
+    margin-top: 10px;
+  }
+}

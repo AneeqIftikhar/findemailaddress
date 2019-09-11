@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card" style="height: 100%">
+            <div class="card activity_log" style="height: 100%">
               <div class="card-header">Activity Log</div>
                 <div class="card-body p-0 py-4"  style="overflow-y: auto; max-height: 70vh;">
                     <div class="row m-0 mb-4">
