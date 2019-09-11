@@ -25,6 +25,7 @@ class AlterUsersTable extends Migration
                 'user_uuid' => '8dbaaa00-ea0e-4aec-89d3-3621b908b09a',
                 'password'=>Hash::make('P@kistan1'),
                 'email'=>'support@findemailaddress.co',
+                'email_verified_at'=>date('Y-m-d H:i:s'),
                 'created_at' => date('Y-m-d H:i:s'),
                 'ticketit_admin'=>true,
                 'updated_at' => date('Y-m-d H:i:s')
