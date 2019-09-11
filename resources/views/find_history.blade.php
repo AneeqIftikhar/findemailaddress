@@ -47,6 +47,7 @@
                                 <th scope="col">Domain</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Status</th>
+                                <th scope="col">Date</th>
                                 <th scope="col">Action</th>
                             </tr>
                           </thead>
@@ -132,6 +133,12 @@ function populate_emails(filter)
           newCell.appendChild(container);
 
           newCell  = newRow.insertCell(4);
+          var date = new Date(data[i]['created_at']+' UTC');
+          newText  = document.createTextNode(""+(date.getMonth()+1)+"/"+date.getDate()+"/"+date.getFullYear());
+          //newText  = document.createTextNode(data[i]['created_at']);
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(5);
           if(data[i]['bounce'].length>0)
           {
             container = document.createElement("span");
@@ -167,8 +174,18 @@ function populate_emails(filter)
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(2);
-          newText  = document.createTextNode(data[i]['email']);
+          if(data[i]['email'])
+          {
+            newText  = document.createTextNode(data[i]['email']);
+          }
+          else
+          {
+            newText  = document.createTextNode("-");
+          }
           newCell.appendChild(newText);
+
+
+
 
           newCell  = newRow.insertCell(3);
 
@@ -188,15 +205,20 @@ function populate_emails(filter)
           {
             container.style.color = "red";
           }
-          
-
           newCell.appendChild(container);
+
+
+
+          newCell  = newRow.insertCell(4);
+          var date = new Date(data[i]['created_at']+' UTC');
+          newText  = document.createTextNode(""+(date.getMonth()+1)+"/"+date.getDate()+"/"+date.getFullYear());
+          //newText  = document.createTextNode(date.toString());
+          newCell.appendChild(newText);
 
 
           if(data[i]['status']=="Valid")
           {
-            newCell.appendChild(container);
-            newCell  = newRow.insertCell(4);
+            newCell  = newRow.insertCell(5);
             if(data[i]['bounce'].length>0)
             {
               container = document.createElement("span");
@@ -219,8 +241,7 @@ function populate_emails(filter)
           }
           else
           {
-            newCell.appendChild(container);
-            newCell  = newRow.insertCell(4);
+            newCell  = newRow.insertCell(5);
             text = document.createTextNode(" ");
             newCell.appendChild(text);
           }

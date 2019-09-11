@@ -44,7 +44,9 @@
                             <thead class="black white-text">
                               <tr>
                                   <th scope="col">Email</th>
-                                  <th scope="col">Status</th>
+                                  <th scope="col">Server Status</th>
+                                  <th scope="col">Email Status</th>
+                                  <th scope="col">Date</th>
                                   <th scope="col">Action</th>
                               </tr>
                             </thead>
@@ -98,7 +100,7 @@ function populate_emails(filter)
       for(var i =0;i<data.length;i++)
       {
         
-        if(filter=="less" && data[i]['status']=='Valid')
+        if(filter=="less" && data[i]['status']=='Valid' && data[i]['server_status']=='Valid')
         {
           var newRow   = tableRef.insertRow();
 
@@ -111,13 +113,28 @@ function populate_emails(filter)
 
           newCell  = newRow.insertCell(1);
           container = document.createElement("span");
+          text = document.createTextNode(data[i]['server_status']);
+          container.appendChild(text);
+          container.style.color = "green";
+          container.style.fontWeight="bold";
+          newCell.appendChild(container);
+
+
+          newCell  = newRow.insertCell(2);
+          container = document.createElement("span");
           text = document.createTextNode(data[i]['status']);
           container.appendChild(text);
           container.style.color = "green";
           container.style.fontWeight="bold";
           newCell.appendChild(container);
 
-          newCell  = newRow.insertCell(2);
+          newCell  = newRow.insertCell(3);
+          var date = new Date(data[i]['created_at']+' UTC');
+          newText  = document.createTextNode(""+(date.getMonth()+1)+"/"+date.getDate()+"/"+date.getFullYear());
+          //newText  = document.createTextNode(data[i]['created_at']);
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(4);
           if(data[i]['bounce'].length>0)
           {
             container = document.createElement("span");
@@ -150,6 +167,37 @@ function populate_emails(filter)
           newCell  = newRow.insertCell(1);
 
           container = document.createElement("span");
+          if(data[i]['server_status']=="No MX Records")
+          {
+            text = document.createTextNode("No Mailbox");
+          }
+          else
+          {
+            text = document.createTextNode(data[i]['server_status']);
+          }
+          
+
+          container.appendChild(text);
+          if(data[i]['status']=="Valid")
+          {
+            container.style.color = "green";
+          }
+          else if (data[i]['status']=="Catch All")
+          {
+            container.style.color = "orange";
+          }
+          else
+          {
+            container.style.color = "red";
+          }
+          container.style.fontWeight="bold";
+
+          newCell.appendChild(container);
+
+
+          newCell  = newRow.insertCell(2);
+
+          container = document.createElement("span");
           text = document.createTextNode(data[i]['status']);
 
           container.appendChild(text);
@@ -169,26 +217,43 @@ function populate_emails(filter)
 
           newCell.appendChild(container);
 
-          newCell  = newRow.insertCell(2);
-          if(data[i]['bounce'].length>0)
-          {
-            container = document.createElement("span");
-            text = document.createTextNode(data[i]['bounce'][0]['status']);
-            container.style.fontWeight="bold";
-            container.appendChild(text);
-            container.style.color = "green";
 
-            newCell.appendChild(container);
+          newCell  = newRow.insertCell(3);
+          var date = new Date(data[i]['created_at']+' UTC');
+          newText  = document.createTextNode(""+(date.getMonth()+1)+"/"+date.getDate()+"/"+date.getFullYear());
+          //newText  = document.createTextNode(data[i]['created_at']);
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(4);
+          if(data[i]['status']=="Valid" && data[i]['server_status']=="Valid")
+          {
+            if(data[i]['bounce'].length>0)
+            {
+              container = document.createElement("span");
+              text = document.createTextNode(data[i]['bounce'][0]['status']);
+              container.style.fontWeight="bold";
+              container.appendChild(text);
+              container.style.color = "green";
+
+              newCell.appendChild(container);
+            }
+            else
+            {
+              button = document.createElement("button");
+              button.className="btn btn-primary";
+              button.innerHTML ="Report Bounce";
+              var id=data[i]['id'];
+              button.onclick = function() { report_bounce_modal(id,'verify'); };
+              newCell.appendChild(button);
+            }
           }
           else
           {
-            button = document.createElement("button");
-            button.className="btn btn-primary";
-            button.innerHTML ="Report Bounce";
-            var id=data[i]['id'];
-            button.onclick = function() { report_bounce_modal(id,'verify'); };
-            newCell.appendChild(button);
+
+            newText  = document.createTextNode(" ");
+            newCell.appendChild(newText);
           }
+          
         }
         
 

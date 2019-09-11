@@ -309,7 +309,7 @@ class EmailController extends Controller
             $user->save();
             if($json_output[0]->mx==null || $json_output[0]->mx=='')
             {
-               $server_status=$json_output[0]->status;
+               $server_status="No Mailbox";
                $email_status="-";
             }
             else
@@ -390,12 +390,12 @@ class EmailController extends Controller
       }
       public function getUserFoundEmails(Request $request)
       {
-         $emails=Auth::user()->emails()->where('type','find')->with('bounce')->get();
+         $emails=Auth::user()->emails()->where('type','find')->orderBy('id', 'DESC')->with('bounce')->get();
          return view('find_history',compact('emails'));
       }
       public function getUserVerifiedEmails(Request $request)
       {
-         $emails=Auth::user()->emails()->where('type','verify')->with('bounce')->get();
+         $emails=Auth::user()->emails()->where('type','verify')->orderBy('id', 'DESC')->with('bounce')->get();
          return view('verify_history',compact('emails'));
       }
 
