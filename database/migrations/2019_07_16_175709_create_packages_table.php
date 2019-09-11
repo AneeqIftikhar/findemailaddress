@@ -26,7 +26,7 @@ class CreatePackagesTable extends Migration
             array(
                 'name' => "Free",
                 'amount' => 0,
-                'credits'=>100,
+                'credits'=>50,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ),

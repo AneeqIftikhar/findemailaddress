@@ -133,8 +133,8 @@
                                     
                                 </div>
                             </li>
-                            <li class="nav-item dropdown coming-soon">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle coming-soon" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     <span class="padding_right"><i class="fas fa-file-import fa-sm"></i></span>Batch  <span class="caret"></span>
                                     <!-- <img src="{{ asset('images/coming-soon.png') }}" style="max-height: 100px;"> -->
                                 </a>
