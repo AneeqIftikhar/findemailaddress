@@ -37,14 +37,14 @@ Route::get('verify-old', function()
 {
     return view('verify-old');
 })->name('verify-old')->middleware('verified');
-Route::get('batch_find', function()
+Route::get('bulk_find', function()
 {
-    return view('batch_find');
-})->name('batch_find')->middleware('verified');
-Route::get('batch_verify', function()
+    return view('bulk_find');
+})->name('bulk_find')->middleware('verified');
+Route::get('bulk_verify', function()
 {
-    return view('batch_verify');
-})->name('batch_verify')->middleware('verified');
+    return view('bulk_verify');
+})->name('bulk_verify')->middleware('verified');
 Route::get('usage_policy', function()
 {
     return view('usage_policy');

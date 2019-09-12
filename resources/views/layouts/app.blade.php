@@ -72,7 +72,7 @@
                         <input type="hidden" name="bounce_email_type" id="bounce_email_type">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <textarea rows="3" name="bounce_message" placeholder="Place Your Bounce Email Here" class="form-control" id="bounce_message" required>
+                                <textarea rows="5" name="bounce_message" placeholder="Place Your Bounce Email Here" class="form-control" id="bounce_message" required>
                                 </textarea>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                                 <div class="col-sm-4 col-form-label text-md-right">
                                 </div>
                                 <div class="col-md-6">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary">Report</button>
                                 </div>
                                 
                             </div>
@@ -135,7 +135,7 @@
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    <span class="padding_right"><i class="fas fa-file-import fa-sm"></i></span>Batch  <span class="caret"></span>
+                                    <span class="padding_right"><i class="fas fa-file-import fa-sm"></i></span>Bulk  <span class="caret"></span>
                                     <!-- <img src="{{ asset('images/coming-soon.png') }}" style="max-height: 100px;"> -->
                                 </a>
                                 
@@ -213,7 +213,7 @@
                                                     </div>
                                                     <div class="row mb-2 mt-2">
                                                         <div class="col-12">
-                                                            <a href="{{URL::route('upgrade_account')}}" class="btn btn-primary">Upgrade Account</a>
+                                                            <a href="{{URL::route('upgrade_account')}}" style="width:100%"class="btn btn-primary">Upgrade Account</a>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -6,7 +6,7 @@
     <div class="row justify-content-center" style="height: 100%">
         <div class="col-md-6">
             <div class="card" style="height: 100%">
-                <div class="card-header">Find Email</div>
+                <div class="card-header"><h4>Find Email</h4></div>
                 <div class="card-body p-0 py-4">
                     <!-- <div style="position: relative;top: 50% !important;transform: translateY(-50%);"> -->
                         <div class="row m-0 mb-4">
@@ -21,7 +21,7 @@
                                     <input type="text" placeholder="Domain name" class="form-control" id="domain-field">
                                 </div>
                                 <div class="input-group">
-                                    <button class="btn btn-success" type="button" id="find_email_button" style="min-width: 120px; font-weight: 700;" onclick="find_email_ajax()">
+                                    <button class="btn btn-primary" type="button" id="find_email_button" style="min-width: 120px; font-weight: 700;" onclick="find_email_ajax()">
                                     Find
                                     </button>
                                 </div>
@@ -46,8 +46,8 @@
         </div>
         <div class="col-md-6">
             <div class="card activity_log" style="height: 100%">
-                <div class="card-header">Activity Log</div>
-                <div class="card-body p-0 py-4" style="overflow-y: auto; max-height: 70vh;">
+                <div class="card-header"><h4>Activity Log</h4></div>
+                <div class="card-body p-0 py-4" style="overflow-y: auto; max-height: 68vh;">
                     <div class="row m-0 mb-4">
                         <div class="col-12" style="padding-left: 1.4rem!important;">
                             <div class="table-wrapper-scroll-y my-custom-scrollbar">
@@ -112,7 +112,7 @@ function populate_emails()
         
         var newRow   = tableRef.insertRow();
         newCell  = newRow.insertCell(0);
-        newCell.style.padding="2px";
+        newCell.style.padding="3px";
         newCell.colspan=3;
         newCell.style.border="0px";
 
@@ -144,14 +144,14 @@ function populate_emails()
           container.style.fontWeight="bold";
           if(data[i]['status']=="Valid" || data[i]['status']=="Multiple Emails")
           {
-            //newRow.style.border= "1px solid green";
-            newRow.style.background="rgba(0,255,0,0.2)";
+            newRow.style.border= "1px solid var(--main-bg-color)";
+            //newRow.style.background="rgba(0,255,0,0.2)";
             container.style.color = "green";
           }
           else if (data[i]['status']=="Catch All")
           {
-            //newRow.style.border= "1px solid orange";
-            newRow.style.background="rgba(255,165,0,0.2)";
+            newRow.style.border= "1px solid var(--main-bg-color)";
+            //newRow.style.background="rgba(255,165,0,0.2)";
             container.style.color = "orange";
             container.setAttribute('data-toggle', 'tooltip');
             container.setAttribute('data-placement', 'bottom');
@@ -160,8 +160,8 @@ function populate_emails()
           }
           else
           {
-            //newRow.style.border= "1px solid red";
-            newRow.style.background="rgba(255,0,0,0.2)";
+            newRow.style.border= "1px solid var(--main-bg-color)";
+            //newRow.style.background="rgba(255,0,0,0.2)";
             container.style.color = "red";
             if(data[i]['status']=="No Mailbox")
             {
@@ -239,7 +239,7 @@ function find_email_ajax()
             // }
             var newRow   = tableRef.insertRow(0);
             newCell  = newRow.insertCell(0);
-            newCell.style.padding="2px";
+            newCell.style.padding="3px";
             newCell.colspan=3;
             newCell.style.border="0px";
 
@@ -283,20 +283,20 @@ function find_email_ajax()
                     {
                         if(response['status']=="Valid" || response['status']=="Multiple Emails")
                         {   
-                            //newRow.style.border= "1px solid green";
-                            newRow.style.background="rgba(0,255,0,0.2)";
+                            newRow.style.border= "1px solid var(--main-bg-color)";
+                            //newRow.style.background="rgba(0,255,0,0.2)";
                             newRow.cells[2].innerHTML='<div style="font-weight:bold; color:green">Valid</div>';
                         }
                         else if(response['status']=="Catch All")
                         {
-                            //newRow.style.border= "1px solid orange";
-                            newRow.style.background="rgba(255,165,0,0.2)";
+                            newRow.style.border= "1px solid var(--main-bg-color)";
+                            //newRow.style.background="rgba(255,165,0,0.2)";
                             newRow.cells[2].innerHTML='<div style=" font-weight:bold; color:orange">'+response['status']+'</div>';
                         }
                         else
                         {
-                            //newRow.style.border= "1px solid red";
-                            newRow.style.background="rgba(255,0,0,0.1)";
+                            newRow.style.border= "1px solid var(--main-bg-color)";
+                            //newRow.style.background="rgba(255,0,0,0.1)";
                             newRow.cells[2].innerHTML='<div style="font-weight:bold; color:red">'+response['status']+'</div>';
                         }
                         if(response['emails']=='' || response['emails']==null || response['emails']==undefined)

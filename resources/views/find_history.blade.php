@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Find Email History</div>
+                <div class="card-header"><h4>Find Email History</h4></div>
 
                 <div class="card-body">
                   @if (count($emails)>0)

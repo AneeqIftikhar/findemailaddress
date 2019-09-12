@@ -7,7 +7,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                	<h3>Account Settings</h3>
+                	<h4>Account Settings</h4>
                 </div>
 
                 	

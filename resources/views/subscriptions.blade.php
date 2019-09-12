@@ -9,8 +9,8 @@
 		<div class="row" style="margin-bottom: 5px">
 		  <div class="col-sm-12">
 		    <div class="card">
+		    	<div class="card-header"><h4>No Subscriptions Found</h4></div>
 		      <div class="card-body">
-		        <h5 class="card-title">No Subscriptions Found.</h5>
 		        <p> If you have recently Purchased Please visit in 5 minutes.</p>
 		       
 		      </div>
