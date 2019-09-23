@@ -23,7 +23,7 @@ Route::post('batch','EmailController@import');
 Route::get('2checkout','UserController@test_2checkout');
 
 Route::post('test_fastspring','EmailController@test_fastspring');
-Route::post('webhook','SubscriptionController@webhook');
+
 Route::post('get_webhook','SubscriptionController@get_webhook');
 
 Route::post('find_email_api','API\EmailApiController@find_email_api');

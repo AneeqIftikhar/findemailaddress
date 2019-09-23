@@ -100,3 +100,7 @@ Route::group(['middleware' => ['throttle:8']], function () {
     Route::post('find_email','EmailController@find_email_ajax');
     Route::post('verify_email','EmailController@verify_email_ajax');
 });
+
+
+
+Route::post('webhook','SubscriptionController@webhook');
