@@ -16,6 +16,7 @@ class IsValidDomain implements Rule
         //
     }
 
+
     /**
      * Determine if the validation rule passes.
      *
@@ -35,6 +36,6 @@ class IsValidDomain implements Rule
      */
     public function message()
     {
-        return 'Invalid Domain';
+        return 'Please Enter a Valid Domain';
     }
 }

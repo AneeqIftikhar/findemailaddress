@@ -27,7 +27,8 @@
               <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Money Back Gaurantee</li>
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
-            <button href="#" class="btn btn-block btn-primary text-uppercase" disabled>Buy Now!</button>
+            <a href='#' data-fsc-action="Add,Checkout" data-fsc-item-path-value="small">Purchase "Small Plan"</a>
+            <!-- <button href="#" class="btn btn-block btn-primary text-uppercase" disabled>Buy Now!</button> -->
           </div>
         </div>
       </div>
@@ -180,6 +181,44 @@
 
     });
 });
+function onFSPopupClosed(orderReference) 
+{
+  if (orderReference)
+  {
+    console.log(orderReference.reference);
+    fastspring.builder.reset();
+    //window.location.replace("http://furiousfalcon.com/?orderId=" + orderReference.reference);
+  } 
+  else 
+  {
+    console.log("no order ID");
+  }
+}
 
+
+</script>
+<script
+        id="fsc-api"
+        src="https://d1f8f9xcsvx3ha.cloudfront.net/sbl/0.8.1/fastspring-builder.min.js"
+        type="text/javascript"
+        data-popup-closed="onFSPopupClosed"
+        data-storefront="devrec.test.onfastspring.com/popup-devrec">
+
+</script>
+<script type="text/javascript">
+  // fastspring.builder.recognize({"email":"ne1@all.com","firstName":"Leeroy","lastName":"Jenkins"});
+  // fastspring.builder.account("rO_bGfPeTdipo__qUxC5_g");
+//   var s={
+//   'products' : [
+//     {
+//       'path':'small',
+//       'quantity': 1
+//     }
+//   ],
+//   'account': 'rO_bGfPeTdipo__qUxC5_g'
+
+// };
+// fastspring.builder.push(s);
+fastspring.builder.checkout("2aqIUau0TOSsP56ZvBEa7A");
 </script>
 @endpush

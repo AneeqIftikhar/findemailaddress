@@ -18,326 +18,208 @@ use App\Rules\BlackListDomains;
 use App\Rules\IsValidDomain;
 use Validator;
 use App\ReportedBounce;
+use App\Helpers\CurlRequest;
+use Carbon\Carbon;
+use App\FastSpring\FastSpringApi;
 class EmailController extends Controller
 {
 
 
+  function test_fastspring(Request $request)
+  {
+    //3nYk8pT1S0OBzQdTL3QrTA
+    //rO_bGfPeTdipo__qUxC5_g
+    //X7XqdNmtRPC7RyZj0-H1AQ
+    //W_tVJRN2SL2Uv172r7Ho4Q
+    $FastSpringApi = new FastSpringApi();
+    return $FastSpringApi->getCustomer('rO_bGfPeTdipo__qUxC5_g');
+    //return $FastSpringApi->getAllCustomers();
+    //return $FastSpringApi->createCustomer();
+    return $FastSpringApi->updateCustomer();
+    //return $FastSpringApi->getSession();
+  }
 
-      function find_email_page(Request $request)
-      {
-         $user=Auth::user();
-         $emails=Auth::user()->emails()->where('type','find')->orderBy('id', 'DESC')->take(10)->get();
-         return view('find',compact('emails'));
-      }
-      function verify_email_page(Request $request)
-      {
-         $user=Auth::user();
-         $emails=Auth::user()->emails()->where('type','verify')->orderBy('id', 'DESC')->take(10)->get();
-         return view('verify',compact('emails'));
-      }
-   	function find_email_ajax(Request $request)
+	/*
+		Request Type GET
+		Return Find Page with the 10 latest emails of the user
+	*/
+	function find_email_page(Request $request)
+	{
+		$user=Auth::user();
+		$emails=Auth::user()->emails()->where('type','find')->orderBy('id', 'DESC')->take(10)->get();
+		return view('find',compact('emails'));
+	}
+	/*
+		Request Type GET
+		Return Verify Page with 10 latest emails of the user
+	*/
+	function verify_email_page(Request $request)
+	{
+		$user=Auth::user();
+		$emails=Auth::user()->emails()->where('type','verify')->orderBy('id', 'DESC')->take(10)->get();
+		return view('verify',compact('emails'));
+	}
+	/*
+		Request Type POST
+		Parameters: first_name, last_name, domain
+		Return: Json Response
+	*/
+	function find_email_ajax(Request $request)
    	{
-         try
-         {
-            $this->validate($request, [
-                'first_name' => ['required', 'string', 'max:50'],
-                'last_name' => ['required', 'string', 'max:50'],
-                'domain' => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
-            ]);
-            
-            $user=Auth::user();
-            // return json_encode(array('status'=>"Catch All",'emails'=>'aneeq@dev-rec.com','logs'=>[],'proxy'=>'Proxy','credits_left'=>$user->credits));
+		try
+		{
 
-            $endpoint = "http://3.17.231.9:5000/find";
-            $postdata='data=[{"'.'firstName":"'.$request->first_name.'", "'.'lastName":"'.$request->last_name.'", "'.'domainName": "'.$request->domain.'"}]';
-            $ch = curl_init();
+			$this->validate($request, [
+			    'first_name' => ['required', 'string', 'max:50'],
+			    'last_name' => ['required', 'string', 'max:50'],
+			    'domain' => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
+			]);
 
-            curl_setopt($ch, CURLOPT_URL,$endpoint);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS,$postdata);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 200);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+			$user=Auth::user();
+			$first_name=strtolower($request->first_name);
+			$last_name=strtolower($request->last_name);
+			$domain=strtolower($request->domain);
+			$status="";
+			$type="find";
+			$email="";
+			$error="";
+			$server_status="";
 
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$exists_email=Emails::where('first_name',$first_name)->where('last_name',$last_name)->where('domain',$domain)->latest()->first();
 
-            $server_output = curl_exec ($ch);
+			if($exists_email && $exists_email->email != null)
+			{
+				$email_created_at = new Carbon($exists_email->created_at);
+				$now = Carbon::now();
+				if($email_created_at->diffInDays($now)>1)
+				{
+					$server_output=CurlRequest::verify_email($exists_email->email);
+				}
+				else
+				{
+					$server_output=$exists_email->server_json_dump;
+				}
+				
+			}
+			else
+			{
+				$server_output=CurlRequest::find_email($request->first_name,$request->last_name,$request->domain);			
+			}
 
+			
+			$json_output=json_decode($server_output);
+			if($json_output && array_key_exists('curl_error',$json_output))
+			{
+				$error=$json_output['curl_error'];
+				$status="Not Found";
+			}
+			else
+			{
+				if($json_output && count($json_output)>0)
+				{
+				   $status=$json_output[0]->status;
+				   $server_status="Valid";
+					if($json_output[0]->status != 'Valid')
+					{
 
-            if ($error_number = curl_errno($ch)) {
-               $emails_db = new Emails;
-               $emails_db->first_name = strtolower($request->first_name);
-               $emails_db->last_name = strtolower($request->last_name);
-               $emails_db->domain = strtolower($request->domain);
-               $emails_db->status = "Not Found";
-               $emails_db->user_id = $user->id;
-               $emails_db->type = 'find';
-               $emails_db->save();
-                if (in_array($error_number, array(CURLE_OPERATION_TIMEDOUT, CURLE_OPERATION_TIMEOUTED))) {
-                  
+						if($json_output[0]->mx==null || $json_output[0]->mx=='')
+						{
+							$status="No Mailbox";
+							$server_status="No Mailbox";
+						}
+						if($json_output[0]->status==null || $json_output[0]->status=='')
+						{
+							$status="Not Found";
+						}
+						else if($json_output[0]->status=='Catch All')
+						{
+							$email=$first_name.'@'.$domain;
+						}
 
-                  return json_encode(array('status'=>"Not Found",'emails'=>"",'logs'=>[],'proxy'=>[],'credits_left'=>$user->credits,'commands'=>[],'MX'=>"",'Catch All Test'=>"","error"=>"curl timed out")); 
-                }
-                else
-                {
-                   return json_encode(array('status'=>"Not Found",'emails'=>"",'logs'=>[],'proxy'=>[],'credits_left'=>$user->credits,'commands'=>[],'MX'=>"",'Catch All Test'=>"","error"=>curl_error($ch))); 
-                }
-            }
-            
+					}
+				    else
+				    {
+				    	$email=$json_output[0]->email;
+				    	$user->decrement('credits');
+				    }
+				   
+				} 
+			}
 
-            curl_close ($ch);
+			Emails::insert_email($first_name,$last_name,$domain,$email,$status,$user->id,$type,$server_output,$server_status);
 
-            // return json_encode($server_output);
+			return json_encode(array('status'=>$status,'emails'=>$email,'logs'=>$json_output,'credits_left'=>$user->credits,'error'=>$error));
+		}
+		catch(Exception $e)
+		{
 
-            $json_output=json_decode($server_output);
-            $status="-";
-            if($json_output && count($json_output)>0)
-            {
-               $status=$json_output[0]->status;
-               if($json_output[0]->status != 'Valid')
-               {
-                  
-                  if($json_output[0]->mx==null || $json_output[0]->mx=='')
-                  {
-                     $status="No Mailbox";
-                  }
-                  $emails_db = new Emails;
-                  $emails_db->first_name = strtolower($request->first_name);
-                  $emails_db->last_name = strtolower($request->last_name);
-                  $emails_db->domain = strtolower($request->domain);
-                  $emails_db->status = $status;
-                  $emails_db->user_id = $user->id;
-                  $emails_db->type = 'find';
-                  $emails_db->save(); 
-                  if($json_output[0]->status=='Catch All')
-                  {
-                     $json_output[0]->email=strtolower($request->first_name).'@'.strtolower($request->domain);
-                  }
-
-               }
-               else
-               {
-                  
-                  $user->credits=($user->credits)-1;
-                  $user->save();
-                  $emails_db = new Emails;
-                  $emails_db->first_name = strtolower($request->first_name);
-                  $emails_db->last_name = strtolower($request->last_name);
-                  $emails_db->domain = strtolower($request->domain);
-                  $emails_db->status = $json_output[0]->status;
-                  $emails_db->email = $json_output[0]->email;
-                  $emails_db->user_id = $user->id;
-                  $emails_db->type = 'find';
-                  $emails_db->save(); 
-               }
-               
-            } 
-            
-
-            return json_encode(array('status'=>$status,'emails'=>$json_output[0]->email,'logs'=>$json_output[0]->logs,'proxy'=>$json_output[0]->proxy,'credits_left'=>$user->credits,'commands'=>$json_output[0]->commands,'MX'=>$json_output[0]->mx,'Catch All Test'=>$json_output[0]->catch_all_test));
-         }
-         catch(Exception $e)
-         {
-
-         }
-         
-
-
+		}
    	}
-      function find_email_api(Request $request)
-      {
-         try
-         {
-
-            // $this->validate($request, [
-            //     'first_name' => ['required', 'string', 'max:50'],
-            //     'last_name' => ['required', 'string', 'max:50'],
-            //     'domain' => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
-            // ]);
-              $validator = Validator::make($request->all(), [
-                'first_name' => ['required', 'string', 'max:50'],
-                'last_name' => ['required', 'string', 'max:50'],
-                'domain' => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
-            ]);
-
-            if ($validator->fails()) {
-              $errors = $validator->errors();
-                return response()->json(["errors"=>$errors],422);
-            }
-            $endpoint = "http://3.17.231.9:5000/find";
-            $postdata='data=[{"'.'firstName":"'.$request->first_name.'", "'.'lastName":"'.$request->last_name.'", "'.'domainName": "'.$request->domain.'"}]';
-            $ch = curl_init();
-
-            curl_setopt($ch, CURLOPT_URL,$endpoint);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS,$postdata);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 200);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            $server_output = curl_exec ($ch);
-
-
-            if ($error_number = curl_errno($ch)) {
-
-                if (in_array($error_number, array(CURLE_OPERATION_TIMEDOUT, CURLE_OPERATION_TIMEOUTED))) {
-                  
-
-                  return json_encode(array('status'=>"Not Found",'emails'=>"",'MX'=>"","error"=>"curl timed out")); 
-                }
-                else
-                {
-                   return json_encode(array('status'=>"Not Found",'emails'=>"",'MX'=>"","error"=>curl_error($ch))); 
-                }
-            }
-            
-
-            curl_close ($ch);
-
-            $json_output=json_decode($server_output);
-            $status="-";
-            if($json_output && count($json_output)>0)
-            {
-               $status=$json_output[0]->status;
-               if($json_output[0]->status != 'Valid')
-               {
-                  
-                  if($json_output[0]->mx==null || $json_output[0]->mx=='')
-                  {
-                     $status="No Mailbox";
-                  }
-                  if($json_output[0]->status=='Catch All')
-                  {
-                     $json_output[0]->email=strtolower($request->first_name).'@'.strtolower($request->domain);
-                  }
-
-               }
-
-               
-            } 
-            
-
-            return json_encode(array('status'=>$status,'emails'=>$json_output[0]->email,'MX'=>$json_output[0]->mx));
-         }
-         catch(Exception $e)
-         {
-
-         }
-         
-
-
-      }
-    function verify_email_api(Request $request)
-    {
-      try
-         {
-            // $this->validate($request, [
-            //     'email' => ['required', 'string', 'email', 'max:255',new BlackListDomains],
-            // ]);
-             $validator = Validator::make($request->all(), [
-                 'email' => ['required', 'string', 'email', 'max:255',new BlackListDomains],
-            ]);
-
-            if ($validator->fails()) {
-              $errors = $validator->errors();
-                return response()->json(["errors"=>$errors],422);
-            }
-            $endpoint = "http://3.17.231.9:5000/verify";
-            $postdata='data=["'.$request->email.'"]';
-          $ch = curl_init();
-
-            curl_setopt($ch, CURLOPT_URL,$endpoint);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS,$postdata);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 50);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            $server_output = curl_exec ($ch);
-
-            curl_close ($ch);
-            
-            $email_status="Valid";
-            $server_status="Valid";
-            $json_output=json_decode($server_output);
-            if($json_output[0]->mx==null || $json_output[0]->mx=='')
-            {
-               $server_status=$json_output[0]->status;
-               $email_status="-";
-            }
-            else
-            {
-               $email_status=$json_output[0]->status;
-            }
-
-            return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status));
-         }
-         catch(Exception $e)
-         {
-
-         }
-    }
-   	function verify_email_ajax(Request $request)
+   	/*
+		Request Type POST
+		Parameters: email
+		Return: Json Response
+	*/
+    function verify_email_ajax(Request $request)
    	{
    		try
          {
             $this->validate($request, [
                 'email' => ['required', 'string', 'email', 'max:255',new BlackListDomains],
             ]);
-            $endpoint = "http://3.17.231.9:5000/verify";
-            $postdata='data=["'.$request->email.'"]';
-      		$ch = curl_init();
-
-            curl_setopt($ch, CURLOPT_URL,$endpoint);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS,$postdata);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 50);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            $server_output = curl_exec ($ch);
-
-            curl_close ($ch);
-            
-            $email_status="Valid";
-            $server_status="Valid";
-            $json_output=json_decode($server_output);
             $user=Auth::user();
-            $user->credits=($user->credits)-1;
-            $user->save();
-            if($json_output[0]->mx==null || $json_output[0]->mx=='')
-            {
-               $server_status="No Mailbox";
-               $email_status="-";
-            }
-            else
-            {
-              if($json_output[0]->status==null || $json_output[0]->status=='')
-              {
-                $email_status="Not Found";
-              }
-              else
-              {
-                $email_status=$json_output[0]->status;
-              }
-            }
-            $emails_db = new Emails;
-            $emails_db->email = $request->email;
-            $emails_db->user_id = $user->id;
-            $emails_db->status = $email_status;
-            $emails_db->server_status = $server_status;
-            $emails_db->type = 'verify';
-            $emails_db->save(); 
-            //return json_encode($json_output[0]);
-            return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status,'credits_left'=>$user->credits,'MX'=>$json_output[0]->mx));
+			$server_output=CurlRequest::verify_email($request->email);
+			$json_output=json_decode($server_output);
+
+			$first_name="";
+			$last_name="";
+			$domain="";
+			$email_status="";
+			$server_status="";
+			$type="verify";
+			$email=$request->email;
+			$error="";
+			if($json_output && array_key_exists('curl_error',$json_output))
+			{
+				$error=$json_output['curl_error'];
+				$email_status="Not Found";
+				$server_status="-";
+			}
+			else
+			{
+				$user->decrement('credits');
+				$email_status="Valid";
+				$server_status="Valid";
+	            if($json_output[0]->mx==null || $json_output[0]->mx=='')
+	            {
+	               $server_status="No Mailbox";
+	               $email_status="-";
+	            }
+	            else
+	            {
+					if($json_output[0]->status==null || $json_output[0]->status=='')
+					{
+						$email_status="Not Found";
+					}
+					else
+					{
+						$email_status=$json_output[0]->status;
+					}
+	            }
+			}
+
+
+            Emails::insert_email($first_name,$last_name,$domain,$email,$email_status,$user->id,$type,$server_output,$server_status);
+
+			return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status,'logs'=>$json_output,'credits_left'=>$user->credits,'error'=>$error));
+            
          }
          catch(Exception $e)
          {
 
          }
    	}
+
 
       public function import(Request $request) 
       {
@@ -467,4 +349,176 @@ class EmailController extends Controller
 
             
        }
+
+
+
+       /*
+       Old Commenmted Codes
+       */
+
+    /*   
+    function find_email_ajax(Request $request)
+   	{
+         try
+         {
+
+            $this->validate($request, [
+                'first_name' => ['required', 'string', 'max:50'],
+                'last_name' => ['required', 'string', 'max:50'],
+                'domain' => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
+            ]);
+            
+            $user=Auth::user();
+            // return json_encode(array('status'=>"Catch All",'emails'=>'aneeq@dev-rec.com','logs'=>[],'proxy'=>'Proxy','credits_left'=>$user->credits));
+
+            $endpoint = "http://3.17.231.9:5000/find";
+            $postdata='data=[{"'.'firstName":"'.$request->first_name.'", "'.'lastName":"'.$request->last_name.'", "'.'domainName": "'.$request->domain.'"}]';
+            $ch = curl_init();
+
+            curl_setopt($ch, CURLOPT_URL,$endpoint);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS,$postdata);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 200);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            $server_output = curl_exec ($ch);
+
+
+            if ($error_number = curl_errno($ch)) {
+               $emails_db = new Emails;
+               $emails_db->first_name = strtolower($request->first_name);
+               $emails_db->last_name = strtolower($request->last_name);
+               $emails_db->domain = strtolower($request->domain);
+               $emails_db->status = "Not Found";
+               $emails_db->user_id = $user->id;
+               $emails_db->type = 'find';
+               $emails_db->save();
+                if (in_array($error_number, array(CURLE_OPERATION_TIMEDOUT, CURLE_OPERATION_TIMEOUTED))) {
+                  
+
+                  return json_encode(array('status'=>"Not Found",'emails'=>"",'logs'=>[],'proxy'=>[],'credits_left'=>$user->credits,'commands'=>[],'MX'=>"",'Catch All Test'=>"","error"=>"curl timed out")); 
+                }
+                else
+                {
+                   return json_encode(array('status'=>"Not Found",'emails'=>"",'logs'=>[],'proxy'=>[],'credits_left'=>$user->credits,'commands'=>[],'MX'=>"",'Catch All Test'=>"","error"=>curl_error($ch))); 
+                }
+            }
+            
+
+            curl_close ($ch);
+
+            // return json_encode($server_output);
+
+            $json_output=json_decode($server_output);
+            $status="-";
+            if($json_output && count($json_output)>0)
+            {
+               $status=$json_output[0]->status;
+               if($json_output[0]->status != 'Valid')
+               {
+                  
+                  if($json_output[0]->mx==null || $json_output[0]->mx=='')
+                  {
+                     $status="No Mailbox";
+                  }
+                  $emails_db = new Emails;
+                  $emails_db->first_name = strtolower($request->first_name);
+                  $emails_db->last_name = strtolower($request->last_name);
+                  $emails_db->domain = strtolower($request->domain);
+                  $emails_db->status = $status;
+                  $emails_db->user_id = $user->id;
+                  $emails_db->type = 'find';
+                  $emails_db->save(); 
+                  if($json_output[0]->status=='Catch All')
+                  {
+                     $json_output[0]->email=strtolower($request->first_name).'@'.strtolower($request->domain);
+                  }
+
+               }
+               else
+               {
+                  
+                  $user->decrement('credits');
+                  $emails_db = new Emails;
+                  $emails_db->first_name = strtolower($request->first_name);
+                  $emails_db->last_name = strtolower($request->last_name);
+                  $emails_db->domain = strtolower($request->domain);
+                  $emails_db->status = $json_output[0]->status;
+                  $emails_db->email = $json_output[0]->email;
+                  $emails_db->user_id = $user->id;
+                  $emails_db->type = 'find';
+                  $emails_db->save(); 
+               }
+               
+            } 
+            
+
+            return json_encode(array('status'=>$status,'emails'=>$json_output[0]->email,'logs'=>$json_output[0]->logs,'proxy'=>$json_output[0]->proxy,'credits_left'=>$user->credits,'commands'=>$json_output[0]->commands,'MX'=>$json_output[0]->mx,'Catch All Test'=>$json_output[0]->catch_all_test));
+         }
+         catch(Exception $e)
+         {
+
+         }
+   	}
+   	function verify_email_ajax(Request $request)
+   	{
+   		try
+         {
+            $this->validate($request, [
+                'email' => ['required', 'string', 'email', 'max:255',new BlackListDomains],
+            ]);
+            $endpoint = "http://3.17.231.9:5000/verify";
+            $postdata='data=["'.$request->email.'"]';
+      		$ch = curl_init();
+
+            curl_setopt($ch, CURLOPT_URL,$endpoint);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS,$postdata);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 50);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            $server_output = curl_exec ($ch);
+
+            curl_close ($ch);
+            
+            $email_status="Valid";
+            $server_status="Valid";
+            $json_output=json_decode($server_output);
+            $user=Auth::user();
+            $user->decrement('credits');
+            if($json_output[0]->mx==null || $json_output[0]->mx=='')
+            {
+               $server_status="No Mailbox";
+               $email_status="-";
+            }
+            else
+            {
+              if($json_output[0]->status==null || $json_output[0]->status=='')
+              {
+                $email_status="Not Found";
+              }
+              else
+              {
+                $email_status=$json_output[0]->status;
+              }
+            }
+            $emails_db = new Emails;
+            $emails_db->email = $request->email;
+            $emails_db->user_id = $user->id;
+            $emails_db->status = $email_status;
+            $emails_db->server_status = $server_status;
+            $emails_db->type = 'verify';
+            $emails_db->save(); 
+            //return json_encode($json_output[0]);
+            return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status,'credits_left'=>$user->credits,'MX'=>$json_output[0]->mx));
+         }
+         catch(Exception $e)
+         {
+
+         }
+   	}*/
 }
