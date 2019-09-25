@@ -7,6 +7,7 @@ use App\User;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use App\TwoCheckout\TwoCheckoutApi;
+use App\FastSpring\FastSpringApi;
 use App\Orders;
 use App\Package;
 use App\UserPackagesLogs;
@@ -78,6 +79,12 @@ class UserController extends Controller
 
         return $twocheckoutapi->getCustomerSubscriptions('676306262');
         
+    }
+    public function get_fastspring_session(Request $request)
+    {
+        $user=Auth::user();
+        $FastSpringApi = new FastSpringApi();
+        return $FastSpringApi->getSession($user->payment_user_reference,$request->input('package_name'));
     }
     public function return_url(Request $request)
     {
@@ -155,5 +162,6 @@ class UserController extends Controller
         $data=$twocheckoutapi->getCustomerSubscriptions($user->two_checkout_user_reference);
         return redirect()->back()->with(['data'=>$data]);
     }
+
     
 }

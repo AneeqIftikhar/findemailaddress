@@ -15,35 +15,17 @@ class FastSpringApi
     }
     
 
-    public function getSession()
+    public function getSession($account,$product_name)
     {
 
-      /*
-
-          {
-            "id": "2aqIUau0TOSsP56ZvBEa7A",
-            "currency": "USD",
-            "expires": 1569337591062,
-            "order": null,
-            "account": "rO_bGfPeTdipo__qUxC5_g",
-            "subtotal": 29.99,
-            "items": [
-                {
-                    "product": "small",
-                    "quantity": 1
-                }
-            ]
-        }
-      */
-
-    $payload ='{
-     "account": "W_tVJRN2SL2Uv172r7Ho4Q",                                        
-     "items": [
-               {
-                   "product": "small",
-                   "quantity": 1
-               }
-           ]
+      $payload ='{
+       "account": "'.$account.'",                                        
+       "items": [
+                 {
+                     "product": "'.$product_name.'",
+                     "quantity": 1
+                 }
+             ]
       }';
       try {
           $FastSpringClient = new FastSpringClient();
@@ -59,25 +41,20 @@ class FastSpringApi
           return $responseBody;
       }
     }
-    public function createCustomer()
+    public function createCustomer($first,$last='',$email,$user_uuid)
     {
-
-    // "account": "rO_bGfPeTdipo__qUxC5_g",
-    //"id": "rO_bGfPeTdipo__qUxC5_g",
-    //"action": "account.create",
-    //"result": "success"
     	$payload ='{  
            "contact":
            {  
-              "first":"John",         
-              "last":"Doe",
-              "email":"j.doe@fastspring.com"
+              "first":"'.$first.'",         
+              "last":"'.$last.'",
+              "email":"'.$email.'"
            },
            "language":"en",
            "country":"US",
            "lookup":
            {               
-              "custom":"customKey"
+              "custom":"'.$user_uuid.'"
            }
       }';
   		try {
@@ -96,11 +73,6 @@ class FastSpringApi
     }
     public function updateCustomer()
     {
-
-    // "account": "rO_bGfPeTdipo__qUxC5_g",
-    //"id": "rO_bGfPeTdipo__qUxC5_g",
-    //"action": "account.create",
-    //"result": "success"
       $payload ='{  
            "contact":
            {  
@@ -163,6 +135,23 @@ class FastSpringApi
         $responseBody = $exception->getResponse()->getBody(true);
           return $responseBody;
       }
+    }
+    public function getCustomerUsingEmail($email)
+    {
+      try {
+          $FastSpringClient = new FastSpringClient();
+            $response = json_decode($FastSpringClient->get('accounts/?email='.$email)->getBody()->getContents(),true);
+            return $response;
+      } catch (ClientErrorResponseException $exception) {
+          $responseBody = $exception->getResponse()->getBody(true);
+          return $responseBody;
+      }
+      catch (\Exception $exception)
+      {
+        $responseBody = $exception->getResponse()->getBody(true);
+          return $responseBody;
+      }
+      //GET /accounts?key=value&limit=15&page=2
     }
 
       

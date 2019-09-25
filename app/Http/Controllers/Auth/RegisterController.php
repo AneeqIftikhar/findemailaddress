@@ -12,6 +12,7 @@ use App\UserPackagesLogs;
 use Illuminate\Validation\Rule;
 use App\Rules\BlackListDomains;
 use App\TwoCheckout\TwoCheckoutApi;
+use App\FastSpring\FastSpringApi;
 use Ramsey\Uuid\Uuid;
 class RegisterController extends Controller
 {
@@ -80,7 +81,7 @@ class RegisterController extends Controller
         $data['user_uuid'] = Uuid::uuid4();
         $user = new User($data);
         $user->save();
-        $twocheckoutapi=new TwoCheckoutApi();
+        $FastSpringApi=new FastSpringApi();
         $name=explode(" ",$user->name);
         if(count($name)>2)
         {
@@ -97,8 +98,19 @@ class RegisterController extends Controller
             $first_name=$name[0];
             $last_name=" ";
         }
-        $user->two_checkout_user_reference=$twocheckoutapi->createCustomer($first_name,$last_name,$user->email,$user->user_uuid);
-        $user->save();
+        $if_exists=$FastSpringApi->getCustomerUsingEmail($user->email);
+        if($if_exists['result']=="error")
+        {
+            $account=$FastSpringApi->createCustomer($first_name,$last_name,$user->email,$user->user_uuid);
+            $user->payment_user_reference=$account['id'];
+            $user->save();
+        }
+        else
+        {
+            $user->payment_user_reference=$if_exists['accounts'][0]['id'];
+            $user->save();
+        }
+        
 
         $user_package_log = new UserPackagesLogs;
         $user_package_log->package()->associate($free_package);

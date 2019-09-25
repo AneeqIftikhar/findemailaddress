@@ -27,8 +27,8 @@
               <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Money Back Gaurantee</li>
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
-            <!-- <a href='#' data-fsc-action="Add,Checkout" data-fsc-item-path-value="small">Purchase "Small Plan"</a> -->
-            <button href="#" class="btn btn-block btn-primary text-uppercase" disabled>Buy Now!</button>
+            <a href='#' data-fsc-action="Add,Checkout" data-fsc-item-path-value="small">Purchase "Small Plan"</a>
+            <!-- <button href="#" class="btn btn-block btn-primary text-uppercase" disabled>Buy Now!</button> -->
           </div>
         </div>
       </div>
@@ -103,6 +103,100 @@
 </div>
 @endsection
 @push('scripts')
+<script type="text/javascript">
+
+    var user = {!! auth()->user() !!};
+    (function (document, src, libName, config) {
+        var script             = document.createElement('script');
+        script.src             = src;
+        script.async           = true;
+        var firstScriptElement = document.getElementsByTagName('script')[0];
+        script.onload          = function () {
+            for (var namespace in config) {
+                if (config.hasOwnProperty(namespace)) {
+                    window[libName].setup.setConfig(namespace, config[namespace]);
+                }
+            }
+            window[libName].register();
+        };
+
+        firstScriptElement.parentNode.insertBefore(script, firstScriptElement);
+    })(document, 'https://secure.avangate.com/checkout/client/twoCoInlineCart.js', 'TwoCoInlineCart',{"app":{"merchant":"250183608226"},"cart":{"host":"https:\/\/secure.2checkout.com","customization":"inline"}});
+  $( document ).ready(function() {
+    document.getElementById('buy1').addEventListener('click', function(event) {
+    event.preventDefault();
+    TwoCoInlineCart.products.removeAll();
+    TwoCoInlineCart.products.add({
+
+        code: "1",
+        quantity: 1
+
+      });
+    TwoCoInlineCart.cart.setReturnMethod({
+        type: 'redirect',
+        url : 'http://localhost/email_finder_verifier/return_url'
+      });
+
+      TwoCoInlineCart.cart.setCustomerReference(user['two_checkout_user_reference']);
+      console.log(TwoCoInlineCart.products.getAll());
+      TwoCoInlineCart.cart.checkout();
+
+    });
+    document.getElementById('buy2').addEventListener('click', function(event) {
+      event.preventDefault();
+    TwoCoInlineCart.products.removeAll();
+    TwoCoInlineCart.products.add({
+
+        code: "2",
+        quantity: 1
+
+      });
+    TwoCoInlineCart.cart.setReturnMethod({
+        type: 'redirect',
+        url : 'http://localhost/email_finder_verifier/return_url'
+      });
+
+      TwoCoInlineCart.cart.setCustomerReference(user['two_checkout_user_reference']);
+
+      TwoCoInlineCart.cart.checkout();
+
+    });
+    document.getElementById('buy3').addEventListener('click', function(event) {
+      event.preventDefault();
+    TwoCoInlineCart.products.removeAll();
+    TwoCoInlineCart.products.add({
+
+        code: "3",
+        quantity: 1
+
+      });
+    TwoCoInlineCart.cart.setReturnMethod({
+        type: 'redirect',
+        url : "{{URL::to('return_url')}}"
+      });
+
+      TwoCoInlineCart.cart.setCustomerReference(user['two_checkout_user_reference']);
+
+      TwoCoInlineCart.cart.checkout();
+
+    });
+});
+function onFSPopupClosed(orderReference) 
+{
+  if (orderReference)
+  {
+    console.log(orderReference.reference);
+    fastspring.builder.reset();
+    //window.location.replace("http://furiousfalcon.com/?orderId=" + orderReference.reference);
+  } 
+  else 
+  {
+    console.log("no order ID");
+  }
+}
+
+
+</script>
 <script
         id="fsc-api"
         src="https://d1f8f9xcsvx3ha.cloudfront.net/sbl/0.8.1/fastspring-builder.min.js"
@@ -112,94 +206,19 @@
 
 </script>
 <script type="text/javascript">
+  // fastspring.builder.recognize({"email":"ne1@all.com","firstName":"Leeroy","lastName":"Jenkins"});
+  // fastspring.builder.account("rO_bGfPeTdipo__qUxC5_g");
+//   var s={
+//   'products' : [
+//     {
+//       'path':'small',
+//       'quantity': 1
+//     }
+//   ],
+//   'account': 'rO_bGfPeTdipo__qUxC5_g'
 
-
-	$( document ).ready(function() {
-	document.getElementById('buy1').addEventListener('click', function(event) {
-	event.preventDefault();
-  $('#buy1').html('<i class="fa fa-spinner fa-spin"></i>');
-  $('#buy1').attr('disabled',true);
-	$.ajax({
-        method: 'GET',
-        dataType: 'json', 
-        url: 'get_fastspring_session', 
-        data: {'package_name' : "small","_token": "{{ csrf_token() }}"}, 
-        success: function(response){ 
-        	console.log(response);
-          $('#buy1').html('Buy Now!');
-          $('#buy1').attr('disabled',false);
-        	fastspring.builder.checkout(response['id']);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            $('#buy1').html('Buy Now!');
-            $('#buy1').attr('disabled',false);
-            console.log(jqXHR);
-            
-        }
-    });
-	
-
-	});
-	document.getElementById('buy2').addEventListener('click', function(event) {
-		event.preventDefault();
-    $('#buy2').html('<i class="fa fa-spinner fa-spin"></i>');
-    $('#buy2').attr('disabled',true);
-	$.ajax({
-        method: 'GET',
-        dataType: 'json', 
-        url: 'get_fastspring_session', 
-        data: {'package_name' : "medium","_token": "{{ csrf_token() }}"}, 
-        success: function(response){ 
-          $('#buy2').html('Buy Now!');
-          $('#buy2').attr('disabled',false);
-        	fastspring.builder.checkout(response['id']);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            $('#buy2').html('Buy Now!');
-            $('#buy2').attr('disabled',false);
-            console.log(jqXHR);
-            
-        }
-    });
-
-	});
-	document.getElementById('buy3').addEventListener('click', function(event) {
-	event.preventDefault();
-  $('#buy3').html('<i class="fa fa-spinner fa-spin"></i>');
-  $('#buy3').attr('disabled',true);
-	$.ajax({
-        method: 'GET',
-        dataType: 'json', 
-        url: 'get_fastspring_session', 
-        data: {'package_name' : "large","_token": "{{ csrf_token() }}"}, 
-        success: function(response){ 
-          $('#buy3').html('Buy Now!');
-          $('#buy3').attr('disabled',false);
-        	fastspring.builder.checkout(response['id']);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            $('#buy3').html('Buy Now!');
-            $('#buy3').attr('disabled',false);
-            console.log(jqXHR);
-            
-        }
-    });
-
-	});
-});
-function onFSPopupClosed(orderReference) 
-{
-  if (orderReference)
-  {
-    console.log(orderReference.reference);
-    fastspring.builder.reset();
-  } 
-  else 
-  {
-    console.log("no order ID");
-  }
-}
-
-
+// };
+// fastspring.builder.push(s);
+fastspring.builder.checkout("mNnPTRLHT1yCjhkPQu7pJQ");
 </script>
 @endpush

@@ -102,5 +102,6 @@ Route::group(['middleware' => ['throttle:8']], function () {
 });
 
 
+Route::get('get_fastspring_session','UserController@get_fastspring_session')->middleware('verified');
 
 Route::post('webhook','SubscriptionController@webhook');
