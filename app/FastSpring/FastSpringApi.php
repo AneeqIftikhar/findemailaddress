@@ -158,20 +158,21 @@ class FastSpringApi
       try {
           if($prorate)
           {
-            $payload ='{
+            $payload ='{"subscriptions": [{
              "subscription": "'.$subscription_id.'",                                        
               "product": "'.$product_name.'",
               "quantity": 1,
               "prorate": true
-            }';
+            }]}';
           }
           else
           {
-            $payload ='{
+            $payload ='{"subscriptions": [
+            {
              "subscription": "'.$subscription_id.'",                                        
               "product": "'.$product_name.'",
               "quantity": 1
-            }';
+            }]}';
           }
         
           $FastSpringClient = new FastSpringClient();
