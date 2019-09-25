@@ -32,7 +32,7 @@ class WebhookController extends Controller
                         $Webhook=new Webhooks();
                         $Webhook->webhook_dump=$json_dump;
                         $Webhook->user_id=$user->id;
-                        $subscription->save();
+                        $Webhook->save();
 
                         $product_name=$event['data']['product'];
                         $package=Package::where('name',$product_name)->first();
@@ -64,7 +64,7 @@ class WebhookController extends Controller
                         $Webhook=new Webhooks();
                         $Webhook->webhook_dump=$json_dump;
                         $Webhook->user_id=$user->id;
-                        $subscription->save();
+                        $Webhook->save();
 
                     }
                 }
