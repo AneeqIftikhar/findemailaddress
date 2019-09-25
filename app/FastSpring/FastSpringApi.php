@@ -153,6 +153,39 @@ class FastSpringApi
       }
       //GET /accounts?key=value&limit=15&page=2
     }
-
+    public function updateSubscription($subscription_id,$product_name,$prorate)
+    {
+      try {
+          if($prorate)
+          {
+            $payload ='{
+             "subscription": "'.$subscription_id.'",                                        
+              "product": "'.$product_name.'",
+              "quantity": 1,
+              "prorate": true
+            }';
+          }
+          else
+          {
+            $payload ='{
+             "subscription": "'.$subscription_id.'",                                        
+              "product": "'.$product_name.'",
+              "quantity": 1
+            }';
+          }
+        
+          $FastSpringClient = new FastSpringClient();
+            $response = json_decode($FastSpringClient->post('subscriptions', ['body' => $payload])->getBody()->getContents(),true);
+            return $response;
+      } catch (ClientErrorResponseException $exception) {
+          $responseBody = $exception->getResponse()->getBody(true);
+          return $responseBody;
+      }
+      catch (\Exception $exception)
+      {
+        $responseBody = $exception->getResponse()->getBody(true);
+          return $responseBody;
+      }
+    }
       
 }

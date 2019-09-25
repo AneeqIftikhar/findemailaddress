@@ -34,7 +34,8 @@ class EmailController extends Controller
     $FastSpringApi = new FastSpringApi();
     //return $FastSpringApi->getCustomer('rO_bGfPeTdipo__qUxC5_g');
     //return $FastSpringApi->getAllCustomers();
-    return $FastSpringApi->createCustomer('dummy','dummy','dummy@dummy.com','kajshdkuyiuyiudhsa');
+    $account=$FastSpringApi->createCustomer('dummy','dummy','dummy4@dummy.com','kaj2shdkuyiu2yiudhsa');
+    return $account['id'];
     //return $FastSpringApi->updateCustomer();
     //return $FastSpringApi->getCustomerUsingEmail('kh.aneeq@gmail.com');
   }

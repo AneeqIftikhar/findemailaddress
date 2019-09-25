@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->string('payment_user_reference')->nullable();
             $table->integer('visited_subscription_page')->default(0);
             $table->integer('visited_pricing_page')->default(0);
+            $table->string('current_plan')->default("Free");
             $table->rememberToken();
             $table->timestamps();
         });

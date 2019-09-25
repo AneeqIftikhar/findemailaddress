@@ -27,8 +27,13 @@
               <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Money Back Gaurantee</li>
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
-            <!-- <a href='#' data-fsc-action="Add,Checkout" data-fsc-item-path-value="small">Purchase "Small Plan"</a> -->
-            <button href="#" class="btn btn-block btn-primary text-uppercase" disabled>Buy Now!</button>
+            @if ( !empty ( $data ) ) 
+              <a href="#" id="disable" class="btn btn-block btn-primary text-uppercase">Cancel Subscription</a>
+
+            @else
+              <a id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</a>
+            @endif
+            
           </div>
         </div>
       </div>
@@ -50,7 +55,17 @@
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Money Back Gaurantee</li>
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
-            <a href="#buy" id="buy1" class="btn btn-block btn-primary text-uppercase">Buy Now!</a>
+            @if ( !empty ( $data ) ) 
+              @if($data->product_name=="small" || $data->product_name=="Small" || $data->product_name=="basic" || $data->product_name=="Basic")
+                <a id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</a>
+              @else
+                <a href="#" id="select1" class="btn btn-block btn-danger text-uppercase">Select</a>
+              @endif
+
+            @else
+              <a href="#buy" id="buy1" class="btn btn-block btn-primary text-uppercase">Select</a>
+            @endif
+            
           </div>
         </div>
       </div>
@@ -70,7 +85,17 @@
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Money Back Gaurantee</li>
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
-            <a href="#" id="buy2" class="btn btn-block btn-primary text-uppercase">Buy Now!</a>
+            @if ( !empty ( $data ) ) 
+              @if($data->product_name=="medium" || $data->product_name=="Medium" || $data->product_name=="pro" || $data->product_name=="Pro")
+                <a id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</a>
+              @else
+                <a href="#" id="select2" class="btn btn-block btn-primary text-uppercase">Select</a>
+              @endif
+
+            @else
+              <a href="#" id="buy2" class="btn btn-block btn-primary text-uppercase">Buy Now!</a>
+            @endif
+            
           </div>
         </div>
       </div>
@@ -90,7 +115,17 @@
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Money Back Gaurantee</li>
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
-            <a href="#" id="buy3" class="btn btn-block btn-primary text-uppercase">Buy Now!</a>
+            @if ( !empty ( $data ) ) 
+              @if($data->product_name=="large" || $data->product_name=="Large" || $data->product_name=="Enterprise" || $data->product_name=="enterprise")
+                <a id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</a>
+              @else
+                <a id="select3" class="btn btn-block btn-primary text-uppercase">Select</a>
+              @endif
+
+            @else
+              <a href="#" id="buy3" class="btn btn-block btn-primary text-uppercase">Buy Now!</a>
+            @endif
+            
           </div>
         </div>
       </div>
@@ -115,84 +150,161 @@
 
 
 	$( document ).ready(function() {
-	document.getElementById('buy1').addEventListener('click', function(event) {
-	event.preventDefault();
-  $('#buy1').html('<i class="fa fa-spinner fa-spin"></i>');
-  $('#buy1').attr('disabled',true);
-	$.ajax({
-        method: 'GET',
-        dataType: 'json', 
-        url: 'get_fastspring_session', 
-        data: {'package_name' : "small","_token": "{{ csrf_token() }}"}, 
-        success: function(response){ 
-        	console.log(response);
-          $('#buy1').html('Buy Now!');
-          $('#buy1').attr('disabled',false);
-        	fastspring.builder.checkout(response['id']);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
+  if(document.getElementById('buy1'))
+  {
+    document.getElementById('buy1').addEventListener('click', function(event) {
+    event.preventDefault();
+    $('#buy1').html('<i class="fa fa-spinner fa-spin"></i>');
+    $('#buy1').attr('disabled',true);
+    $.ajax({
+          method: 'GET',
+          dataType: 'json', 
+          url: 'get_fastspring_session', 
+          data: {'package_name' : "small","_token": "{{ csrf_token() }}"}, 
+          success: function(response){ 
+            console.log(response);
             $('#buy1').html('Buy Now!');
             $('#buy1').attr('disabled',false);
-            console.log(jqXHR);
-            
-        }
-    });
-	
+            fastspring.builder.checkout(response['id']);
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              $('#buy1').html('Buy Now!');
+              $('#buy1').attr('disabled',false);
+              console.log(jqXHR);
+              
+          }
+      });
+    
 
-	});
-	document.getElementById('buy2').addEventListener('click', function(event) {
-		event.preventDefault();
-    $('#buy2').html('<i class="fa fa-spinner fa-spin"></i>');
-    $('#buy2').attr('disabled',true);
-	$.ajax({
-        method: 'GET',
-        dataType: 'json', 
-        url: 'get_fastspring_session', 
-        data: {'package_name' : "medium","_token": "{{ csrf_token() }}"}, 
-        success: function(response){ 
-          $('#buy2').html('Buy Now!');
-          $('#buy2').attr('disabled',false);
-        	fastspring.builder.checkout(response['id']);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
+    });
+  }
+	if(document.getElementById('buy2'))
+  {
+  	document.getElementById('buy2').addEventListener('click', function(event) {
+  		event.preventDefault();
+      $('#buy2').html('<i class="fa fa-spinner fa-spin"></i>');
+      $('#buy2').attr('disabled',true);
+  	$.ajax({
+          method: 'GET',
+          dataType: 'json', 
+          url: 'get_fastspring_session', 
+          data: {'package_name' : "medium","_token": "{{ csrf_token() }}"}, 
+          success: function(response){ 
             $('#buy2').html('Buy Now!');
             $('#buy2').attr('disabled',false);
-            console.log(jqXHR);
-            
-        }
-    });
+          	fastspring.builder.checkout(response['id']);
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              $('#buy2').html('Buy Now!');
+              $('#buy2').attr('disabled',false);
+              console.log(jqXHR);
+              
+          }
+      });
 
-	});
-	document.getElementById('buy3').addEventListener('click', function(event) {
-	event.preventDefault();
-  $('#buy3').html('<i class="fa fa-spinner fa-spin"></i>');
-  $('#buy3').attr('disabled',true);
-	$.ajax({
-        method: 'GET',
-        dataType: 'json', 
-        url: 'get_fastspring_session', 
-        data: {'package_name' : "large","_token": "{{ csrf_token() }}"}, 
-        success: function(response){ 
-          $('#buy3').html('Buy Now!');
-          $('#buy3').attr('disabled',false);
-        	fastspring.builder.checkout(response['id']);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
+  	});
+  }
+  if(document.getElementById('buy3'))
+  {
+  	document.getElementById('buy3').addEventListener('click', function(event) {
+  	event.preventDefault();
+    $('#buy3').html('<i class="fa fa-spinner fa-spin"></i>');
+    $('#buy3').attr('disabled',true);
+  	$.ajax({
+          method: 'GET',
+          dataType: 'json', 
+          url: 'get_fastspring_session', 
+          data: {'package_name' : "large","_token": "{{ csrf_token() }}"}, 
+          success: function(response){ 
             $('#buy3').html('Buy Now!');
             $('#buy3').attr('disabled',false);
-            console.log(jqXHR);
-            
-        }
-    });
+          	fastspring.builder.checkout(response['id']);
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              $('#buy3').html('Buy Now!');
+              $('#buy3').attr('disabled',false);
+              console.log(jqXHR);
+              
+          }
+      });
+	   });
+  }
+  if(document.getElementById('select1'))
+  {
+    document.getElementById('select1').addEventListener('click', function(event) {
+    event.preventDefault();
+    $('#select1').html('<i class="fa fa-spinner fa-spin"></i>');
+    $('#select1').attr('disabled',true);
+    $.ajax({
+          method: 'GET',
+          dataType: 'json', 
+          url: 'update_subscription', 
+          data: {'package_name' : "small","_token": "{{ csrf_token() }}"}, 
+          success: function(response){ 
+            console.log(response);
 
-	});
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+
+              console.log(jqXHR);
+              
+          }
+      });
+    
+
+    });
+  }
+  if(document.getElementById('select2'))
+  {
+    document.getElementById('select2').addEventListener('click', function(event) {
+      event.preventDefault();
+      $('#select2').html('<i class="fa fa-spinner fa-spin"></i>');
+      $('#select2').attr('disabled',true);
+    $.ajax({
+          method: 'GET',
+          dataType: 'json', 
+          url: 'get_fastspring_session', 
+          data: {'package_name' : "medium","_token": "{{ csrf_token() }}"}, 
+          success: function(response){ 
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              console.log(jqXHR);
+              
+          }
+      });
+
+    });
+  }
+  if(document.getElementById('select3'))
+  {
+    document.getElementById('select3').addEventListener('click', function(event) {
+    event.preventDefault();
+    $('#select3').html('<i class="fa fa-spinner fa-spin"></i>');
+    $('#select3').attr('disabled',true);
+    $.ajax({
+          method: 'GET',
+          dataType: 'json', 
+          url: 'get_fastspring_session', 
+          data: {'package_name' : "large","_token": "{{ csrf_token() }}"}, 
+          success: function(response){ 
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              console.log(jqXHR);
+              
+          }
+      });
+
+    });
+  }
 });
+
 function onFSPopupClosed(orderReference) 
 {
   if (orderReference)
   {
     console.log(orderReference.reference);
     fastspring.builder.reset();
+    location.reload();
   } 
   else 
   {

@@ -103,19 +103,19 @@ class RegisterController extends Controller
         {
             $account=$FastSpringApi->createCustomer($first_name,$last_name,$user->email,$user->user_uuid);
             $user->payment_user_reference=$account['id'];
-            $user->save();
         }
         else
         {
             $user->payment_user_reference=$if_exists['accounts'][0]['id'];
-            $user->save();
+            
         }
-        
-
+        $user->current_plan="Free";
+        $user->save();
         $user_package_log = new UserPackagesLogs;
         $user_package_log->package()->associate($free_package);
         $user_package_log->user()->associate($user);
         $user_package_log->save();
+
         return $user;
     }
 }

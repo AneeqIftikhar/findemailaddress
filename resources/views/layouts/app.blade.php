@@ -183,7 +183,7 @@
                                             <td style="padding: 2px; line-height: 19px;">
                                                 <strong >{{ Auth::user()->name }}</strong>
                                                 <br>
-                                                <span class="badge badge-primary" >{{session('package_name')}} Plan</span>
+                                                <span class="badge badge-primary" >{{Auth::user()->current_plan}} Plan</span>
                                             </td>
                                             <td style="padding: 2px 12px;">
                                                 <i class="fas fa-angle-down fa-2x"></i>
@@ -203,7 +203,7 @@
                                                 <div class="col-12">
                                                     <div class='row mt-2'>
                                                         <div class="col-12">
-                                                            <strong>{{session('package_name')}} Plan</strong>
+                                                            <strong>{{Auth::user()->current_plan}} Plan</strong>
                                                         </div>
                                                     </div>
                                                      <div class="row mt-2">

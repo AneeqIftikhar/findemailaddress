@@ -12,6 +12,7 @@ use App\Orders;
 use App\Package;
 use App\UserPackagesLogs;
 use Session;
+use App\Subscriptions;
 class UserController extends Controller
 {
     public function update_personal_info(Request $request)
@@ -143,7 +144,8 @@ class UserController extends Controller
     {
         $user=Auth::user();
         $user->visited_pricing_page=$user->visited_pricing_page+1;
-        return view('upgrade_account');
+        $subscription=Subscriptions::where('user_id',$user->id)->first();
+        return view('upgrade_account', ['data'=>$subscription]);
     }
         
     public function disableRecurringBilling(Request $request)
