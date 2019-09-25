@@ -8,6 +8,7 @@ use App\User;
 use App\Package;
 use App\UserPackagesLogs;
 use Auth;
+use App\FastSpring\FastSpringApi;
 class SubscriptionController extends Controller
 {
     public function webhook(Request $request)
