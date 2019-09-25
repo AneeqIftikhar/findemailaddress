@@ -236,7 +236,7 @@
     $('#select1').html('<i class="fa fa-spinner fa-spin"></i>');
     $('#select1').attr('disabled',true);
     $.ajax({
-          method: 'GET',
+          method: 'POST',
           dataType: 'json', 
           url: 'update_subscription', 
           data: {'package_name' : "small","_token": "{{ csrf_token() }}"}, 
@@ -262,7 +262,7 @@
       $('#select2').html('<i class="fa fa-spinner fa-spin"></i>');
       $('#select2').attr('disabled',true);
     $.ajax({
-          method: 'GET',
+          method: 'POST',
           dataType: 'json', 
           url: 'update_subscription', 
           data: {'package_name' : "medium","_token": "{{ csrf_token() }}"}, 
@@ -285,7 +285,7 @@
     $('#select3').html('<i class="fa fa-spinner fa-spin"></i>');
     $('#select3').attr('disabled',true);
     $.ajax({
-          method: 'GET',
+          method: 'POST',
           dataType: 'json', 
           url: 'update_subscription', 
           data: {'package_name' : "large","_token": "{{ csrf_token() }}"}, 
