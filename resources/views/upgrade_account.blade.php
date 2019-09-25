@@ -63,7 +63,7 @@
               @endif
 
             @else
-              <a href="#buy" id="buy1" class="btn btn-block btn-primary text-uppercase">Select</a>
+              <a href="#buy" id="buy1" class="btn btn-block btn-primary text-uppercase">Buy Now!</a>
             @endif
             
           </div>
@@ -138,6 +138,7 @@
 </div>
 @endsection
 @push('scripts')
+
 <script
         id="fsc-api"
         src="https://d1f8f9xcsvx3ha.cloudfront.net/sbl/0.8.1/fastspring-builder.min.js"
@@ -160,7 +161,7 @@
           method: 'GET',
           dataType: 'json', 
           url: 'get_fastspring_session', 
-          data: {'package_name' : "small","_token": "{{ csrf_token() }}"}, 
+          data: {'package_name' : "basix","_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
             console.log(response);
             $('#buy1').html('Buy Now!');
@@ -171,6 +172,7 @@
               $('#buy1').html('Buy Now!');
               $('#buy1').attr('disabled',false);
               console.log(jqXHR);
+
               
           }
       });
@@ -239,7 +241,7 @@
           method: 'POST',
           dataType: 'json', 
           url: 'update_subscription', 
-          data: {'package_name' : "small","_token": "{{ csrf_token() }}"}, 
+          data: {'package_name' : "basic","_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
             console.log(response);
             //location.reload();

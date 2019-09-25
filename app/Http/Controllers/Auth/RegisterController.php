@@ -75,7 +75,7 @@ class RegisterController extends Controller
     {
 
 
-        $free_package=Package::where('name','basic')->first();
+        $free_package=Package::where('name','free')->first();
         $data['password']=Hash::make($data['password']);
         $data['credits']=$free_package->credits;
         $data['user_uuid'] = Uuid::uuid4();
@@ -110,6 +110,7 @@ class RegisterController extends Controller
             $user->payment_user_reference=$if_exists['accounts'][0]['id'];
             
         }
+        $user->save();
         $user_package_log = new UserPackagesLogs;
         $user_package_log->package()->associate($free_package);
         $user_package_log->user()->associate($user);
