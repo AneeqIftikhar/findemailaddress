@@ -31,6 +31,8 @@ class CreateEmailsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->bigInteger('user_file_id')->unsigned()->nullable();
             $table->foreign('user_file_id')->references('id')->on('user_files')->nullable()->onDelete('cascade');
+            $table->string('server_status')->nullable();
+            $table->longText('server_json_dump')->nullable();
 
 
             $table->timestamps();

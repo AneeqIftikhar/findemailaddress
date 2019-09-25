@@ -24,7 +24,7 @@ Route::get('2checkout','UserController@test_2checkout');
 
 Route::post('test_fastspring','EmailController@test_fastspring');
 
-Route::post('get_webhook','SubscriptionController@get_webhook');
+Route::post('get_webhook','WebhookController@get_webhook');
 
 Route::post('find_email_api','API\EmailApiController@find_email_api');
 Route::post('verify_email_api','API\EmailApiController@verify_email_api');

@@ -22,12 +22,16 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('phone')->nullable();
             $table->string('company_name')->nullable();
+            $table->string('status')->nullable();
             $table->integer('credits')->default(50);
             $table->timestamp('last_login')->nullable();
             $table->string('payment_user_reference')->nullable();
             $table->integer('visited_subscription_page')->default(0);
             $table->integer('visited_pricing_page')->default(0);
-            $table->string('current_plan')->default("Free");
+            $table->timestamp('last_active')->nullable();
+            $table->bigInteger('package_id')->unsigned()->nullable();
+            $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade');
+            $table->string('subscription_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

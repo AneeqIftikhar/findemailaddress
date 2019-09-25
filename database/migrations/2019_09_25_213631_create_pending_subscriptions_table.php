@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSubscriptionsTable extends Migration
+class CreatePendingSubscriptionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class CreateSubscriptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('subscriptions', function (Blueprint $table) {
+        Schema::create('pending_subscriptions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->longText('webhook_dump')->nullable();
-            $table->string('subscription_id');
-            $table->string('active');
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('product_name');
-            $table->integer('price');
-
+            $table->bigInteger('package_id')->unsigned();
+            $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade');
+            $table->string('status');
+            $table->integer('credits');
+            $table->string('reason')->nullable();
             $table->timestamps();
         });
     }
@@ -34,6 +33,6 @@ class CreateSubscriptionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subscriptions');
+        Schema::dropIfExists('pending_subscriptions');
     }
 }

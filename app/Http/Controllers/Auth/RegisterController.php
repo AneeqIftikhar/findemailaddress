@@ -75,10 +75,11 @@ class RegisterController extends Controller
     {
 
 
-        $free_package=Package::where('name','Free')->first();
+        $free_package=Package::where('name','basic')->first();
         $data['password']=Hash::make($data['password']);
         $data['credits']=$free_package->credits;
         $data['user_uuid'] = Uuid::uuid4();
+        $data['package_id'] = $free_package->id;
         $user = new User($data);
         $user->save();
         $FastSpringApi=new FastSpringApi();
@@ -109,8 +110,6 @@ class RegisterController extends Controller
             $user->payment_user_reference=$if_exists['accounts'][0]['id'];
             
         }
-        $user->current_plan="Free";
-        $user->save();
         $user_package_log = new UserPackagesLogs;
         $user_package_log->package()->associate($free_package);
         $user_package_log->user()->associate($user);

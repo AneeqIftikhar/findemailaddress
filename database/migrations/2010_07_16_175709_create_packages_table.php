@@ -24,28 +24,28 @@ class CreatePackagesTable extends Migration
         });
         $data=array (
             array(
-                'name' => "Free",
+                'name' => "free",
                 'amount' => 0,
                 'credits'=>50,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ),
             array(
-                'name' => "Basic",
+                'name' => "basic",
                 'amount' => 29,
                 'credits'=>1000,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ),
             array(
-                'name' => "Medium",
+                'name' => "extended",
                 'amount' => 49,
                 'credits'=>2500,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ),
             array(
-                'name' => "Large",
+                'name' => "corporate",
                 'amount' => 99,
                 'credits'=>10000,
                 'created_at' => date('Y-m-d H:i:s'),
