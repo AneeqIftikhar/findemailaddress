@@ -242,6 +242,7 @@
           data: {'package_name' : "small","_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
             console.log(response);
+            //location.reload();
 
           },
           error: function(jqXHR, textStatus, errorThrown) {
@@ -263,9 +264,11 @@
     $.ajax({
           method: 'GET',
           dataType: 'json', 
-          url: 'get_fastspring_session', 
+          url: 'update_subscription', 
           data: {'package_name' : "medium","_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
+            console.log(response);
+            //location.reload();
           },
           error: function(jqXHR, textStatus, errorThrown) {
               console.log(jqXHR);
@@ -284,9 +287,11 @@
     $.ajax({
           method: 'GET',
           dataType: 'json', 
-          url: 'get_fastspring_session', 
+          url: 'update_subscription', 
           data: {'package_name' : "large","_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
+            console.log(response);
+            //location.reload();
           },
           error: function(jqXHR, textStatus, errorThrown) {
               console.log(jqXHR);

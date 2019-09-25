@@ -7,6 +7,7 @@ use App\Subscriptions;
 use App\User;
 use App\Package;
 use App\UserPackagesLogs;
+use Auth;
 class SubscriptionController extends Controller
 {
     public function webhook(Request $request)
@@ -184,5 +185,25 @@ class SubscriptionController extends Controller
     		return "ops";
     	}
     	
+    }
+    public function update_subscription(Request $request)
+    {
+        $user=Auth::user();
+        $package_name=$request->input('package_name');
+        $subscription=Subscriptions::where('user_id',$user->id)->first();
+        if($subscription->product_name=="small" && ($package_name=="medium"||$package_name=="large"))
+        {
+            $prorate=true;
+        }
+        else if($subscription->product_name=="medium" && $package_name=="large")
+        {
+            $prorate=true;
+        }
+        else
+        {
+            $prorate=false;
+        }
+        $FastSpringApi = new FastSpringApi();
+        return $FastSpringApi->updateSubscription($subscription->subscription_id,$package_name,$prorate)
     }
 }
