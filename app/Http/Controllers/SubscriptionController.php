@@ -204,6 +204,6 @@ class SubscriptionController extends Controller
             $prorate=false;
         }
         $FastSpringApi = new FastSpringApi();
-        return $FastSpringApi->updateSubscription($subscription->subscription_id,$package_name,$prorate)
+        return $FastSpringApi->updateSubscription($subscription->subscription_id,$package_name,$prorate);
     }
 }
