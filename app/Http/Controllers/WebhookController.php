@@ -69,17 +69,17 @@ class WebhookController extends Controller
                     }
                     else if($event['type']=="subscription.charge.completed")
                     {
-                        $user=User::where('payment_user_reference',$event['subscription']['account'])->first();
+                        $user=User::where('payment_user_reference',$event['data']['subscription']['account'])->first();
 
                         $Webhook=Webhook::where('user_id',$user->id)->first();
 
                         if($Webhook && $Webhook->status=="UPDATE_IN_PROGRESS")
                         {
                             $previous_package=Package::find($user->package_id);
-                            $new_package=Package::where('name',$event['subscription']['product'])->first();
+                            $new_package=Package::where('name',$event['data']['subscription']['product'])->first();
                             if($previous_package->id<$new_package->id)
                             {
-                                $user->credits=Package::calculateProratedCredits($previous_package,$new_package,$event['subscription']['nextInSeconds'],$user);
+                                $user->credits=Package::calculateProratedCredits($previous_package,$new_package,$event['data']['subscription']['nextInSeconds'],$user);
                             }
                             $Webhook->delete();
                         }
