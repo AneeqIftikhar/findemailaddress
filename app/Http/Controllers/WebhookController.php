@@ -81,7 +81,9 @@ class WebhookController extends Controller
                         //     }
                         //     $Webhook->delete();
                         // }
-                        if($event['data']['total']<$new_package->amount)
+                        
+                        //if($event['data']['total']<$new_package->amount)
+                        if($user->package->amount<$new_package->amount)
                         {
                             $previous_package=Package::find($user->package_id);
                             
@@ -120,7 +122,7 @@ class WebhookController extends Controller
         $user=Auth::user();
         $package_name=$request->input('package_name');
         $package=Package::where('name',$package_name)->first();
-        if($user->package_id<$package->id)
+        if($user->package->amount<$package->amount)
         {
             $prorate=true;
         }
