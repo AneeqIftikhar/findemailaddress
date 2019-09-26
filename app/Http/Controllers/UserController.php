@@ -144,7 +144,12 @@ class UserController extends Controller
     {
         $user=Auth::user();
         $user->visited_pricing_page=$user->visited_pricing_page+1;
-        return view('upgrade_account', ['data'=>[]]);
+        $data=[];
+        if($user->subscription_id)
+        {
+            $data['subscription']=true;
+        }
+        return view('upgrade_account', ['data'=>$data]);
     }
         
     public function disableRecurringBilling(Request $request)

@@ -56,7 +56,7 @@
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
             @if ( !empty ( $data ) ) 
-              @if($data->product_name=="small" || $data->product_name=="Small" || $data->product_name=="basic" || $data->product_name=="Basic")
+              @if(Auth::user()->package->name=="basic")
                 <a id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</a>
               @else
                 <a href="#" id="select1" class="btn btn-block btn-danger text-uppercase">Select</a>
@@ -73,8 +73,8 @@
       <div class="col-lg-3">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title text-muted text-uppercase text-center">Medium</h5>
-            <h6 class="card-price text-center">$49<span class="period">/month</span></h6>
+            <h5 class="card-title text-muted text-uppercase text-center">EXTENDED</h5>
+            <h6 class="card-price text-center">$49.99<span class="period">/month</span></h6>
             <hr>
             <ul class="fa-ul">
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Find & Verify <strong>2500</strong> Emails</li>
@@ -86,7 +86,7 @@
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
             @if ( !empty ( $data ) ) 
-              @if($data->product_name=="medium" || $data->product_name=="Medium" || $data->product_name=="pro" || $data->product_name=="Pro")
+              @if(Auth::user()->package->name=="extended")
                 <a id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</a>
               @else
                 <a href="#" id="select2" class="btn btn-block btn-primary text-uppercase">Select</a>
@@ -103,8 +103,8 @@
       <div class="col-lg-3">
         <div class="card mb-5 mb-lg-0">
           <div class="card-body">
-            <h5 class="card-title text-muted text-uppercase text-center">Large</h5>
-            <h6 class="card-price text-center">$99<span class="period">/month</span></h6>
+            <h5 class="card-title text-muted text-uppercase text-center">CORPORATE</h5>
+            <h6 class="card-price text-center">$99.99<span class="period">/month</span></h6>
             <hr>
             <ul class="fa-ul">
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Find & Verify <strong>10000</strong> Emails</li>
@@ -116,7 +116,7 @@
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
             @if ( !empty ( $data ) ) 
-              @if($data->product_name=="large" || $data->product_name=="Large" || $data->product_name=="Enterprise" || $data->product_name=="enterprise")
+              @if(Auth::user()->package->name=="corporate")
                 <a id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</a>
               @else
                 <a id="select3" class="btn btn-block btn-primary text-uppercase">Select</a>
@@ -190,7 +190,7 @@
           method: 'GET',
           dataType: 'json', 
           url: 'get_fastspring_session', 
-          data: {'package_name' : "medium","_token": "{{ csrf_token() }}"}, 
+          data: {'package_name' : "extended","_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
             $('#buy2').html('Buy Now!');
             $('#buy2').attr('disabled',false);
@@ -216,7 +216,7 @@
           method: 'GET',
           dataType: 'json', 
           url: 'get_fastspring_session', 
-          data: {'package_name' : "large","_token": "{{ csrf_token() }}"}, 
+          data: {'package_name' : "corporate","_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
             $('#buy3').html('Buy Now!');
             $('#buy3').attr('disabled',false);
@@ -267,7 +267,7 @@
           method: 'POST',
           dataType: 'json', 
           url: 'update_subscription', 
-          data: {'package_name' : "medium","_token": "{{ csrf_token() }}"}, 
+          data: {'package_name' : "extended","_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
             console.log(response);
             //location.reload();
@@ -290,7 +290,7 @@
           method: 'POST',
           dataType: 'json', 
           url: 'update_subscription', 
-          data: {'package_name' : "large","_token": "{{ csrf_token() }}"}, 
+          data: {'package_name' : "corporate","_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
             console.log(response);
             //location.reload();

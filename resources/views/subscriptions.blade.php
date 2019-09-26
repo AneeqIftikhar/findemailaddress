@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     
-    @if ($data['Items'])
+    @if (!empty( $data ))
 		@each('partials.subscription', $data['Items'], 'item')
 	@else
 		<div class="row" style="margin-bottom: 5px">

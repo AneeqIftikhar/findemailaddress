@@ -67,6 +67,28 @@ class WebhookController extends Controller
                         $Webhook->save();
 
                     }
+                    else if($event['type']=="subscription.charge.completed")
+                    {
+                        $user=User::where('payment_user_reference',$event['subscription']['account'])->first();
+
+                        $Webhook=Webhook::where('user_id',$user->id)->first();
+
+                        if($Webhook && $Webhook->status=="UPDATE_IN_PROGRESS")
+                        {
+                            $previous_package=Package::find($user->package_id);
+                            $new_package=Package::where('name',$event['subscription']['product'])->first();
+                            if($previous_package->id<$new_package->id)
+                            {
+                                $user->credits=Package::calculateProratedCredits($previous_package,$new_package,$event['subscription']['nextInSeconds'],$user);
+                            }
+                            $Webhook->delete();
+                        }
+                        else
+                        {
+                            $user->credits=$user->credits+$user->Package->credits;
+                        }
+                        $user->save();
+                    }
                 }
             }
         }
@@ -88,7 +110,7 @@ class WebhookController extends Controller
     {
         $user=Auth::user();
         $package_name=$request->input('package_name');
-        $package=Package::where('name',$product_name)->first();
+        $package=Package::where('name',$package_name)->first();
         if($user->package_id<$package->id)
         {
             $prorate=true;
@@ -98,6 +120,6 @@ class WebhookController extends Controller
             $prorate=false;
         }
         $FastSpringApi = new FastSpringApi();
-        return $FastSpringApi->updateSubscription($subscription->subscription_id,$package_name,$prorate);
+        //return $FastSpringApi->updateSubscription($subscription->subscription_id,$package_name,$prorate);
     }
 }
