@@ -83,7 +83,7 @@ class WebhookController extends Controller
                         //     }
                         //     $Webhook->delete();
                         // }
-                        if($event['data']['order']['total']<$new_package->amount)
+                        if($event['data']['total']<$new_package->amount)
                         {
                             $previous_package=Package::find($user->package_id);
                             
