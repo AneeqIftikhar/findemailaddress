@@ -72,11 +72,21 @@ class WebhookController extends Controller
                         $user=User::where('payment_user_reference',$event['data']['subscription']['account'])->first();
 
                         $Webhook=Webhook::where('user_id',$user->id)->first();
-
-                        if($Webhook && $Webhook->status=="UPDATE_IN_PROGRESS")
+                        $new_package=Package::where('name',$event['data']['subscription']['product'])->first();
+                        // if($Webhook && $Webhook->status=="UPDATE_IN_PROGRESS")
+                        // {
+                        //     $previous_package=Package::find($user->package_id);
+                            
+                        //     if($previous_package->id<$new_package->id)
+                        //     {
+                        //         $user->credits=Package::calculateProratedCredits($previous_package,$new_package,$event['data']['subscription']['nextInSeconds'],$user);
+                        //     }
+                        //     $Webhook->delete();
+                        // }
+                        if($event['data']['order']['total']<$new_package->amount)
                         {
                             $previous_package=Package::find($user->package_id);
-                            $new_package=Package::where('name',$event['data']['subscription']['product'])->first();
+                            
                             if($previous_package->id<$new_package->id)
                             {
                                 $user->credits=Package::calculateProratedCredits($previous_package,$new_package,$event['data']['subscription']['nextInSeconds'],$user);
@@ -85,8 +95,9 @@ class WebhookController extends Controller
                         }
                         else
                         {
-                            $user->credits=$user->credits+$user->Package->credits;
+                            $user->credits=$user->credits+$new_package->credits;
                         }
+                        $user->package_id=$new_package->id;
                         $user->save();
                     }
                 }
