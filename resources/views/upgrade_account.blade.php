@@ -59,7 +59,7 @@
               @if(Auth::user()->package->name=="basic")
                 <a id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</a>
               @else
-                <a href="#" id="select1" class="btn btn-block btn-danger text-uppercase">Select</a>
+                <a href="#" id="select1" class="btn btn-block btn-primary text-uppercase">Select</a>
               @endif
 
             @else

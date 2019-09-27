@@ -60,6 +60,12 @@ class WebhookController extends Controller
                         $subscription->status="UPDATE_IN_PROGRESS";
                         $subscription->save();
 
+                        if($user->package->amount>$package->amount)
+                        {
+                            $user->package_id=$package->id;
+                            $user->save();
+                        }
+
                         $Webhook=new Webhooks();
                         $Webhook->webhook_dump=$json_dump;
                         $Webhook->user_id=$user->id;
@@ -69,20 +75,8 @@ class WebhookController extends Controller
                     else if($event['type']=="subscription.charge.completed")
                     {
                         $user=User::where('payment_user_reference',$event['data']['subscription']['account'])->first();
-                        // $Webhook=Webhook::where('user_id',$user->id)->first();
                         $new_package=Package::where('name',$event['data']['subscription']['product'])->first();
-                        // if($Webhook && $Webhook->status=="UPDATE_IN_PROGRESS")
-                        // {
-                        //     $previous_package=Package::find($user->package_id);
-                            
-                        //     if($previous_package->id<$new_package->id)
-                        //     {
-                        //         $user->credits=Package::calculateProratedCredits($previous_package,$new_package,$event['data']['subscription']['nextInSeconds'],$user);
-                        //     }
-                        //     $Webhook->delete();
-                        // }
-                        
-                        //if($event['data']['total']<$new_package->amount)
+
                         if($user->package->amount<$new_package->amount)
                         {
                             $previous_package=Package::find($user->package_id);
@@ -91,7 +85,6 @@ class WebhookController extends Controller
                             {
                                 $user->credits=Package::calculateProratedCredits($previous_package,$new_package,$event['data']['subscription']['nextInSeconds'],$user);
                             }
-                            // $Webhook->delete();
                         }
                         else
                         {
@@ -99,6 +92,10 @@ class WebhookController extends Controller
                         }
                         $user->package_id=$new_package->id;
                         $user->save();
+                        $Webhook=new Webhooks();
+                        $Webhook->webhook_dump=$json_dump;
+                        $Webhook->user_id=$user->id;
+                        $Webhook->save();
                     }
                 }
             }
