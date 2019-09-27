@@ -187,7 +187,7 @@ class WebhookController extends Controller
         $user=Auth::user();
         $FastSpringApi = new FastSpringApi();
         $resp=$FastSpringApi->uncancelSubscription($user->subscription_id);
-        if($resp->subscriptions[0]->result=="success")
+        if($resp && isset($resp['subscriptions']) && $resp['subscriptions'][0]['result']=="success")
         {
             $subscription=PendingSubscriptions::where('user_id',$user->id)->first();
             if($subscription)
