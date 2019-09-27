@@ -67,7 +67,7 @@ class EmailController extends Controller
 		Return: Json Response
 	*/
 	function find_email_ajax(Request $request)
-   	{
+  {
 		try
 		{
 
@@ -78,142 +78,159 @@ class EmailController extends Controller
 			]);
 
 			$user=Auth::user();
-			$first_name=strtolower($request->first_name);
-			$last_name=strtolower($request->last_name);
-			$domain=strtolower($request->domain);
-			$status="";
-			$type="find";
-			$email="";
-			$error="";
-			$server_status="";
+      if($user->credits>0)
+      {
+        $first_name=strtolower($request->first_name);
+        $last_name=strtolower($request->last_name);
+        $domain=strtolower($request->domain);
+        $status="";
+        $type="find";
+        $email="";
+        $error="";
+        $server_status="";
 
-			$exists_email=Emails::where('first_name',$first_name)->where('last_name',$last_name)->where('domain',$domain)->latest()->first();
+        $exists_email=Emails::where('first_name',$first_name)->where('last_name',$last_name)->where('domain',$domain)->latest()->first();
 
-			if($exists_email && $exists_email->email != null)
-			{
-				$email_created_at = new Carbon($exists_email->created_at);
-				$now = Carbon::now();
-				if($email_created_at->diffInDays($now)>1)
-				{
-					$server_output=CurlRequest::verify_email($exists_email->email);
-				}
-				else
-				{
-					$server_output=$exists_email->server_json_dump;
-				}
-				
-			}
-			else
-			{
-				$server_output=CurlRequest::find_email($request->first_name,$request->last_name,$request->domain);			
-			}
+        if($exists_email && $exists_email->email != null)
+        {
+          $email_created_at = new Carbon($exists_email->created_at);
+          $now = Carbon::now();
+          if($email_created_at->diffInDays($now)>1)
+          {
+            $server_output=CurlRequest::verify_email($exists_email->email);
+          }
+          else
+          {
+            $server_output=$exists_email->server_json_dump;
+          }
+          
+        }
+        else
+        {
+          $server_output=CurlRequest::find_email($request->first_name,$request->last_name,$request->domain);      
+        }
 
-			
-			$json_output=json_decode($server_output);
-			if($json_output && array_key_exists('curl_error',$json_output))
-			{
-				$error=$json_output['curl_error'];
-				$status="Not Found";
-			}
-			else
-			{
-				if($json_output && count($json_output)>0)
-				{
-				   $status=$json_output[0]->status;
-				   $server_status="Valid";
-					if($json_output[0]->status != 'Valid')
-					{
+        
+        $json_output=json_decode($server_output);
+        if($json_output && array_key_exists('curl_error',$json_output))
+        {
+          $error=$json_output['curl_error'];
+          $status="Not Found";
+        }
+        else
+        {
+          if($json_output && count($json_output)>0)
+          {
+             $status=$json_output[0]->status;
+             $server_status="Valid";
+            if($json_output[0]->status != 'Valid')
+            {
 
-						if($json_output[0]->mx==null || $json_output[0]->mx=='')
-						{
-							$status="No Mailbox";
-							$server_status="No Mailbox";
-						}
-						if($json_output[0]->status==null || $json_output[0]->status=='')
-						{
-							$status="Not Found";
-						}
-						else if($json_output[0]->status=='Catch All')
-						{
-							$email=$first_name.'@'.$domain;
-						}
+              if($json_output[0]->mx==null || $json_output[0]->mx=='')
+              {
+                $status="No Mailbox";
+                $server_status="No Mailbox";
+              }
+              if($json_output[0]->status==null || $json_output[0]->status=='')
+              {
+                $status="Not Found";
+              }
+              else if($json_output[0]->status=='Catch All')
+              {
+                $email=$first_name.'@'.$domain;
+              }
 
-					}
-				    else
-				    {
-				    	$email=$json_output[0]->email;
-				    	$user->decrement('credits');
-				    }
-				   
-				} 
-			}
+            }
+              else
+              {
+                $email=$json_output[0]->email;
+                $user->decrement('credits');
+              }
+             
+          } 
+        }
 
-			Emails::insert_email($first_name,$last_name,$domain,$email,$status,$user->id,$type,$server_output,$server_status);
+        Emails::insert_email($first_name,$last_name,$domain,$email,$status,$user->id,$type,$server_output,$server_status);
 
-			return json_encode(array('status'=>$status,'emails'=>$email,'logs'=>$json_output,'credits_left'=>$user->credits,'error'=>$error));
+        return json_encode(array('status'=>$status,'emails'=>$email,'logs'=>$json_output,'credits_left'=>$user->credits,'error'=>$error));
+      }
+      else
+      {
+        return response()->json(['errors'=>['message'=>['Insufficient Credits to Perform This Request']]], 422 );
+      }
+
+  			
 		}
 		catch(Exception $e)
 		{
 
 		}
-   	}
+   }
    	/*
 		Request Type POST
 		Parameters: email
 		Return: Json Response
+      }
 	*/
     function verify_email_ajax(Request $request)
    	{
    		try
-         {
-            $this->validate($request, [
-                'email' => ['required', 'string', 'email', 'max:255',new BlackListDomains],
-            ]);
-            $user=Auth::user();
-			$server_output=CurlRequest::verify_email($request->email);
-			$json_output=json_decode($server_output);
+      {
+          $this->validate($request, [
+              'email' => ['required', 'string', 'email', 'max:255',new BlackListDomains],
+          ]);
+          $user=Auth::user();
+          if($user->credits>0)
+          {
+      			$server_output=CurlRequest::verify_email($request->email);
+      			$json_output=json_decode($server_output);
 
-			$first_name="";
-			$last_name="";
-			$domain="";
-			$email_status="";
-			$server_status="";
-			$type="verify";
-			$email=$request->email;
-			$error="";
-			if($json_output && array_key_exists('curl_error',$json_output))
-			{
-				$error=$json_output['curl_error'];
-				$email_status="Not Found";
-				$server_status="-";
-			}
-			else
-			{
-				$user->decrement('credits');
-				$email_status="Valid";
-				$server_status="Valid";
-	            if($json_output[0]->mx==null || $json_output[0]->mx=='')
-	            {
-	               $server_status="No Mailbox";
-	               $email_status="-";
-	            }
-	            else
-	            {
-					if($json_output[0]->status==null || $json_output[0]->status=='')
-					{
-						$email_status="Not Found";
-					}
-					else
-					{
-						$email_status=$json_output[0]->status;
-					}
-	            }
-			}
+      			$first_name="";
+      			$last_name="";
+      			$domain="";
+      			$email_status="";
+      			$server_status="";
+      			$type="verify";
+      			$email=$request->email;
+      			$error="";
+      			if($json_output && array_key_exists('curl_error',$json_output))
+      			{
+      				$error=$json_output['curl_error'];
+      				$email_status="Not Found";
+      				$server_status="-";
+      			}
+      			else
+      			{
+      				$user->decrement('credits');
+      				$email_status="Valid";
+      				$server_status="Valid";
+      	            if($json_output[0]->mx==null || $json_output[0]->mx=='')
+      	            {
+      	               $server_status="No Mailbox";
+      	               $email_status="-";
+      	            }
+      	            else
+      	            {
+      					if($json_output[0]->status==null || $json_output[0]->status=='')
+      					{
+      						$email_status="Not Found";
+      					}
+      					else
+      					{
+      						$email_status=$json_output[0]->status;
+      					}
+      	            }
+      			}
 
 
             Emails::insert_email($first_name,$last_name,$domain,$email,$email_status,$user->id,$type,$server_output,$server_status);
 
-			return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status,'logs'=>$json_output,'credits_left'=>$user->credits,'error'=>$error));
+      			return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status,'logs'=>$json_output,'credits_left'=>$user->credits,'error'=>$error));
+          }
+          else
+          {
+            return response()->json(['errors'=>['message'=>['Insufficient Credits to Perform This Request']]], 422 );
+          }
             
          }
          catch(Exception $e)

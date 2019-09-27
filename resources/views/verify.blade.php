@@ -271,10 +271,8 @@ function verify_email_ajax()
                     $errors = jqXHR.responseJSON;
 
                      $.each( $errors.errors , function( key, value ) {
-                        if(key=='email')
-                        {   
-                            document.getElementById('email_error').innerHTML=value[0];
-                        }
+                       document.getElementById('email_error').innerHTML=value[0];
+                       
                        
                         
                     });
