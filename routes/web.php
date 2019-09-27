@@ -107,3 +107,5 @@ Route::get('get_fastspring_session','UserController@get_fastspring_session')->mi
 Route::post('webhook','WebhookController@webhook');
 
 Route::post('update_subscription','WebhookController@update_subscription')->middleware('verified');
+Route::post('cancel_subscription','WebhookController@cancel_subscription')->middleware('verified');
+Route::post('uncancel_subscription','WebhookController@uncancel_subscription')->middleware('verified');

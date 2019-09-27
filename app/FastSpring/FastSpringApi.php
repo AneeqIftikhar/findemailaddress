@@ -188,5 +188,45 @@ class FastSpringApi
           return $responseBody;
       }
     }
+
+    public function cancelSubscription($subscription_id)
+    {
+      try {
+        
+          $FastSpringClient = new FastSpringClient();
+            $response = json_decode($FastSpringClient->delete('subscriptions/'.$subscription_id)->getBody()->getContents(),true);
+            return $response;
+      } catch (ClientErrorResponseException $exception) {
+          $responseBody = $exception->getResponse()->getBody(true);
+          return $responseBody;
+      }
+      catch (\Exception $exception)
+      {
+        $responseBody = $exception->getResponse()->getBody(true);
+          return $responseBody;
+      }
+    }
+    public function uncancelSubscription($subscription_id)
+    {
+      try {
+
+            $payload ='{"subscriptions": [{
+             "subscription": "'.$subscription_id.'",                                        
+              "deactivation": null
+            }]}';
+        
+          $FastSpringClient = new FastSpringClient();
+            $response = json_decode($FastSpringClient->post('subscriptions', ['body' => $payload])->getBody()->getContents(),true);
+            return $response;
+      } catch (ClientErrorResponseException $exception) {
+          $responseBody = $exception->getResponse()->getBody(true);
+          return $responseBody;
+      }
+      catch (\Exception $exception)
+      {
+        $responseBody = $exception->getResponse()->getBody(true);
+          return $responseBody;
+      }
+    }
       
 }

@@ -13,6 +13,7 @@ use App\Package;
 use App\UserPackagesLogs;
 use Session;
 use App\Subscriptions;
+use App\PendingSubscriptions;
 class UserController extends Controller
 {
     public function update_personal_info(Request $request)
@@ -147,7 +148,24 @@ class UserController extends Controller
         $data=[];
         if($user->subscription_id)
         {
-            $data['subscription']=true;
+            $pending=PendingSubscriptions::where('user_id',$user->id)->first();
+            if($pending)
+            {   
+                $pending_package=Package::where('id',$pending->package_id)->first();
+                $data['pending_status']=$pending->status;
+                $data['pending_package']=$pending_package->name;
+            }
+            else
+            {
+                $data['pending_status']=null;
+                $data['pending_package']=null;
+            }
+
+        }
+        else
+        {
+            $data['pending_status']=null;
+            $data['pending_package']=null;
         }
         return view('upgrade_account', ['data'=>$data]);
     }

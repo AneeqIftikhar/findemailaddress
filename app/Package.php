@@ -39,19 +39,9 @@ class Package extends Model
 
     public static function calculateProratedCredits($previous_package,$new_package,$next_charge_seconds,$user)
     {
-        // $new_package_per_day=$new_package->credits/30;//83.33
-        // $previous_package_per_day=$previous_package->credits/30;//33.33
-        // $difference_in_days=($next_charge_seconds-time())/(24*3600);//29
-        // $days_used=30-$difference_in_days;//1
-        // $allowed=$days_used*$previous_package_per_day;//33.33
-        // $used_credits=($previous_package->credits)-($user->credits);//0
-        // $addable=$difference_in_days*$new_package_per_day;//2416.67
-        // $prorated_credits=$allowed-$used_credits+$addable;//2450
-
         //Previous Package Calculation
         $used_days=($next_charge_seconds-time())/(24*3600);
-        // $remaining_days=30-$used_days;
-        $remaining_days=15;
+        $remaining_days=round(30-$used_days);
         $previous_package_per_day=($previous_package->credits/30);
         $allowed_credits=($previous_package->credits)-($remaining_days*$previous_package_per_day);
         $rollover_credits=($user->credits)-$allowed_credits;
@@ -62,6 +52,6 @@ class Package extends Model
 
         $prorated_credits=$rollover_credits+$new_credits_tba;
 
-        return $prorated_credits;
+        return round($prorated_credits);
     }
 }

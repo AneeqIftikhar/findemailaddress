@@ -27,11 +27,10 @@
               <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Money Back Gaurantee</li>
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
-            @if ( !empty ( $data ) ) 
-              <a href="#" id="disable" class="btn btn-block btn-primary text-uppercase">Cancel Subscription</a>
-
+            @if ( Auth::user()->package->name=="free" ) 
+              <button id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</button>              
             @else
-              <a id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</a>
+              <button href="#" id="cancel" onClick="cancel_subscription()" class="btn btn-block btn-primary text-uppercase">Cancel Subscription</button>
             @endif
             
           </div>
@@ -55,15 +54,14 @@
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Money Back Gaurantee</li>
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
-            @if ( !empty ( $data ) ) 
-              @if(Auth::user()->package->name=="basic")
-                <a id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</a>
-              @else
-                <a href="#" id="select1" class="btn btn-block btn-primary text-uppercase">Select</a>
-              @endif
-
+            @if (Auth::user()->package->name=="free" && ($data['pending_status']=="" || $data['pending_status']=="DEACTIVATED" ))
+              <button href="#buy" id="buy_basic" onClick="buy('basic')" class="btn btn-block btn-primary text-uppercase">Buy Now!</button>
+            @elseif(Auth::user()->package->name=="free" && $data['pending_package']=="basic")
+              <button href="#" id="uncancel_basic" onClick="uncancel('basic')" class="btn btn-block btn-primary text-uppercase">Uncancel</button>
+            @elseif(Auth::user()->package->name=="basic")
+              <button id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</button>
             @else
-              <a href="#buy" id="buy1" class="btn btn-block btn-primary text-uppercase">Buy Now!</a>
+              <button href="#" id="select_basic" onClick="select('basic')" class="btn btn-block btn-primary text-uppercase">Select</button>
             @endif
             
           </div>
@@ -85,15 +83,15 @@
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Money Back Gaurantee</li>
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
-            @if ( !empty ( $data ) ) 
-              @if(Auth::user()->package->name=="extended")
-                <a id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</a>
-              @else
-                <a href="#" id="select2" class="btn btn-block btn-primary text-uppercase">Select</a>
-              @endif
 
+            @if (Auth::user()->package->name=="free" && ($data['pending_status']=="" || $data['pending_status']=="DEACTIVATED" ))
+              <button href="#buy" id="buy_extended" onClick="buy('extended')" class="btn btn-block btn-primary text-uppercase">Buy Now!</button>
+            @elseif(Auth::user()->package->name=="free" && $data['pending_package']=="extended")
+              <button href="#" id="uncancel_extended" onClick="uncancel('extended')" class="btn btn-block btn-primary text-uppercase">Uncancel</button>
+            @elseif(Auth::user()->package->name=="extended")
+              <button id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</button>
             @else
-              <a href="#" id="buy2" class="btn btn-block btn-primary text-uppercase">Buy Now!</a>
+              <button href="#" id="select_extended" onClick="select('extended')" class="btn btn-block btn-primary text-uppercase">Select</button>
             @endif
             
           </div>
@@ -115,15 +113,15 @@
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Money Back Gaurantee</li>
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
-            @if ( !empty ( $data ) ) 
-              @if(Auth::user()->package->name=="corporate")
-                <a id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</a>
-              @else
-                <a id="select3" class="btn btn-block btn-primary text-uppercase">Select</a>
-              @endif
 
+            @if (Auth::user()->package->name=="free" && ($data['pending_status']=="" || $data['pending_status']=="DEACTIVATED" ))
+              <button href="#buy" id="buy_corporate" onClick="buy('corporate')" class="btn btn-block btn-primary text-uppercase">Buy Now!</button>
+            @elseif(Auth::user()->package->name=="free" && $data['pending_package']=="corporate")
+              <button href="#" id="uncancel_corporate" onClick="uncancel('corporate')" class="btn btn-block btn-primary text-uppercase">Uncancel</button>
+            @elseif(Auth::user()->package->name=="corporate")
+              <button id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</button>
             @else
-              <a href="#" id="buy3" class="btn btn-block btn-primary text-uppercase">Buy Now!</a>
+              <button href="#" id="select_corporate" onClick="select('corporate')" class="btn btn-block btn-primary text-uppercase">Select</button>
             @endif
             
           </div>
@@ -149,6 +147,96 @@
 </script>
 <script type="text/javascript">
 
+  function cancel_subscription($package_name)
+  {
+    $('#cancel').html('<i class="fa fa-spinner fa-spin"></i>');
+    $('#cancel').attr('disabled',true);
+    $.ajax({
+          method: 'POST',
+          dataType: 'json', 
+          url: 'cancel_subscription', 
+          data: {'package_name' : "basic","_token": "{{ csrf_token() }}"}, 
+          success: function(response){ 
+            $('#cancel').html('Pending');
+            $('#cancel').attr('disabled',false);
+            console.log(response);
+
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+
+              console.log(jqXHR);
+              
+          }
+      });
+  }
+  function uncancel($package_name)
+  {
+    $('#uncancel'+$package_name).html('<i class="fa fa-spinner fa-spin"></i>');
+    $('#uncancel'+$package_name).attr('disabled',true);
+    $.ajax({
+          method: 'POST',
+          dataType: 'json', 
+          url: 'uncancel_subscription', 
+          data: {'package_name' : "basic","_token": "{{ csrf_token() }}"}, 
+          success: function(response){ 
+            $('#uncancel'+$package_name).html('Pending');
+            $('#uncancel'+$package_name).attr('disabled',false);
+            console.log(response);
+
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+
+              console.log(jqXHR);
+              
+          }
+      });
+  }
+  function select($package_name)
+  {
+    $('#select_'+$package_name).html('<i class="fa fa-spinner fa-spin"></i>');
+    $('#select_'+$package_name).attr('disabled',true);
+    $.ajax({
+          method: 'POST',
+          dataType: 'json', 
+          url: 'update_subscription', 
+          data: {'package_name' : $package_name,"_token": "{{ csrf_token() }}"}, 
+          success: function(response){ 
+            $('#select_'+$package_name).html('Pending');
+            $('#select_'+$package_name).attr('disabled',false);
+            console.log(response);
+
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+
+              console.log(jqXHR);
+              
+          }
+      });
+  }
+  function buy($package_name)
+  {
+    $('#buy_'+$package_name).html('<i class="fa fa-spinner fa-spin"></i>');
+    $('#buy_'+$package_name).attr('disabled',true);
+    $.ajax({
+          method: 'GET',
+          dataType: 'json', 
+          url: 'get_fastspring_session', 
+          data: {'package_name' : $package_name,"_token": "{{ csrf_token() }}"}, 
+          success: function(response){ 
+            console.log(response);
+            $('#buy_'+$package_name).html('Buy Now!');
+            $('#buy_'+$package_name).attr('disabled',false);
+            fastspring.builder.checkout(response['id']);
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              $('#buy1').html('Buy Now!');
+              $('#buy1').attr('disabled',false);
+              console.log(jqXHR);
+
+              
+          }
+      });
+  }
 
 	$( document ).ready(function() {
   if(document.getElementById('buy1'))

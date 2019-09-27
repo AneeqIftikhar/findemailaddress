@@ -53,13 +53,6 @@ class WebhookController extends Controller
                         $product_name=$event['data']['product'];
                         $package=Package::where('name',$product_name)->first();
 
-                        $subscription=new PendingSubscriptions();
-                        $subscription->user_id=$user->id;
-                        $subscription->package_id=$package->id;
-                        $subscription->credits=$user->credits;
-                        $subscription->status="UPDATE_IN_PROGRESS";
-                        $subscription->save();
-
                         if($user->package->amount>$package->amount)
                         {
                             $user->package_id=$package->id;
@@ -92,10 +85,63 @@ class WebhookController extends Controller
                         }
                         $user->package_id=$new_package->id;
                         $user->save();
+
                         $Webhook=new Webhooks();
                         $Webhook->webhook_dump=$json_dump;
                         $Webhook->user_id=$user->id;
                         $Webhook->save();
+                    }
+                    else if($event['type']=="subscription.canceled")
+                    {
+                        $user=User::where('payment_user_reference',$event['data']['account'])->first();
+                        $package=Package::where('name',$event['data']['product'])->first();
+
+                        $subscription=PendingSubscriptions::where('user_id',$user->id)->where('package_id',$package->id)->first();
+                        if(!$subscription)
+                        {
+                            $subscription=new PendingSubscriptions();
+                            $subscription->user_id=$user->id;
+                            $subscription->package_id=$package->id;
+                        }
+                        $subscription->credits=$user->credits;
+                        $subscription->status="CANCLED";
+                        $subscription->save();
+
+                        $Webhook=new Webhooks();
+                        $Webhook->webhook_dump=$json_dump;
+                        $Webhook->user_id=$user->id;
+                        $Webhook->save();
+
+                        $free=Package::where('name','free')->first();
+                        $user->package_id=$free->id;
+                        $user->save();
+                    }
+                    else if($event['type']=="subscription.deactivated")
+                    {
+                        $user=User::where('payment_user_reference',$event['data']['account'])->first();
+                        $package=Package::where('name',$event['data']['product'])->first();
+
+                        $subscription=PendingSubscriptions::where('user_id',$user->id)->where('package_id',$package->id)->first();
+                        if(!$subscription)
+                        {
+                            $subscription=new PendingSubscriptions();
+                            $subscription->user_id=$user->id;
+                            $subscription->package_id=$package->id;
+                        }
+                        $subscription->credits=$user->credits;
+                        $subscription->status="DEACTIVATED";
+                        $subscription->save();
+
+                        $Webhook=new Webhooks();
+                        $Webhook->webhook_dump=$json_dump;
+                        $Webhook->user_id=$user->id;
+                        $Webhook->save();
+
+                        $free=Package::where('name','free')->first();
+                        $user->package_id=$free->id;
+                        $user->subscription_id=null;
+                        $user->credits=0;
+                        $user->save();
                     }
                 }
             }
@@ -129,5 +175,17 @@ class WebhookController extends Controller
         }
         $FastSpringApi = new FastSpringApi();
         return $FastSpringApi->updateSubscription($user->subscription_id,$package_name,$prorate);
+    }
+    public function cancel_subscription(Request $request)
+    {
+        $user=Auth::user();
+        $FastSpringApi = new FastSpringApi();
+        return $FastSpringApi->cancelSubscription($user->subscription_id);
+    }
+    public function uncancel_subscription(Request $request)
+    {
+        $user=Auth::user();
+        $FastSpringApi = new FastSpringApi();
+        return $FastSpringApi->uncancelSubscription($user->subscription_id);
     }
 }
