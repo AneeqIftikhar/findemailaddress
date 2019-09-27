@@ -186,6 +186,16 @@ class WebhookController extends Controller
     {
         $user=Auth::user();
         $FastSpringApi = new FastSpringApi();
-        return $FastSpringApi->uncancelSubscription($user->subscription_id);
+        $resp=$FastSpringApi->uncancelSubscription($user->subscription_id);
+        if($resp->subscriptions[0]->result=="success")
+        {
+            $subscription=PendingSubscriptions::where('user_id',$user->id)->first();
+            if($subscription)
+            {
+                $subscription->delete();
+            }
+           
+        }
+        return $resp;
     }
 }
