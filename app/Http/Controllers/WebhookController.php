@@ -50,13 +50,34 @@ class WebhookController extends Controller
                     else if($event['type']=="subscription.updated")
                     {
                         $user=User::where('payment_user_reference',$event['data']['account'])->first();
-                        // $product_name=$event['data']['product'];
-                        // $package=Package::where('name',$product_name)->first();
+                        $product_name=$event['data']['product'];
+                        $package=Package::where('name',$product_name)->first();
 
                         // if($user->package->amount>$package->amount)
                         // {
-                        //     $user->package_id=$package->id;
-                        //     $user->save();
+                        //     $subscription=PendingSubscriptions::where('user_id',$user->id)->where('package_id',$package->id)->first();
+                        //     if(!$subscription)
+                        //     {
+                        //         $subscription=new PendingSubscriptions();
+                        //         $subscription->user_id=$user->id;
+                        //         $subscription->package_id=$package->id;
+                        //     }
+                        //     $subscription->credits=$user->credits;
+                        //     $subscription->status="DOWNGRADED";
+                        //     $subscription->save();
+                        // }
+                        // else
+                        // {
+                        //     $subscription=PendingSubscriptions::where('user_id',$user->id)->where('package_id',$package->id)->first();
+                        //     if(!$subscription)
+                        //     {
+                        //         $subscription=new PendingSubscriptions();
+                        //         $subscription->user_id=$user->id;
+                        //         $subscription->package_id=$package->id;
+                        //     }
+                        //     $subscription->credits=$user->credits;
+                        //     $subscription->status="UPGRADED";
+                        //     $subscription->save();
                         // }
 
                         $Webhook=new Webhooks();
@@ -73,14 +94,20 @@ class WebhookController extends Controller
                         if($user->package->amount<$new_package->amount)
                         {
                             $previous_package=Package::find($user->package_id);
-                            
-                            if($previous_package->id<$new_package->id)
+                            $user->credits=Package::calculateProratedCredits($previous_package,$new_package,$event['data']['subscription']['nextInSeconds'],$user);
+                            $subscription=PendingSubscriptions::where('user_id',$user->id)->first();
+                            if($subscription)
                             {
-                                $user->credits=Package::calculateProratedCredits($previous_package,$new_package,$event['data']['subscription']['nextInSeconds'],$user);
+                                $subscription->delete();
                             }
                         }
                         else
                         {
+                            $subscription=PendingSubscriptions::where('user_id',$user->id)->first();
+                            if($subscription)
+                            {
+                                $subscription->delete();
+                            }
                             $user->credits=$user->credits+$new_package->credits;
                         }
                         $user->package_id=$new_package->id;
@@ -168,13 +195,30 @@ class WebhookController extends Controller
         if($user->package->amount<$package->amount)
         {
             $prorate=true;
+            $status="UPGRADED";
         }
         else
         {
             $prorate=false;
+            $status="DOWNGRADED";
         }
         $FastSpringApi = new FastSpringApi();
-        return $FastSpringApi->updateSubscription($user->subscription_id,$package_name,$prorate);
+        $resp=$FastSpringApi->updateSubscription($user->subscription_id,$package_name,$prorate);
+        if($resp && isset($resp['subscriptions']) && $resp['subscriptions'][0]['result']=="success")
+        {
+            $subscription=PendingSubscriptions::where('user_id',$user->id)->where('package_id',$package->id)->first();
+            if(!$subscription)
+            {
+                $subscription=new PendingSubscriptions();
+                $subscription->user_id=$user->id;
+                $subscription->package_id=$package->id;
+            }
+            $subscription->credits=$user->credits;
+            $subscription->status=$status;
+            $subscription->save();
+           
+        }
+        return $resp;
     }
     public function cancel_subscription(Request $request)
     {
