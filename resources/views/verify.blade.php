@@ -281,22 +281,22 @@ function verify_email_ajax()
                     document.getElementById("email-field").value=email;
                 }
                 else if( jqXHR.status === 419 )
-                    {
-                        console.log(jqXHR);
+                {
+                    console.log(jqXHR);
 
-                        $("#login_again").modal()
-                        document.getElementById("find_email_button").disabled = false;
-                        request_counter--;
-                        
-                    }
-                    else if (jqXHR.status === 429)
-                    {
+                    $("#login_again").modal()
+                    document.getElementById("verify_email_button").disabled = false;
+                    request_counter--;
+                    
+                }
+                else if (jqXHR.status === 429)
+                {
 
-                        tableRef.deleteRow(0);
-                        tableRef.deleteRow(0);
-                        document.getElementById('verify_error').innerHTML="Too Many Requests";
-                        request_counter--;
-                    }
+                    tableRef.deleteRow(0);
+                    tableRef.deleteRow(0);
+                    document.getElementById('email_error').innerHTML="Too Many Requests";
+                    request_counter--;
+                }
                 else
                 {
                     // document.getElementsByClassName("email-verifier-result-container")[0].innerHTML="Something Went Wrong";

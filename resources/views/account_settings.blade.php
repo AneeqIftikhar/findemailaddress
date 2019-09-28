@@ -18,7 +18,7 @@
 					    <h5 class="card-title">Account Information</h5>
 		                    <div class="input-group">
 							  
-							  <strong>Package: </strong><p class="ml-2 text-muted">{{session('package_name')}}</p>
+							  <strong>Package: </strong><p class="ml-2 text-muted">{{strtoupper(Auth::user()->package->name)}}</p>
 							</div>
 							<div class="input-group mb-2">
 							 
