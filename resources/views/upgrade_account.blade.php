@@ -54,11 +54,11 @@
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Money Back Gaurantee</li>
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
-           
+
             @if (Auth::user()->package->name=="free" && ($data['pending_status']=="" || $data['pending_status']=="DEACTIVATED" ))
               <button href="#buy" id="buy_basic" onClick="buy('basic')" class="btn btn-block btn-primary text-uppercase">Buy Now!</button>
             @elseif(Auth::user()->package->name=="free" && $data['pending_package']=="basic")
-              <button href="#" id="uncancel_basic" onClick="uncancel('basic')" class="btn btn-block btn-primary text-uppercase">Uncancel</button>
+              <button href="#" id="uncancel_basic" onClick="uncancel('basic')" class="btn btn-block btn-primary text-uppercase">Reactivate</button>
             @elseif(Auth::user()->package->name=="basic")
               <button id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</button>
             @elseif(Auth::user()->package->name!="basic" && $data['pending_package']=="")
@@ -90,7 +90,7 @@
             @if (Auth::user()->package->name=="free" && ($data['pending_status']=="" || $data['pending_status']=="DEACTIVATED" ))
               <button href="#buy" id="buy_extended" onClick="buy('extended')" class="btn btn-block btn-primary text-uppercase">Buy Now!</button>
             @elseif(Auth::user()->package->name=="free" && $data['pending_package']=="extended")
-              <button href="#" id="uncancel_extended" onClick="uncancel('extended')" class="btn btn-block btn-primary text-uppercase">Uncancel</button>
+              <button href="#" id="uncancel_extended" onClick="uncancel('extended')" class="btn btn-block btn-primary text-uppercase">Reactivate</button>
             @elseif(Auth::user()->package->name=="extended")
               <button id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</button>
             @elseif(Auth::user()->package->name!="basic" && $data['pending_package']==null)
@@ -122,7 +122,7 @@
             @if (Auth::user()->package->name=="free" && ($data['pending_status']=="" || $data['pending_status']=="DEACTIVATED" ))
               <button href="#buy" id="buy_corporate" onClick="buy('corporate')" class="btn btn-block btn-primary text-uppercase">Buy Now!</button>
             @elseif(Auth::user()->package->name=="free" && $data['pending_package']=="corporate")
-              <button href="#" id="uncancel_corporate" onClick="uncancel('corporate')" class="btn btn-block btn-primary text-uppercase">Uncancel</button>
+              <button href="#" id="uncancel_corporate" onClick="uncancel('corporate')" class="btn btn-block btn-primary text-uppercase">Reactivate</button>
             @elseif(Auth::user()->package->name=="corporate")
               <button id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</button>
             @elseif(Auth::user()->package->name!="basic" && $data['pending_package']==null)
@@ -178,16 +178,16 @@
   }
   function uncancel($package_name)
   {
-    $('#uncancel'+$package_name).html('<i class="fa fa-spinner fa-spin"></i>');
-    $('#uncancel'+$package_name).attr('disabled',true);
+    $('#uncancel_'+$package_name).html('<i class="fa fa-spinner fa-spin"></i>');
+    $('#uncancel_'+$package_name).attr('disabled',true);
     $.ajax({
           method: 'POST',
           dataType: 'json', 
           url: 'uncancel_subscription', 
-          data: {'package_name' : "basic","_token": "{{ csrf_token() }}"}, 
+          data: {'package_name' : $package_name,"_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
-            $('#uncancel'+$package_name).html('Pending');
-            $('#uncancel'+$package_name).attr('disabled',false);
+            $('#uncancel_'+$package_name).html('Pending');
+            $('#uncancel_'+$package_name).attr('disabled',false);
             console.log(response);
 
           },
