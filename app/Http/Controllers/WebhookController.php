@@ -50,14 +50,14 @@ class WebhookController extends Controller
                     else if($event['type']=="subscription.updated")
                     {
                         $user=User::where('payment_user_reference',$event['data']['account'])->first();
-                        $product_name=$event['data']['product'];
-                        $package=Package::where('name',$product_name)->first();
+                        // $product_name=$event['data']['product'];
+                        // $package=Package::where('name',$product_name)->first();
 
-                        if($user->package->amount>$package->amount)
-                        {
-                            $user->package_id=$package->id;
-                            $user->save();
-                        }
+                        // if($user->package->amount>$package->amount)
+                        // {
+                        //     $user->package_id=$package->id;
+                        //     $user->save();
+                        // }
 
                         $Webhook=new Webhooks();
                         $Webhook->webhook_dump=$json_dump;
