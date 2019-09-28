@@ -28,13 +28,15 @@ class EmailApiController extends Controller
 			  $errors = $validator->errors();
 			    return response()->json(["errors"=>$errors],422);
 			}
-			$server_output = $server_output=CurlRequest::find_email($request->first_name,$request->last_name,$request->domain);
+			$first_name=strtolower(Functions::removeAccents($request->first_name));
+        	$last_name=strtolower(Functions::removeAccents($request->last_name));
+        	$domain=strtolower(Functions::removeAccentsDomain($request->domain));
+
+			$server_output = $server_output=CurlRequest::find_email($first_name,$last_name,$domain);
 
 			$json_output=json_decode($server_output);
 
-			$first_name=$request->first_name;
-			$last_name=$request->last_name;
-			$domain=$request->domain;
+			
 			$status="";
 			$type="find";
 			$email="";
@@ -58,7 +60,7 @@ class EmailApiController extends Controller
 				      }
 				      if($json_output[0]->status=='Catch All')
 				      {
-				         $email=strtolower($request->first_name).'@'.strtolower($request->domain);
+				         $email=strtolower($first_name).'@'.strtolower($domain);
 				      }
 
 				   }
@@ -90,7 +92,8 @@ class EmailApiController extends Controller
 			    return response()->json(["errors"=>$errors],422);
 			}
 			$user=Auth::user();
-			$server_output=CurlRequest::verify_email($request->email);
+			$email=strtolower(Functions::removeAccentsEmail($request->email));
+			$server_output=CurlRequest::verify_email($email);
 			$json_output=json_decode($server_output);
 
 			$first_name="";
@@ -99,7 +102,6 @@ class EmailApiController extends Controller
 			$email_status="";
 			$server_status="";
 			$type="verify";
-			$email=$request->email;
 			$error="";
 
 			if($json_output && array_key_exists('curl_error',$json_output))

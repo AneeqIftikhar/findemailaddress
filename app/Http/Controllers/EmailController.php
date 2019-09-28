@@ -19,6 +19,7 @@ use App\Rules\IsValidDomain;
 use Validator;
 use App\ReportedBounce;
 use App\Helpers\CurlRequest;
+use App\Helpers\Functions;
 use Carbon\Carbon;
 use App\FastSpring\FastSpringApi;
 class EmailController extends Controller
@@ -80,9 +81,9 @@ class EmailController extends Controller
 			$user=Auth::user();
       if($user->credits>0)
       {
-        $first_name=strtolower($request->first_name);
-        $last_name=strtolower($request->last_name);
-        $domain=strtolower($request->domain);
+        $first_name=strtolower(Functions::removeAccents($request->first_name));
+        $last_name=strtolower(Functions::removeAccents($request->last_name));
+        $domain=Functions::get_domain(strtolower(Functions::removeAccentsDomain($request->domain)));
         $status="";
         $type="find";
         $email="";
@@ -91,7 +92,7 @@ class EmailController extends Controller
 
         $exists_email=Emails::where('first_name',$first_name)->where('last_name',$last_name)->where('domain',$domain)->latest()->first();
 
-        if($exists_email && $exists_email->email != null)
+        if($exists_email && $exists_email->email != null && $exists_email->status != "Catch All")
         {
           $email_created_at = new Carbon($exists_email->created_at);
           $now = Carbon::now();
@@ -107,7 +108,7 @@ class EmailController extends Controller
         }
         else
         {
-          $server_output=CurlRequest::find_email($request->first_name,$request->last_name,$request->domain);      
+          $server_output=CurlRequest::find_email($first_name,$last_name,$domain);      
         }
 
         
@@ -182,7 +183,8 @@ class EmailController extends Controller
           $user=Auth::user();
           if($user->credits>0)
           {
-      			$server_output=CurlRequest::verify_email($request->email);
+            $email=strtolower(Functions::removeAccentsEmail($request->email));
+      			$server_output=CurlRequest::verify_email($email);
       			$json_output=json_decode($server_output);
 
       			$first_name="";
@@ -191,7 +193,6 @@ class EmailController extends Controller
       			$email_status="";
       			$server_status="";
       			$type="verify";
-      			$email=$request->email;
       			$error="";
       			if($json_output && array_key_exists('curl_error',$json_output))
       			{

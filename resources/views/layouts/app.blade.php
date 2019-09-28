@@ -53,6 +53,24 @@
           </div>
         </div>
 
+        <div class="modal" tabindex="-1" role="dialog" id="success_modal">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="alert alert-danger" style="display:none"></div>
+              <div class="modal-header">
+                
+                <h5 class="modal-title">Successful</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p id="success_modal_message"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="modal" tabindex="-1" role="dialog" id="report_bounce">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -275,7 +293,7 @@
           $('#bounce_email_id').val(id);
           $('#bounce_email_type').val(type);
           $("#bounce_message").val('');
-          $("#report_bounce").modal();          
+          $("#report_bounce").modal();        
         }
     </script>
 </body>

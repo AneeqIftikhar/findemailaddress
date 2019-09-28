@@ -164,8 +164,10 @@
           url: 'cancel_subscription', 
           data: {'package_name' : "basic","_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
-            $('#cancel').html('Pending');
+            $('#cancel').html('Cancel');
             $('#cancel').attr('disabled',false);
+            $("#success_modal_message").html('Subscription Canceled. Please Revisit in 5 Minutes For Changes To Take Effect');
+            $("#success_modal").modal();
             console.log(response);
 
           },
@@ -186,8 +188,10 @@
           url: 'uncancel_subscription', 
           data: {'package_name' : $package_name,"_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
-            $('#uncancel_'+$package_name).html('Pending');
+            $('#uncancel_'+$package_name).html('Reactivate');
             $('#uncancel_'+$package_name).attr('disabled',false);
+            $("#success_modal_message").html('Subscription Activated. Please Revisit in 5 Minutes For Changes To Take Effect');
+            $("#success_modal").modal();
             console.log(response);
 
           },
@@ -208,8 +212,10 @@
           url: 'update_subscription', 
           data: {'package_name' : $package_name,"_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
-            $('#select_'+$package_name).html('Pending');
+            $('#select_'+$package_name).html('Select');
             $('#select_'+$package_name).attr('disabled',false);
+            $("#success_modal_message").html('Subscription Updated. Please Revisit in 5 Minutes For Changes To Take Effect');
+            $("#success_modal").modal();
             console.log(response);
 
           },
@@ -249,9 +255,11 @@ function onFSPopupClosed(orderReference)
 {
   if (orderReference)
   {
-    console.log(orderReference.reference);
+    
     fastspring.builder.reset();
-    location.reload();
+    $("#success_modal_message").html('Order Placed. Please Revisit in 5 Minutes For Changes To Take Effect');
+    $("#success_modal").modal();
+             
   } 
   else 
   {

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Rules;
-
+use App\Helpers\Functions;
 use Illuminate\Contracts\Validation\Rule;
 
 class IsValidDomain implements Rule
@@ -36,6 +36,6 @@ class IsValidDomain implements Rule
      */
     public function message()
     {
-        return 'Please Enter a Valid Domain';
+        return 'Please Enter a Valid Domain/URL';
     }
 }

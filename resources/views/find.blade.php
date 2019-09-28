@@ -184,14 +184,10 @@ function isValidDomain(v) {
   var re = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
   return re.test(v);
 }
-function validURL(str) {
-  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-  return !!pattern.test(str);
+function isValidUrl(userInput) {
+    var regexQuery = "^(https?://)?(www\\.)?([-a-z0-9]{1,63}\\.)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.[a-z]{2,6}(/[-\\w@\\+\\.~#\\?&/=%]*)?$";
+    var url = new RegExp(regexQuery,"i");
+    return url.test(userInput);
 }
 function find_email_ajax()
 {
@@ -230,9 +226,9 @@ function find_email_ajax()
         {
             document.getElementById('find_error').innerHTML="Domain too Long";
         }
-        else if(!isValidDomain(domain))
+        else if(!isValidUrl(domain))
         {
-            document.getElementById('find_error').innerHTML="Invalid Domain";
+            document.getElementById('find_error').innerHTML="Invalid Domain/URL";
         }
         else
         {
@@ -379,8 +375,6 @@ function find_email_ajax()
                         document.getElementById("find_email_button").disabled = false;
                         request_counter--;
                     }
-                    
-                    //first_name_error
                 },
                 timeout: 600000 // sets timeout to 60 seconds
             });
