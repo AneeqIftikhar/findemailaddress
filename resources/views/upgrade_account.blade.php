@@ -54,14 +54,17 @@
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Money Back Gaurantee</li>
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
+           
             @if (Auth::user()->package->name=="free" && ($data['pending_status']=="" || $data['pending_status']=="DEACTIVATED" ))
               <button href="#buy" id="buy_basic" onClick="buy('basic')" class="btn btn-block btn-primary text-uppercase">Buy Now!</button>
             @elseif(Auth::user()->package->name=="free" && $data['pending_package']=="basic")
               <button href="#" id="uncancel_basic" onClick="uncancel('basic')" class="btn btn-block btn-primary text-uppercase">Uncancel</button>
             @elseif(Auth::user()->package->name=="basic")
               <button id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</button>
-            @else
+            @elseif(Auth::user()->package->name!="basic" && $data['pending_package']=="")
               <button href="#" id="select_basic" onClick="select('basic')" class="btn btn-block btn-primary text-uppercase">Select</button>
+            @else
+              <button href="#" id="select_disabled" class="btn btn-block btn-danger text-uppercase">Select</button>
             @endif
             
           </div>
@@ -90,8 +93,10 @@
               <button href="#" id="uncancel_extended" onClick="uncancel('extended')" class="btn btn-block btn-primary text-uppercase">Uncancel</button>
             @elseif(Auth::user()->package->name=="extended")
               <button id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</button>
-            @else
+            @elseif(Auth::user()->package->name!="basic" && $data['pending_package']==null)
               <button href="#" id="select_extended" onClick="select('extended')" class="btn btn-block btn-primary text-uppercase">Select</button>
+            @else
+              <button href="#" id="select_extended_disabled" class="btn btn-block btn-danger text-uppercase">Select</button>
             @endif
             
           </div>
@@ -120,8 +125,10 @@
               <button href="#" id="uncancel_corporate" onClick="uncancel('corporate')" class="btn btn-block btn-primary text-uppercase">Uncancel</button>
             @elseif(Auth::user()->package->name=="corporate")
               <button id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</button>
-            @else
+            @elseif(Auth::user()->package->name!="basic" && $data['pending_package']==null)
               <button href="#" id="select_corporate" onClick="select('corporate')" class="btn btn-block btn-primary text-uppercase">Select</button>
+            @else
+              <button href="#" id="select_corporate_disabled" class="btn btn-block btn-danger text-uppercase">Select</button>
             @endif
             
           </div>
