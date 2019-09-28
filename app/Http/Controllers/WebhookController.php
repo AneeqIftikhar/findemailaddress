@@ -131,7 +131,7 @@ class WebhookController extends Controller
                             $subscription->package_id=$package->id;
                         }
                         $subscription->credits=$user->credits;
-                        $subscription->status="CANCLED";
+                        $subscription->status="CANCELED";
                         $subscription->save();
 
                         $Webhook=new Webhooks();
