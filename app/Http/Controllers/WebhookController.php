@@ -232,8 +232,8 @@ class WebhookController extends Controller
             {
                 $subscription=new PendingSubscriptions();
                 $subscription->user_id=$user->id;
-                $subscription->next_package_id=$package->id;
             }
+            $subscription->next_package_id=$package->id;
             $subscription->current_package_id=$user->package->id;
             $subscription->credits=$user->credits;
             $subscription->status=$status;
