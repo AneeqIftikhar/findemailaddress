@@ -61,7 +61,7 @@
               <button href="#" id="uncancel_basic" onClick="uncancel('basic')" class="btn btn-block btn-primary text-uppercase">Reactivate</button>
             @elseif(Auth::user()->package->name=="basic")
               <button id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</button>
-            @elseif(Auth::user()->package->name!="basic" && $data['current_pending_package']=="basic" && $data['pending_status']!="CANCELED")
+            @elseif(Auth::user()->package->name!="basic" && $data['next_pending_package']=="basic" && $data['pending_status']!="CANCELED")
               <button href="#" id="downgraded_basic" class="btn btn-block btn-danger text-uppercase">PENDING {{$data['pending_status']}}</button>
             @elseif(Auth::user()->package->name!="basic")
               <button href="#" id="select_basic" onClick="select('basic')" class="btn btn-block btn-primary text-uppercase">Select</button>
@@ -96,7 +96,7 @@
               <button href="#" id="uncancel_extended" onClick="uncancel('extended')" class="btn btn-block btn-primary text-uppercase">Reactivate</button>
             @elseif(Auth::user()->package->name=="extended")
               <button id="subscribed_extended" class="btn btn-block btn-danger text-uppercase">Subscribed</button>
-            @elseif(Auth::user()->package->name!="extended" && $data['current_pending_package']=="extended" && $data['pending_status']!="CANCELED")
+            @elseif(Auth::user()->package->name!="extended" && $data['next_pending_package']=="extended" && $data['pending_status']!="CANCELED")
               <button href="#" id="downgraded_extended" class="btn btn-block btn-danger text-uppercase">PENDING {{$data['pending_status']}}</button>
             @elseif(Auth::user()->package->name!="extended")
               <button href="#" id="select_extended" onClick="select('extended')" class="btn btn-block btn-primary text-uppercase">Select</button>
@@ -130,7 +130,7 @@
               <button href="#" id="uncancel_corporate" onClick="uncancel('corporate')" class="btn btn-block btn-primary text-uppercase">Reactivate</button>
             @elseif(Auth::user()->package->name=="corporate")
               <button id="subscribed_corporate" class="btn btn-block btn-danger text-uppercase">Subscribed</button>
-            @elseif(Auth::user()->package->name!="corporate" && $data['current_pending_package']=="corporate" && $data['pending_status']!="CANCELED")
+            @elseif(Auth::user()->package->name!="corporate" && $data['next_pending_package']=="corporate" && $data['pending_status']!="CANCELED")
               <button href="#" id="downgraded_corporate" class="btn btn-block btn-danger text-uppercase">PENDING {{$data['pending_status']}}</button>
             @elseif(Auth::user()->package->name!="corporate")
               <button href="#" id="select_corporate" onClick="select('corporate')" class="btn btn-block btn-primary text-uppercase">Select</button>
