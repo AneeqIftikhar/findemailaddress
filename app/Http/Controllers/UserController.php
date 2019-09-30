@@ -151,21 +151,28 @@ class UserController extends Controller
             $pending=PendingSubscriptions::where('user_id',$user->id)->first();
             if($pending)
             {   
-                $pending_package=Package::where('id',$pending->package_id)->first();
+                $next_pending_package=Package::where('id',$pending->next_package_id)->first();
+                $current_pending_package=Package::where('id',$pending->current_package_id)->first();
                 $data['pending_status']=$pending->status;
-                $data['pending_package']=$pending_package->name;
+                $data['next_pending_package']=$next_pending_package->name;
+                $data['current_pending_package']=$current_pending_package->name;
+                $data['pending_is_active']=$pending->is_active;
             }
             else
             {
                 $data['pending_status']=null;
-                $data['pending_package']=null;
+                $data['next_pending_package']=null;
+                $data['current_pending_package']=null;
+                $data['pending_is_active']=null;
             }
 
         }
         else
         {
             $data['pending_status']=null;
-            $data['pending_package']=null;
+            $data['next_pending_package']=null;
+            $data['current_pending_package']=null;
+            $data['is_active']=null;
         }
         return view('upgrade_account', ['data'=>$data]);
     }

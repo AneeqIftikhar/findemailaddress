@@ -17,9 +17,12 @@ class CreatePendingSubscriptionsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->bigInteger('package_id')->unsigned();
-            $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade');
-            $table->string('status');
+            $table->bigInteger('next_package_id')->unsigned();
+            $table->foreign('next_package_id')->references('id')->on('packages')->onDelete('cascade');
+            $table->bigInteger('current_package_id')->unsigned();
+            $table->foreign('current_package_id')->references('id')->on('packages')->onDelete('cascade');
+            $table->string('status')->nullable();
+            $table->boolean('is_active')->default(1);
             $table->integer('credits');
             $table->string('reason')->nullable();
             $table->timestamps();

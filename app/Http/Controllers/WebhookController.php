@@ -49,36 +49,36 @@ class WebhookController extends Controller
                     }
                     else if($event['type']=="subscription.updated")
                     {
-                        $user=User::where('payment_user_reference',$event['data']['account'])->first();
-                        $product_name=$event['data']['product'];
-                        $package=Package::where('name',$product_name)->first();
+                        // $user=User::where('payment_user_reference',$event['data']['account'])->first();
+                        // $product_name=$event['data']['product'];
+                        // $package=Package::where('name',$product_name)->first();
 
-                        // if($user->package->amount>$package->amount)
-                        // {
-                        //     $subscription=PendingSubscriptions::where('user_id',$user->id)->where('package_id',$package->id)->first();
-                        //     if(!$subscription)
-                        //     {
-                        //         $subscription=new PendingSubscriptions();
-                        //         $subscription->user_id=$user->id;
-                        //         $subscription->package_id=$package->id;
-                        //     }
-                        //     $subscription->credits=$user->credits;
-                        //     $subscription->status="DOWNGRADED";
-                        //     $subscription->save();
-                        // }
-                        // else
-                        // {
-                        //     $subscription=PendingSubscriptions::where('user_id',$user->id)->where('package_id',$package->id)->first();
-                        //     if(!$subscription)
-                        //     {
-                        //         $subscription=new PendingSubscriptions();
-                        //         $subscription->user_id=$user->id;
-                        //         $subscription->package_id=$package->id;
-                        //     }
-                        //     $subscription->credits=$user->credits;
-                        //     $subscription->status="UPGRADED";
-                        //     $subscription->save();
-                        // }
+                        // // if($user->package->amount>$package->amount)
+                        // // {
+                        // //     $subscription=PendingSubscriptions::where('user_id',$user->id)->where('package_id',$package->id)->first();
+                        // //     if(!$subscription)
+                        // //     {
+                        // //         $subscription=new PendingSubscriptions();
+                        // //         $subscription->user_id=$user->id;
+                        // //         $subscription->package_id=$package->id;
+                        // //     }
+                        // //     $subscription->credits=$user->credits;
+                        // //     $subscription->status="DOWNGRADED";
+                        // //     $subscription->save();
+                        // // }
+                        // // else
+                        // // {
+                        // //     $subscription=PendingSubscriptions::where('user_id',$user->id)->where('package_id',$package->id)->first();
+                        // //     if(!$subscription)
+                        // //     {
+                        // //         $subscription=new PendingSubscriptions();
+                        // //         $subscription->user_id=$user->id;
+                        // //         $subscription->package_id=$package->id;
+                        // //     }
+                        // //     $subscription->credits=$user->credits;
+                        // //     $subscription->status="UPGRADED";
+                        // //     $subscription->save();
+                        // // }
 
                         $Webhook=new Webhooks();
                         $Webhook->webhook_dump=$json_dump;
@@ -123,41 +123,62 @@ class WebhookController extends Controller
                         $user=User::where('payment_user_reference',$event['data']['account'])->first();
                         $package=Package::where('name',$event['data']['product'])->first();
 
-                        $subscription=PendingSubscriptions::where('user_id',$user->id)->where('package_id',$package->id)->first();
+                        $subscription=PendingSubscriptions::where('user_id',$user->id)->first();
                         if(!$subscription)
                         {
                             $subscription=new PendingSubscriptions();
                             $subscription->user_id=$user->id;
-                            $subscription->package_id=$package->id;
+                            $subscription->current_package_id=$user->package->id;
+                            $subscription->next_package_id=$package->id;
+                            $subscription->status="CANCELED";
+                            $subscription->is_active=0;
+                            $subscription->credits=$user->credits;
+                            $subscription->reson="Charge Failed";
+                            $subscription->save();
+
                         }
-                        $subscription->credits=$user->credits;
-                        $subscription->status="CANCELED";
-                        $subscription->save();
+                        else
+                        {
+                            if($subscription->is_active==1)
+                            {
+                                $subscription->reson="Charge Failed on Update";
+                            }
+                            else
+                            {
+                                $subscription->reson="User Canceled the Subscription";
+                            }
+                            $subscription->is_active=0;
+                            $subscription->credits=$user->credits;
+                            $subscription->save();
+                        } 
+                        
+                        $free=Package::where('name','free')->first();
+                        $user->package_id=$free->id;
+                        $user->save();
+                       
 
                         $Webhook=new Webhooks();
                         $Webhook->webhook_dump=$json_dump;
                         $Webhook->user_id=$user->id;
                         $Webhook->save();
 
-                        $free=Package::where('name','free')->first();
-                        $user->package_id=$free->id;
-                        $user->save();
+                        
                     }
                     else if($event['type']=="subscription.deactivated")
                     {
                         $user=User::where('payment_user_reference',$event['data']['account'])->first();
-                        $package=Package::where('name',$event['data']['product'])->first();
+                        // $package=Package::where('name',$event['data']['product'])->first();
 
-                        $subscription=PendingSubscriptions::where('user_id',$user->id)->where('package_id',$package->id)->first();
-                        if(!$subscription)
-                        {
-                            $subscription=new PendingSubscriptions();
-                            $subscription->user_id=$user->id;
-                            $subscription->package_id=$package->id;
-                        }
-                        $subscription->credits=$user->credits;
-                        $subscription->status="DEACTIVATED";
-                        $subscription->save();
+                        // $subscription=PendingSubscriptions::where('user_id',$user->id)->where('package_id',$package->id)->first();
+                        // if(!$subscription)
+                        // {
+                        //     $subscription=new PendingSubscriptions();
+                        //     $subscription->user_id=$user->id;
+                        //     $subscription->package_id=$package->id;
+                        // }
+                        // $subscription->credits=$user->credits;
+                        // $subscription->status="DEACTIVATED";
+                        // $subscription->save();
 
                         $Webhook=new Webhooks();
                         $Webhook->webhook_dump=$json_dump;
@@ -167,7 +188,7 @@ class WebhookController extends Controller
                         $free=Package::where('name','free')->first();
                         $user->package_id=$free->id;
                         $user->subscription_id=null;
-                        $user->credits=0;
+                        $user->credits=$free->credits;
                         $user->save();
                     }
                 }
@@ -195,24 +216,25 @@ class WebhookController extends Controller
         if($user->package->amount<$package->amount)
         {
             $prorate=true;
-            $status="UPGRADED";
+            $status="UPGRADE";
         }
         else
         {
             $prorate=false;
-            $status="DOWNGRADED";
+            $status="DOWNGRADE";
         }
         $FastSpringApi = new FastSpringApi();
         $resp=$FastSpringApi->updateSubscription($user->subscription_id,$package_name,$prorate);
         if($resp && isset($resp['subscriptions']) && $resp['subscriptions'][0]['result']=="success")
         {
-            $subscription=PendingSubscriptions::where('user_id',$user->id)->where('package_id',$package->id)->first();
+            $subscription=PendingSubscriptions::where('user_id',$user->id)->where('next_package_id',$package->id)->first();
             if(!$subscription)
             {
                 $subscription=new PendingSubscriptions();
                 $subscription->user_id=$user->id;
-                $subscription->package_id=$package->id;
+                $subscription->next_package_id=$package->id;
             }
+            $subscription->current_package_id=$user->package->id;
             $subscription->credits=$user->credits;
             $subscription->status=$status;
             $subscription->save();
@@ -224,7 +246,28 @@ class WebhookController extends Controller
     {
         $user=Auth::user();
         $FastSpringApi = new FastSpringApi();
-        return $FastSpringApi->cancelSubscription($user->subscription_id);
+        $resp=$FastSpringApi->cancelSubscription($user->subscription_id);
+        if($resp && isset($resp['subscriptions']) && $resp['subscriptions'][0]['result']=="success")
+        {
+            $subscription=PendingSubscriptions::where('user_id',$user->id)->first();
+            if(!$subscription)
+            {
+                $subscription=new PendingSubscriptions();
+                $subscription->user_id=$user->id;
+                $subscription->next_package_id=$user->package->id;
+                $subscription->current_package_id=$user->package->id;
+                $subscription->status="CALCELED";
+            }
+            $subscription->credits=$user->credits;
+            $subscription->is_active=0;
+            $subscription->save();
+
+            $free=Package::where('name','free')->first();
+            $user->package_id=$free->id;
+            $user->save();
+           
+        }
+        return $resp;
     }
     public function uncancel_subscription(Request $request)
     {
@@ -236,9 +279,18 @@ class WebhookController extends Controller
             $subscription=PendingSubscriptions::where('user_id',$user->id)->first();
             if($subscription)
             {
-                $user->package_id=$subscription->package_id;
+                $user->package_id=$subscription->current_package_id;
                 $user->save();
-                $subscription->delete();
+                if($subscription->status=="CANCELED")
+                {
+                    $subscription->delete();
+                }
+                else
+                {
+                    $subscription->is_active=1;
+                    $subscription->save();
+                }
+                
             }
            
         }
