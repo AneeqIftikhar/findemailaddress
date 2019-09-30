@@ -227,7 +227,7 @@ class WebhookController extends Controller
         $resp=$FastSpringApi->updateSubscription($user->subscription_id,$package_name,$prorate);
         if($resp && isset($resp['subscriptions']) && $resp['subscriptions'][0]['result']=="success")
         {
-            $subscription=PendingSubscriptions::where('user_id',$user->id)->where('next_package_id',$package->id)->first();
+            $subscription=PendingSubscriptions::where('user_id',$user->id)->first();
             if(!$subscription)
             {
                 $subscription=new PendingSubscriptions();
