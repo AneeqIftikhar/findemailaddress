@@ -6,7 +6,9 @@ namespace App\Helpers;
 class CurlRequest{
 
     public static function find_email($first_name,$last_name,$domain){
-    	$endpoint = "http://3.17.231.9:5000/find";
+
+        ;
+    	$endpoint = env('PYTHON_SERVER_IP','http://3.17.231.9:5000/')."find";
         $postdata='data=[{"'.'firstName":"'.$first_name.'", "'.'lastName":"'.$last_name.'", "'.'domainName": "'.$domain.'"}]';
         $ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL,$endpoint);
@@ -36,7 +38,7 @@ class CurlRequest{
     }
     public static function verify_email($email)
     {
-    	$endpoint = "http://3.17.231.9:5000/verify";
+    	$endpoint = env('PYTHON_SERVER_IP','http://3.17.231.9:5000/')."verify";
         $postdata='data=["'.$email.'"]';
   		$ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,$endpoint);
