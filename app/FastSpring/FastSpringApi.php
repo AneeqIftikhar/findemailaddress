@@ -32,12 +32,12 @@ class FastSpringApi
             $response = json_decode($FastSpringClient->post('sessions', ['body' => $payload])->getBody()->getContents(),true);
             return $response;
       } catch (ClientErrorResponseException $exception) {
-          $responseBody = $exception->getResponse()->getBody(true);
+          $responseBody = json_decode($exception->getResponse()->getBody(),true);
           return $responseBody;
       }
       catch (\Exception $exception)
       {
-        $responseBody = $exception->getResponse()->getBody(true);
+          $responseBody = json_decode($exception->getResponse()->getBody(),true);
           return $responseBody;
       }
     }
@@ -62,13 +62,13 @@ class FastSpringApi
   	        $response = json_decode($FastSpringClient->post('accounts', ['body' => $payload])->getBody()->getContents(),true);
   	        return $response;
   		} catch (ClientErrorResponseException $exception) {
-  		    $responseBody = $exception->getResponse()->getBody(true);
+  		    $responseBody = json_decode($exception->getResponse()->getBody(),true);
   		    return $responseBody;
   		}
   		catch (\Exception $exception)
   		{
-  			$responseBody = $exception->getResponse()->getBody(true);
-  		    return $responseBody;
+  			$responseBody = json_decode($exception->getResponse()->getBody(),true);
+  		  return $responseBody;
   		}
     }
     public function updateCustomer()
@@ -92,12 +92,12 @@ class FastSpringApi
             $response = json_decode($FastSpringClient->post('accounts/rO_bGfPeTdipo__qUxC5_g', ['body' => $payload])->getBody()->getContents(),true);
             return $response;
       } catch (ClientErrorResponseException $exception) {
-          $responseBody = $exception->getResponse()->getBody(true);
+          $responseBody = json_decode($exception->getResponse()->getBody(),true);
           return $responseBody;
       }
       catch (\Exception $exception)
       {
-        $responseBody = $exception->getResponse()->getBody(true);
+          $responseBody = json_decode($exception->getResponse()->getBody(),true);
           return $responseBody;
       }
     }
@@ -109,12 +109,12 @@ class FastSpringApi
             $response = json_decode($FastSpringClient->get('accounts')->getBody()->getContents(),true);
             return $response;
       } catch (ClientErrorResponseException $exception) {
-          $responseBody = $exception->getResponse()->getBody(true);
+          $responseBody = json_decode($exception->getResponse()->getBody(),true);
           return $responseBody;
       }
       catch (\Exception $exception)
       {
-        $responseBody = $exception->getResponse()->getBody(true);
+          $responseBody = json_decode($exception->getResponse()->getBody(),true);
           return $responseBody;
       }
     }
@@ -127,12 +127,12 @@ class FastSpringApi
             $response = json_decode($FastSpringClient->get('accounts/'.$account)->getBody()->getContents(),true);
             return $response;
       } catch (ClientErrorResponseException $exception) {
-          $responseBody = $exception->getResponse()->getBody(true);
+          $responseBody = json_decode($exception->getResponse()->getBody(),true);
           return $responseBody;
       }
       catch (\Exception $exception)
       {
-        $responseBody = $exception->getResponse()->getBody(true);
+          $responseBody = json_decode($exception->getResponse()->getBody(),true);
           return $responseBody;
       }
     }
@@ -143,12 +143,12 @@ class FastSpringApi
             $response = json_decode($FastSpringClient->get('accounts/?email='.$email)->getBody()->getContents(),true);
             return $response;
       } catch (ClientErrorResponseException $exception) {
-          $responseBody = $exception->getResponse()->getBody(true);
+          $responseBody = json_decode($exception->getResponse()->getBody(),true);
           return $responseBody;
       }
       catch (\Exception $exception)
       {
-        $responseBody = $exception->getResponse()->getBody(true);
+          $responseBody = json_decode($exception->getResponse()->getBody(),true);
           return $responseBody;
       }
       //GET /accounts?key=value&limit=15&page=2
@@ -179,12 +179,12 @@ class FastSpringApi
             $response = json_decode($FastSpringClient->post('subscriptions', ['body' => $payload])->getBody()->getContents(),true);
             return $response;
       } catch (ClientErrorResponseException $exception) {
-          $responseBody = $exception->getResponse()->getBody(true);
+          $responseBody = json_decode($exception->getResponse()->getBody(),true);
           return $responseBody;
       }
       catch (\Exception $exception)
       {
-        $responseBody = $exception->getResponse()->getBody(true);
+          $responseBody = json_decode($exception->getResponse()->getBody(),true);
           return $responseBody;
       }
     }
@@ -197,12 +197,12 @@ class FastSpringApi
             $response = json_decode($FastSpringClient->delete('subscriptions/'.$subscription_id)->getBody()->getContents(),true);
             return $response;
       } catch (ClientErrorResponseException $exception) {
-          $responseBody = $exception->getResponse()->getBody(true);
+          $responseBody = json_decode($exception->getResponse()->getBody(),true);
           return $responseBody;
       }
       catch (\Exception $exception)
       {
-        $responseBody = $exception->getResponse()->getBody(true);
+        $responseBody = json_decode($exception->getResponse()->getBody(),true);
           return $responseBody;
       }
     }
@@ -219,12 +219,12 @@ class FastSpringApi
             $response = json_decode($FastSpringClient->post('subscriptions', ['body' => $payload])->getBody()->getContents(),true);
             return $response;
       } catch (ClientErrorResponseException $exception) {
-          $responseBody = $exception->getResponse()->getBody(true);
+          $responseBody = json_decode($exception->getResponse()->getBody(true)->getContents(),true);
           return $responseBody;
       }
       catch (\Exception $exception)
       {
-        $responseBody = $exception->getResponse()->getBody(true);
+          $responseBody = json_decode($exception->getResponse()->getBody(true)->getContents(),true);
           return $responseBody;
       }
     }

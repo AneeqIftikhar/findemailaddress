@@ -273,7 +273,15 @@ function verify_email_ajax()
                     $errors = jqXHR.responseJSON;
 
                      $.each( $errors.errors , function( key, value ) {
-                       document.getElementById('email_error').innerHTML=value[0];
+                       if(value[0].search("must be of company domain")==-1)
+                        {
+                          document.getElementById('find_error').innerHTML=value[0];
+                        }
+                        else
+                        {
+                            
+                              document.getElementById('find_error').innerHTML="You cannot search for emails at personal domains. Please provide a company domain.";
+                        }
                        
                        
                         
