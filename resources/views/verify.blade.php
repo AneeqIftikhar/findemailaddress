@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('page')
-    {{ "VERIFY" }}
+    {{ "Verify Email" }}
 @endsection
 @section('content')
 <div class="container" style="height: 100%">

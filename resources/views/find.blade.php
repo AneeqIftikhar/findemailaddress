@@ -1,7 +1,7 @@
 
 @extends('layouts.app')
 @section('page')
-    {{ "FIND" }}
+    {{ "Find Email" }}
 @endsection
 @section('content')
 <div class="container" style="height: 100%">

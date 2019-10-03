@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('page')
+    {{ "Account Settings" }}
+@endsection
+
 @section('content')
 
 <div class="container">

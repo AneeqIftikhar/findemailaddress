@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('page')
+    {{ "Upgrade Account" }}
+@endsection
+
 @section('content')
 <div class="container">
 @if(session()->has('message'))

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('page')
-    {{ "HISTORY" }}
+    {{ "History" }}
 @endsection
 @section('content')
 <div class="container">
