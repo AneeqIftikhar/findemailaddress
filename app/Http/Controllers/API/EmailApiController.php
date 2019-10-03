@@ -92,7 +92,6 @@ class EmailApiController extends Controller
 				$errors = $validator->errors();
 			    return response()->json(["errors"=>$errors],422);
 			}
-			$user=Auth::user();
 			$email=strtolower(Functions::removeAccentsEmail($request->email));
 			$server_output=CurlRequest::verify_email($email);
 			$json_output=json_decode($server_output);
