@@ -107,7 +107,7 @@ class EmailApiController extends Controller
 
 			if($json_output && array_key_exists('curl_error',$json_output))
 			{
-				$error=$json_output->curl_error->;
+				$error=$json_output->curl_error;
 				$email_status="Not Found";
 				$server_status="-";
 			}
