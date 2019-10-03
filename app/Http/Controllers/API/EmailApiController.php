@@ -9,6 +9,7 @@ use App\Rules\BlackListDomains;
 use App\Rules\IsValidDomain;
 use Validator;
 use App\Helpers\CurlRequest;
+use App\Helpers\Functions;
 class EmailApiController extends Controller
 {
 
@@ -43,7 +44,7 @@ class EmailApiController extends Controller
 			$error="";
 			if($json_output && array_key_exists('curl_error',$json_output))
 			{
-				$error=$json_output['curl_error'];
+				$error=$json_output->curl_error;
 				$status="Not Found";
 			}
 			else
@@ -106,7 +107,7 @@ class EmailApiController extends Controller
 
 			if($json_output && array_key_exists('curl_error',$json_output))
 			{
-				$error=$json_output['curl_error'];
+				$error=$json_output->curl_error->;
 				$email_status="Not Found";
 				$server_status="-";
 			}

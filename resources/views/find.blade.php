@@ -1,6 +1,8 @@
 
 @extends('layouts.app')
-
+@section('page')
+    {{ "FIND" }}
+@endsection
 @section('content')
 <div class="container" style="height: 100%">
     <div class="row justify-content-center" style="height: 100%">

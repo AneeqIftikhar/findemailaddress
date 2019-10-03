@@ -14,7 +14,7 @@ return [
     */
 
     // 'name' => env('APP_NAME', 'Laravel'),
-    'name' => 'Find Email Address',
+    'name' => 'FindEmailAddress',
 
     /*
     |--------------------------------------------------------------------------
