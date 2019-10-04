@@ -167,18 +167,17 @@
 </script>
 <script type="text/javascript">
 
-  function cancel_subscription(package_name)
+  function cancel_subscription()
   {
     $("#action_modal_title").html('Cancel Subscriptiont');
     $("#action_modal_message").html('Are You Sure You want to Cancel Your Subscription');
-    $("#action_button").click({'package_name': package_name}, cancel_subscription_ajax);
+    $("#action_button").click(cancel_subscription_ajax);
     $("#action_modal").modal();
 
     
   }
-  function cancel_subscription_ajax(package_name)
+  function cancel_subscription_ajax()
   {
-      var package_name=event.data.package_name;
       $('#action_modal').modal('hide');
       $('#cancel').html('<i class="fa fa-spinner fa-spin"></i>');
       $('#cancel').attr('disabled',true);
@@ -186,7 +185,7 @@
             method: 'POST',
             dataType: 'json', 
             url: 'cancel_subscription', 
-            data: {'package_name' : "basic","_token": "{{ csrf_token() }}"}, 
+            data: {"_token": "{{ csrf_token() }}"}, 
             success: function(response){ 
               location.relaod(true);
               console.log(response);
