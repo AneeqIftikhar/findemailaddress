@@ -206,22 +206,22 @@ class EmailController extends Controller
       				$user->decrement('credits');
       				$email_status="Valid";
       				$server_status="Valid";
-      	            if($json_output[0]->mx==null || $json_output[0]->mx=='')
-      	            {
-      	               $server_status="No Mailbox";
-      	               $email_status="-";
-      	            }
-      	            else
-      	            {
-      					if($json_output[0]->status==null || $json_output[0]->status=='')
+	            if($json_output[0]->mx==null || $json_output[0]->mx=='')
+	            {
+	               $server_status="No Mailbox";
+	               $email_status="-";
+	            }
+	            else
+	            {
+      					if($json_output[0]->status==null || $json_output[0]->status==''|| $json_output[0]->status=='Not Found')
       					{
-      						$email_status="Not Found";
+      						$email_status="Invalid";
       					}
       					else
       					{
       						$email_status=$json_output[0]->status;
       					}
-      	            }
+	            }
       			}
 
 

@@ -121,9 +121,9 @@ class EmailApiController extends Controller
 	            }
 	            else
 	            {
-					if($json_output[0]->status==null || $json_output[0]->status=='')
+					if($json_output[0]->status==null || $json_output[0]->status==''|| $json_output[0]->status=='Not Found')
 					{
-						$email_status="Not Found";
+						$email_status="Invalid";
 					}
 					else
 					{

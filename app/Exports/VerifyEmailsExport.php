@@ -25,17 +25,17 @@ class VerifyEmailsExport implements FromCollection, WithHeadings, ShouldAutoSize
         $user=Auth::user();
         if($this->records=='all')
         {
-            return Emails::select('email','status')->where('user_id', $user->id)->where('type', 'verify')->get();
+            return Emails::select('email','status','server_status','created_at')->where('user_id', $user->id)->where('type', 'verify')->get();
         }
         else
         {
-            return Emails::select('email','status')->where('user_id', $user->id)->where('type', 'verify')->where('status', 'Valid')->get();
+            return Emails::select('email','status','server_status','created_at')->where('user_id', $user->id)->where('type', 'verify')->where('status', 'Valid')->get();
         }
     }
     public function headings(): array
     {
         return [
-            "Email", "Status"
+            "Email", "Server Status" ,"Status", "Date/Time"
         ];
     }
     public function registerEvents(): array

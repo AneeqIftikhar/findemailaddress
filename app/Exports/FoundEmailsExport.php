@@ -25,18 +25,18 @@ class FoundEmailsExport implements FromCollection, WithHeadings, ShouldAutoSize,
         $user=Auth::user();
         if($this->records=='all')
         {
-            return Emails::select('first_name','last_name','domain','email','status')->where('user_id', $user->id)->where('type', 'find')->get();
+            return Emails::select('first_name','last_name','domain','email','status','created_at')->where('user_id', $user->id)->where('type', 'find')->get();
         }
         else
         {
-            return Emails::select('first_name','last_name','domain','email','status')->where('user_id', $user->id)->where('type', 'find')->where('status', 'Valid')->get();
+            return Emails::select('first_name','last_name','domain','email','status','created_at')->where('user_id', $user->id)->where('type', 'find')->where('status', 'Valid')->get();
         }
  
     }
     public function headings(): array
     {
         return [
-            "Firstname", "Lastname", "Domain", "Email", "Status"
+            "Firstname", "Lastname", "Domain", "Email", "Status", "Date/Time"
         ];
     }
     public function registerEvents(): array
