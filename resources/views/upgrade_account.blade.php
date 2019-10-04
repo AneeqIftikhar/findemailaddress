@@ -206,7 +206,7 @@
     $("#action_button").click({'package_name': package_name}, uncancel_ajax);
     $("#action_modal").modal();
   }
-  function uncancel_ajax(package_name)
+  function uncancel_ajax(event)
   {
     var package_name=event.data.package_name;
     $('#action_modal').modal('hide');
