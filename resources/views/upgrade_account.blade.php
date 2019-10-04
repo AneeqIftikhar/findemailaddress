@@ -187,7 +187,7 @@
             url: 'cancel_subscription', 
             data: {"_token": "{{ csrf_token() }}"}, 
             success: function(response){ 
-              location.relaod(true);
+              location.reload();
               console.log(response);
 
             },
@@ -218,7 +218,7 @@
           url: 'uncancel_subscription', 
           data: {'package_name' : package_name,"_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
-            location.relaod(true);
+            location.reload();
             console.log(response);
 
           },
@@ -233,6 +233,7 @@
   }
   function select(package_name)
   {
+    
     $("#action_modal_title").html('Select Subscriptiont');
     $("#action_modal_message").html('Are You Sure You Want to Select This Subscription');
     $("#action_button").click({'package_name': package_name}, select_ajax);
@@ -251,7 +252,7 @@
           url: 'update_subscription', 
           data: {'package_name' : package_name,"_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
-            location.relaod(true);
+            location.reload();
             console.log(response);
 
           },
