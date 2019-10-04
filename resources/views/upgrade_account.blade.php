@@ -199,7 +199,7 @@
         });
     
   }
-  function uncancel($package_name)
+  function uncancel(package_name)
   {
     $("#action_modal_title").html('Reactivate Subscriptiont');
     $("#action_modal_message").html('Are You Sure You Want to Reactivate Your Subscription');
@@ -233,7 +233,7 @@
   }
   function select(package_name)
   {
-    
+
     $("#action_modal_title").html('Select Subscriptiont');
     $("#action_modal_message").html('Are You Sure You Want to Select This Subscription');
     $("#action_button").click({'package_name': package_name}, select_ajax);
