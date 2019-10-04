@@ -13,7 +13,8 @@ use App\User;
 use App\UserFiles;
 use Auth;
 use App\Emails;
-use App\Exports\EmailsExport;
+use App\Exports\VerifyEmailsExport;
+use App\Exports\FoundEmailsExport;
 use App\Rules\BlackListDomains;
 use App\Rules\IsValidDomain;
 use Validator;
@@ -334,14 +335,14 @@ class EmailController extends Controller
        }
        public function downloadFoundRecords(Request $request,$type,$records)
        {
-         $email_export=new EmailsExport();
-         $email_export->set_details(0,$records,'all_db','find');
+         $email_export=new FoundEmailsExport();
+         $email_export->set_details($records);
          return Excel::download($email_export, 'emails.'.$type);
        }
        public function downloadVerifiedRecords(Request $request,$type,$records)
        {
-         $email_export=new EmailsExport();
-         $email_export->set_details(0,$records,'all_db','verify');
+         $email_export=new VerifyEmailsExport();
+         $email_export->set_details($records);
          return Excel::download($email_export, 'emails.'.$type);
        }
 

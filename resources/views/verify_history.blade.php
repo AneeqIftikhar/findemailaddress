@@ -24,13 +24,13 @@
                                 <a class="dropdown-item" href="{{URL::route('downloadverifiedrecords',['type'=>'csv','records'=>'all'])}}">
                                   Download ALL (CSV)
                                 </a>
-                                <a class="dropdown-item" href="{{URL::route('downloadverifiedrecords',['type'=>'csv','records'=>'all'])}}">
+                                <a class="dropdown-item" href="{{URL::route('downloadverifiedrecords',['type'=>'xls','records'=>'all'])}}">
                                   Download ALL (XLS)
                                 </a>
                                 <a class="dropdown-item" href="{{URL::route('downloadverifiedrecords',['type'=>'csv','records'=>'valid'])}}">
                                   Download Valid (CSV)
                                 </a>
-                                <a class="dropdown-item" href="{{URL::route('downloadverifiedrecords',['type'=>'csv','records'=>'valid'])}}">
+                                <a class="dropdown-item" href="{{URL::route('downloadverifiedrecords',['type'=>'xls','records'=>'valid'])}}">
                                   Download Valid (XLS)
                                 </a>
                               </div>
