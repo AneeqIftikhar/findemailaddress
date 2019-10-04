@@ -188,7 +188,7 @@
             url: 'cancel_subscription', 
             data: {'package_name' : "basic","_token": "{{ csrf_token() }}"}, 
             success: function(response){ 
-              location.relaod();
+              location.relaod(true);
               console.log(response);
 
             },
@@ -219,7 +219,7 @@
           url: 'uncancel_subscription', 
           data: {'package_name' : package_name,"_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
-            location.relaod();
+            location.relaod(true);
             console.log(response);
 
           },
@@ -252,7 +252,7 @@
           url: 'update_subscription', 
           data: {'package_name' : package_name,"_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
-            location.relaod();
+            location.relaod(true);
             console.log(response);
 
           },
