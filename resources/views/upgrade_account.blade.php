@@ -167,11 +167,18 @@
 </script>
 <script type="text/javascript">
 
-  function cancel_subscription($package_name)
+  function cancel_subscription(package_name)
   {
     $("#action_modal_title").html('Cancel Subscriptiont');
     $("#action_modal_message").html('Are You Sure You want to Cancel Your Subscription');
-    $("#action_button").click(function(){
+    $("#action_button").click({'package_name': package_name}, cancel_subscription_ajax);
+    $("#action_modal").modal();
+
+    
+  }
+  function cancel_subscription_ajax(package_name)
+  {
+      var package_name=event.data.package_name;
       $('#action_modal').modal('hide');
       $('#cancel').html('<i class="fa fa-spinner fa-spin"></i>');
       $('#cancel').attr('disabled',true);
@@ -181,10 +188,6 @@
             url: 'cancel_subscription', 
             data: {'package_name' : "basic","_token": "{{ csrf_token() }}"}, 
             success: function(response){ 
-              // $('#cancel').html('Cancel');
-              // $('#cancel').attr('disabled',false);
-              // $("#success_modal_message").html('Subscription Canceled. Please Revisit in 5 Minutes For Changes To Take Effect');
-              // $("#success_modal").modal();
               location.relaod();
               console.log(response);
 
@@ -195,61 +198,67 @@
                 
             }
         });
-
-    });
-      
-
-    $("#action_modal").modal();
-
     
   }
   function uncancel($package_name)
   {
-    $('#uncancel_'+$package_name).html('<i class="fa fa-spinner fa-spin"></i>');
-    $('#uncancel_'+$package_name).attr('disabled',true);
+    $("#action_modal_title").html('Reactivate Subscriptiont');
+    $("#action_modal_message").html('Are You Sure You Want to Reactivate Your Subscription');
+    $("#action_button").click({'package_name': package_name}, uncancel_ajax);
+    $("#action_modal").modal();
+  }
+  function uncancel_ajax(package_name)
+  {
+    var package_name=event.data.package_name;
+    $('#action_modal').modal('hide');
+    $('#uncancel_'+package_name).html('<i class="fa fa-spinner fa-spin"></i>');
+    $('#uncancel_'+package_name).attr('disabled',true);
     $.ajax({
           method: 'POST',
           dataType: 'json', 
           url: 'uncancel_subscription', 
-          data: {'package_name' : $package_name,"_token": "{{ csrf_token() }}"}, 
+          data: {'package_name' : package_name,"_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
-            // $('#uncancel_'+$package_name).html('Reactivate');
-            // $('#uncancel_'+$package_name).attr('disabled',false);
-            // $("#success_modal_message").html('Subscription Activated. Please Revisit in 5 Minutes For Changes To Take Effect');
-            // $("#success_modal").modal();
             location.relaod();
             console.log(response);
 
           },
           error: function(error) {
-              $('#uncancel_'+$package_name).html('Reactivate');
-              $('#uncancel_'+$package_name).attr('disabled',false);
+              $('#uncancel_'+package_name).html('Reactivate');
+              $('#uncancel_'+package_name).attr('disabled',false);
               alert("Something Went Wrong");
               console.log(error);
               
           }
       });
   }
-  function select($package_name)
+  function select(package_name)
   {
-    $('#select_'+$package_name).html('<i class="fa fa-spinner fa-spin"></i>');
-    $('#select_'+$package_name).attr('disabled',true);
+    $("#action_modal_title").html('Select Subscriptiont');
+    $("#action_modal_message").html('Are You Sure You Want to Select This Subscription');
+    $("#action_button").click({'package_name': package_name}, select_ajax);
+    $("#action_modal").modal();
+    
+  }
+  function select_ajax(event)
+  {
+    var package_name=event.data.package_name;
+    $('#action_modal').modal('hide');
+    $('#select_'+package_name).html('<i class="fa fa-spinner fa-spin"></i>');
+    $('#select_'+package_name).attr('disabled',true);
     $.ajax({
           method: 'POST',
           dataType: 'json', 
           url: 'update_subscription', 
-          data: {'package_name' : $package_name,"_token": "{{ csrf_token() }}"}, 
+          data: {'package_name' : package_name,"_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
-            // $('#select_'+$package_name).html('Select');
-            // $('#select_'+$package_name).attr('disabled',false);
-            // $("#success_modal_message").html('Subscription Updated. Please Revisit in 5 Minutes For Changes To Take Effect');
-            // $("#success_modal").modal();
             location.relaod();
             console.log(response);
 
           },
           error: function(jqXHR, textStatus, errorThrown) {
-
+              $('#select_'+package_name).html('Select');
+              $('#select_'+package_name).attr('disabled',false);
               console.log(jqXHR);
               
           }
