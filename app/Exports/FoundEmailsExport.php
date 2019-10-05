@@ -43,9 +43,11 @@ class FoundEmailsExport implements FromCollection, WithHeadings, ShouldAutoSize,
     {
         return [
             AfterSheet::class    => function(AfterSheet $event) {
+                $sheet=$event->sheet;
                 $cellRange = 'A1:Z1'; // All headers
-                $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(14);
-                $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold(true);
+                $sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(14);
+                $sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold(true);
+                
             },
         ];
     }

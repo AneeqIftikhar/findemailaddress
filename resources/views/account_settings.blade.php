@@ -69,11 +69,11 @@
 					    <h5 class="card-title">Change Password</h5>
 						   
 		                    <div class="input-group mb-2 mt-2">
-							  <input type="text" class="form-control" placeholder="New Password" aria-label="New Password" aria-describedby="basic-addon2" id="password">
+							  <input type="password" class="form-control" placeholder="New Password" aria-label="New Password" aria-describedby="basic-addon2" id="password">
 							  
 							</div>
 							<div class="input-group mb-2 mt-2">
-							  <input type="text" class="form-control" placeholder="Confirm Password" aria-label="Confirm Password" aria-describedby="basic-addon2" id="c_password">
+							  <input type="password" class="form-control" placeholder="Confirm Password" aria-label="Confirm Password" aria-describedby="basic-addon2" id="c_password">
 							  
 							</div>
 							<span class="invalid-feedback-custom">
@@ -83,7 +83,7 @@
                                 <strong id="password_success"></strong>
                             </span>
 							<div class="input-group">
-							    <button class="btn btn-primary" type="button" onclick="update_password()">Update Password</button>
+							    <button class="btn btn-primary" id="change_password_button" type="button" onclick="update_password()">Update Password</button>
 							</div>
 					    
 					  </div>
@@ -213,6 +213,7 @@ function update_password()
     }
     else
     {
+        $('#change_password_button').html('<i class="fa fa-spinner fa-spin"></i>');
     	$.ajax({
         method: 'POST',
         dataType: 'json', 
@@ -235,12 +236,14 @@ function update_password()
                     data: {"_token": "{{ csrf_token() }}"}, 
                     success: function()
                     {
+                        $('#change_password_button').html('Update Password');
                         location.reload();
                     }
                 });
             }
             else
             {
+                $('#change_password_button').html('Update Password');
             	document.getElementById('password_error').innerHTML=response['message'];
             }
 
