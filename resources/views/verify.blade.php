@@ -75,6 +75,9 @@ $( document ).ready(function() {
           
         }
     });
+    $('body').tooltip({
+        selector: '.tooltip_container'
+    });
 });
 function populate_emails()
 {
@@ -99,23 +102,31 @@ function populate_emails()
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(1);
-          newText  = document.createTextNode(data[i]['server_status']);
-          
-          newCell.style.fontWeight="bold";
           newCell.style.border="0px";
+          container = document.createElement("span");
+          newText  = document.createTextNode(data[i]['server_status']);
+          container.appendChild(newText);
+          container.style.fontWeight="bold";
           if(data[i]['server_status']=="Valid")
           {
-            newCell.style.color = "green";
+            container.style.color = "green";
           }
           else if (data[i]['server_status']=="Catch All")
           {
-            newCell.style.color = "orange";
+            container.style.color = "orange";
           }
           else
           {
-            newCell.style.color = "red";
+            container.style.color = "red";
+            if(data[i]['server_status']=="No Mailbox")
+            {
+                container.setAttribute('data-toggle', 'tooltip');
+                container.setAttribute('data-placement', 'bottom');
+                container.setAttribute('data-html', 'true');
+                container.setAttribute('title', 'This domain does not have a mail server setup');
+            }
           }
-          newCell.appendChild(newText);
+          newCell.appendChild(container);
 
           newCell  = newRow.insertCell(2);
           newCell.style.border="0px";
@@ -127,20 +138,37 @@ function populate_emails()
           if(data[i]['status']=="Valid")
           {
             newRow.style.border= "1px solid var(--main-bg-color)";
-            //newRow.style.background="rgba(0,255,0,0.2)";
             container.style.color = "green";
           }
           else if (data[i]['status']=="Catch All")
           {
             newRow.style.border= "1px solid var(--main-bg-color)";
-            //newRow.style.background="rgba(255,165,0,0.2)";
             container.style.color = "orange";
+            container.setAttribute('data-toggle', 'tooltip');
+            container.setAttribute('data-placement', 'bottom');
+            container.setAttribute('data-html', 'true');
+            container.setAttribute('title', 'Catch All will catch emails sent to any email address under this domain');
+          }
+          else if (data[i]['status']=="Risky")
+          {
+            newRow.style.border= "1px solid var(--main-bg-color)";
+            container.style.color = "orange";
+            container.setAttribute('data-toggle', 'tooltip');
+            container.setAttribute('data-placement', 'bottom');
+            container.setAttribute('data-html', 'true');
+            container.setAttribute('title', 'Email appears to be valid but you might not be authorised to send email to this domain');
           }
           else
           {
             newRow.style.border= "1px solid var(--main-bg-color)";
-            //newRow.style.background="rgba(255,0,0,0.2)";
             container.style.color = "red";
+            if(data[i]['status']=="No Mailbox")
+            {
+                container.setAttribute('data-toggle', 'tooltip');
+                container.setAttribute('data-placement', 'bottom');
+                container.setAttribute('data-html', 'true');
+                container.setAttribute('title', 'This domain does not have a mail server setup');
+            }
           }
           
 
@@ -177,11 +205,6 @@ function verify_email_ajax()
     {
         document.getElementById("email-field").value="";
         var tableRef = document.getElementById('activity_verify_email_table').getElementsByTagName('tbody')[0];
-        // if(tableRef.rows.length>=4)
-        // {
-        //     tableRef.deleteRow(tableRef.rows.length-1);
-        //     tableRef.deleteRow(tableRef.rows.length-1);
-        // }
         var newRow   = tableRef.insertRow(0);
         newCell  = newRow.insertCell(0);
         newCell.style.padding="3px";
@@ -215,53 +238,69 @@ function verify_email_ajax()
             data: {'email' : email,"_token": "{{ csrf_token() }}"}, 
             success: function(response){ // What to do if we succeed
 
-                console.log(response);
+                
                 if(response['server_status']=="Valid")
                 {
                     newRow.style.border= "1px solid var(--main-bg-color)";
-                    //newRow.style.background="rgba(0,255,0,0.2)";
                     newRow.cells[1].innerHTML='<div style="font-weight:bold;color:green">'+response['server_status']+'</div>';
                 }
                 else if(response['server_status']=="Catch All")
                 {
                     newRow.style.border= "1px solid var(--main-bg-color)";
-                    //newRow.style.background="rgba(255,165,0,0.2)";
                     newRow.cells[1].innerHTML='<div style="font-weight:bold;color:orange">'+response['server_status']+'</div>';
                 }
                 else
                 {
                     newRow.style.border= "1px solid var(--main-bg-color)";
-                    //newRow.style.background="rgba(255,0,0,0.2)";
-                    newRow.cells[1].innerHTML='<div style="font-weight:bold;color:red">'+response['server_status']+'</div>';
+                    if(response['server_status']=="No Mailbox")
+                    {
+                      newRow.cells[1].innerHTML='<div class="tooltip_container" data-toggle="tooltip" data-placement="top" data-html="true" title="" data-original-title="This domain does not have a mail server setup" style="font-weight:bold;color:red">'+response['server_status']+'</div>';
+                    }
+                    
+
+                    
                 }
+                var container = document.createElement("div");
+                container.className="tooltip_container";
+                var text = document.createTextNode(response['email_status']);
+                newRow.deleteCell(2);
+                var newCell  = newRow.insertCell(2);
+                newCell.style.border="0px";
+                
+                container.appendChild(text);
+                container.style.fontWeight="bold";
                 if(response['email_status']=="Valid")
                 {
                     newRow.style.border= "1px solid var(--main-bg-color)";
-                    //newRow.style.background="rgba(0,255,0,0.2)";
-                    newRow.cells[2].innerHTML='<div style="font-weight:bold;color:green">'+response['email_status']+'</div>';
+                    container.style.color = "green";
 
                 }
                 else if(response['email_status']=="Catch All")
                 {
                     newRow.style.border= "1px solid var(--main-bg-color)";
-                    //newRow.style.background="rgba(255,165,0,0.2)";
-                    newRow.cells[2].innerHTML='<div style="font-weight:bold;color:orange">'+response['email_status']+'</div>';
+
+                    container.style.color = "orange";
+                    container.setAttribute('data-toggle', 'tooltip');
+                    container.setAttribute('data-placement', 'top');
+                    container.setAttribute('data-html', 'true');
+                    container.setAttribute('title', 'This will catch emails sent to any email address under this domain');
+                }
+                else if(response['email_status']=="Risky")
+                {
+                    newRow.style.border= "1px solid var(--main-bg-color)";
+                    container.style.color = "orange";
+                    container.setAttribute('data-toggle', 'tooltip');
+                    container.setAttribute('data-placement', 'top');
+                    container.setAttribute('data-html', 'true');
+                    container.setAttribute('title', 'Email appears to be valid but you might not be authorised to send email to this domain');
                 }
                 else
                 {
                     newRow.style.border= "1px solid var(--main-bg-color)";
-                    //newRow.style.background="rgba(255,0,0,0.2)";
-                    newRow.cells[2].innerHTML='<div style="font-weight:bold;color:red">'+response['email_status']+'</div>';
+                    container.style.color = "red";
                 }
+                newCell.appendChild(container);
                 document.getElementById('credits_left_span').innerHTML=response['credits_left'];
-                // document.getElementById('verify_format').style.color = 'green';
-                // document.getElementById('verify_format').innerHTML="Valid";
-                // document.getElementById('verify_status').innerHTML=response['server_status'];
-                // document.getElementById('verify_email_status').innerHTML=response['email_status'];
-                // $('#verify_response').css('display','block');
-                // $('#verify_help_text').css('display','none');
-                // $('#verify_email_button').html('Verify');
-                // $('#verify_email_button').attr('disabled',false);
 
                 
 
@@ -280,7 +319,7 @@ function verify_email_ajax()
                         else
                         {
                             
-                              document.getElementById('email_error').innerHTML="You cannot search for emails at personal domains. Please provide a company domain.";
+                          document.getElementById('email_error').innerHTML="You cannot search for emails at personal domains. Please provide a company domain.";
                         }
                        
                        
@@ -309,13 +348,11 @@ function verify_email_ajax()
                 }
                 else
                 {
-                    // document.getElementsByClassName("email-verifier-result-container")[0].innerHTML="Something Went Wrong";
                     newRow.cells[2].innerHTML='<div style="color:red">'+"-"+'</div>';
                     newRow.cells[1].innerHTML='<div style="color:red">'+"-"+'</div>';
                     console.log(jqXHR);
                 }
-                // $('#verify_email_button').html('Verify');
-                // $('#verify_email_button').attr('disabled',false);
+
             },
             timeout: 60000
         });

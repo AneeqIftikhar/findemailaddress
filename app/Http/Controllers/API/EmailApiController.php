@@ -31,7 +31,7 @@ class EmailApiController extends Controller
 			}
 			$first_name=strtolower(Functions::removeAccents($request->first_name));
         	$last_name=strtolower(Functions::removeAccents($request->last_name));
-        	$domain=strtolower(Functions::removeAccentsDomain($request->domain));
+        	$domain=Functions::get_domain(strtolower(Functions::removeAccentsDomain($request->domain)));
 
 			$server_output = $server_output=CurlRequest::find_email($first_name,$last_name,$domain);
 

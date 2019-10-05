@@ -78,6 +78,7 @@
 @endsection
 @push('scripts')
 <script type="text/javascript">
+
     var request_counter=0;
     document.cookie = "is_logged_in=true";
 $( document ).ready(function() {
@@ -100,6 +101,9 @@ $( document ).ready(function() {
         	$("#find_email_button").click();
             
         }
+    });
+    $('body').tooltip({
+        selector: '.tooltip_container'
     });
 });
 function populate_emails()
@@ -147,30 +151,36 @@ function populate_emails()
           if(data[i]['status']=="Valid" || data[i]['status']=="Multiple Emails")
           {
             newRow.style.border= "1px solid var(--main-bg-color)";
-            //newRow.style.background="rgba(0,255,0,0.2)";
             container.style.color = "green";
           }
           else if (data[i]['status']=="Catch All")
           {
             newRow.style.border= "1px solid var(--main-bg-color)";
-            //newRow.style.background="rgba(255,165,0,0.2)";
             container.style.color = "orange";
             container.setAttribute('data-toggle', 'tooltip');
             container.setAttribute('data-placement', 'bottom');
             container.setAttribute('data-html', 'true');
-            container.setAttribute('title', 'Catch All status means this domain will catch any email sent to a non-existent email address.');
+            container.setAttribute('title', 'This will catch emails sent to any email address under this domain');
+          }
+          else if (data[i]['status']=="Risky")
+          {
+            newRow.style.border= "1px solid var(--main-bg-color)";
+            container.style.color = "orange";
+            container.setAttribute('data-toggle', 'tooltip');
+            container.setAttribute('data-placement', 'bottom');
+            container.setAttribute('data-html', 'true');
+            container.setAttribute('title', 'Email appears to be valid but you might not be authorised to send email to this domain');
           }
           else
           {
             newRow.style.border= "1px solid var(--main-bg-color)";
-            //newRow.style.background="rgba(255,0,0,0.2)";
             container.style.color = "red";
             if(data[i]['status']=="No Mailbox")
             {
                 container.setAttribute('data-toggle', 'tooltip');
                 container.setAttribute('data-placement', 'bottom');
                 container.setAttribute('data-html', 'true');
-                container.setAttribute('title', 'No Mailbox status means this domain does not have a mail server setup');
+                container.setAttribute('title', 'This domain does not have a mail server setup');
             }
           }
           
@@ -288,24 +298,68 @@ function find_email_ajax()
 
                     if('status' in response && 'emails' in response)
                     {
+                        
+                        var container = document.createElement("div");
+                        container.className="tooltip_container";
+                        var text = document.createTextNode(response['status']);
+                        newRow.deleteCell(2);
+                        var newCell  = newRow.insertCell(2);
+                        newCell.style.border="0px";
+                        
+                        container.appendChild(text);
+                        container.style.fontWeight="bold";
                         if(response['status']=="Valid" || response['status']=="Multiple Emails")
                         {   
                             newRow.style.border= "1px solid var(--main-bg-color)";
-                            //newRow.style.background="rgba(0,255,0,0.2)";
-                            newRow.cells[2].innerHTML='<div style="font-weight:bold; color:green">Valid</div>';
+                            container.style.color = "green";
+
                         }
                         else if(response['status']=="Catch All")
                         {
                             newRow.style.border= "1px solid var(--main-bg-color)";
                             //newRow.style.background="rgba(255,165,0,0.2)";
-                            newRow.cells[2].innerHTML='<div style=" font-weight:bold; color:orange">'+response['status']+'</div>';
+                            // newRow.cells[2].innerHTML='<div style="font-weight: bold; color: orange;">'+response['status']+'</div>';
+
+                            container.style.color = "orange";
+                            container.setAttribute('data-toggle', 'tooltip');
+                            container.setAttribute('data-placement', 'top');
+                            container.setAttribute('data-html', 'true');
+                            container.setAttribute('title', 'This will catch emails sent to any email address under this domain');
+
+                            
+
+
+                        }
+                        else if(response['status']=="Risky")
+                        {
+                            newRow.style.border= "1px solid var(--main-bg-color)";
+                            //newRow.style.background="rgba(255,165,0,0.2)";
+ 
+
+                            container.style.color = "orange";
+                            container.setAttribute('data-toggle', 'tooltip');
+                            container.setAttribute('data-placement', 'top');
+                            container.setAttribute('data-html', 'true');
+                            container.setAttribute('title', 'Email appears to be valid but you might not be authorised to send email to this domain');
+
                         }
                         else
                         {
                             newRow.style.border= "1px solid var(--main-bg-color)";
                             //newRow.style.background="rgba(255,0,0,0.1)";
-                            newRow.cells[2].innerHTML='<div style="font-weight:bold; color:red">'+response['status']+'</div>';
+                            container.style.color = "red";
+                            if(response['status']=="No Mailbox")
+                            {
+
+                                container.setAttribute('data-toggle', 'tooltip');
+                                container.setAttribute('data-placement', 'bottom');
+                                container.setAttribute('data-html', 'true');
+                                container.setAttribute('title', 'This domain does not have a mail server setup');
+                            }
+
+
                         }
+                        newCell.appendChild(container);
                         if(response['emails']=='' || response['emails']==null || response['emails']==undefined)
                         {
                         }
@@ -315,9 +369,12 @@ function find_email_ajax()
                         }
                         document.getElementById('credits_left_span').innerHTML=response['credits_left'];
                         
+
+                        
                     }
                     document.getElementById("find_email_button").disabled = false;
                     request_counter--;
+
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     
