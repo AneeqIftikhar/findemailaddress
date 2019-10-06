@@ -58,8 +58,9 @@ class RegisterController extends Controller
 
         
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users',new BlackListDomains],
+            'firstname' => ['required', 'string', 'max:100'],
+            'lastname' => ['required', 'string', 'max:100'],
+            'email' => ['required', 'string', 'email', 'max:155', 'unique:users',new BlackListDomains],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'company_name' => ['string', 'max:100','nullable'],
             'phone' => ['string', 'max:100','nullable']]
@@ -83,6 +84,7 @@ class RegisterController extends Controller
             $data['credits']=$free_package->credits;
             $data['user_uuid'] = Uuid::uuid4();
             $data['package_id'] = $free_package->id;
+            $data['name'] = $data['firstname'].' '.$data['lastname'];
             $user = new User($data);
             $user->save();
             $FastSpringApi=new FastSpringApi();

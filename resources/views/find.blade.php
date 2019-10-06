@@ -152,6 +152,10 @@ function populate_emails()
           {
             newRow.style.border= "1px solid var(--main-bg-color)";
             container.style.color = "green";
+            container.setAttribute('data-toggle', 'tooltip');
+            container.setAttribute('data-placement', 'right');
+            container.setAttribute('data-html', 'true');
+            container.setAttribute('title', 'This is a valid email');
           }
           else if (data[i]['status']=="Catch All")
           {
@@ -181,6 +185,13 @@ function populate_emails()
                 container.setAttribute('data-placement', 'bottom');
                 container.setAttribute('data-html', 'true');
                 container.setAttribute('title', 'This domain does not have a mail server setup');
+            }
+            else
+            {
+                container.setAttribute('data-toggle', 'tooltip');
+                container.setAttribute('data-placement', 'bottom');
+                container.setAttribute('data-html', 'true');
+                container.setAttribute('title', 'No valid email found');
             }
           }
           
@@ -286,14 +297,6 @@ function find_email_ajax()
                 data: {'first_name' : first_name,'last_name':last_name,'domain':domain,"_token": "{{ csrf_token() }}"}, 
                 success: function(response){ // What to do if we succeed
                     console.log(response);
-                    // document.getElementById('email-verifier-result-container').innerHTML=" ";
-                    // document.getElementById('email-verifier-result-container').innerHTML="Proxy: "+response['proxy'];
-                    // document.getElementById('email-verifier-result-container').innerHTML+="<br>";
-                    // for (var i = 0; i<response['logs'].length;i++)
-                    // {
-                    //     document.getElementById('email-verifier-result-container').innerHTML+=response['logs'][i]+"<br>";
-                    // }
-                    
                     
 
                     if('status' in response && 'emails' in response)
@@ -312,6 +315,11 @@ function find_email_ajax()
                         {   
                             newRow.style.border= "1px solid var(--main-bg-color)";
                             container.style.color = "green";
+
+                            container.setAttribute('data-toggle', 'tooltip');
+                            container.setAttribute('data-placement', 'right');
+                            container.setAttribute('data-html', 'true');
+                            container.setAttribute('title', 'Valid email found');
 
                         }
                         else if(response['status']=="Catch All")
@@ -355,6 +363,13 @@ function find_email_ajax()
                                 container.setAttribute('data-placement', 'bottom');
                                 container.setAttribute('data-html', 'true');
                                 container.setAttribute('title', 'This domain does not have a mail server setup');
+                            }
+                            else
+                            {
+                                container.setAttribute('data-toggle', 'tooltip');
+                                container.setAttribute('data-placement', 'bottom');
+                                container.setAttribute('data-html', 'true');
+                                container.setAttribute('title', 'No valid email found');
                             }
 
 

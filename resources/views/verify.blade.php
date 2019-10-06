@@ -110,6 +110,10 @@ function populate_emails()
           if(data[i]['server_status']=="Valid")
           {
             container.style.color = "green";
+            container.setAttribute('data-toggle', 'tooltip');
+            container.setAttribute('data-placement', 'bottom');
+            container.setAttribute('data-html', 'true');
+            container.setAttribute('title', 'Valid mail server');
           }
           else if (data[i]['server_status']=="Catch All")
           {
@@ -139,6 +143,10 @@ function populate_emails()
           {
             newRow.style.border= "1px solid var(--main-bg-color)";
             container.style.color = "green";
+            container.setAttribute('data-toggle', 'tooltip');
+            container.setAttribute('data-placement', 'right');
+            container.setAttribute('data-html', 'true');
+            container.setAttribute('title', 'This is a valid email');
           }
           else if (data[i]['status']=="Catch All")
           {
@@ -168,6 +176,13 @@ function populate_emails()
                 container.setAttribute('data-placement', 'bottom');
                 container.setAttribute('data-html', 'true');
                 container.setAttribute('title', 'This domain does not have a mail server setup');
+            }
+            else
+            {
+              container.setAttribute('data-toggle', 'tooltip');
+              container.setAttribute('data-placement', 'right');
+              container.setAttribute('data-html', 'true');
+              container.setAttribute('title', 'Email is Invalid');
             }
           }
           
@@ -242,7 +257,7 @@ function verify_email_ajax()
                 if(response['server_status']=="Valid")
                 {
                     newRow.style.border= "1px solid var(--main-bg-color)";
-                    newRow.cells[1].innerHTML='<div style="font-weight:bold;color:green">'+response['server_status']+'</div>';
+                    newRow.cells[1].innerHTML='<div class="tooltip_container" data-toggle="tooltip" data-placement="top" data-html="true" title="" data-original-title="Valid mail server" style="font-weight:bold;color:green">'+response['server_status']+'</div>';
                 }
                 else if(response['server_status']=="Catch All")
                 {
@@ -273,6 +288,10 @@ function verify_email_ajax()
                 {
                     newRow.style.border= "1px solid var(--main-bg-color)";
                     container.style.color = "green";
+                    container.setAttribute('data-toggle', 'tooltip');
+                    container.setAttribute('data-placement', 'right');
+                    container.setAttribute('data-html', 'true');
+                    container.setAttribute('title', 'This is a valid email');
 
                 }
                 else if(response['email_status']=="Catch All")
@@ -298,6 +317,10 @@ function verify_email_ajax()
                 {
                     newRow.style.border= "1px solid var(--main-bg-color)";
                     container.style.color = "red";
+                    container.setAttribute('data-toggle', 'tooltip');
+                    container.setAttribute('data-placement', 'bottom');
+                    container.setAttribute('data-html', 'true');
+                    container.setAttribute('title', 'Email is Invalid');
                 }
                 newCell.appendChild(container);
                 document.getElementById('credits_left_span').innerHTML=response['credits_left'];

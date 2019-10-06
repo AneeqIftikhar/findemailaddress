@@ -44,11 +44,11 @@
 							  
 							</div>
 							<div class="input-group mb-2 mt-2">
-							  <input type="text" class="form-control" id="phone" placeholder="Phone" aria-label="Phone" aria-describedby="basic-addon2" value="{{ Auth::user()->phone }}">
+							  <input type="text" class="form-control" id="phone" placeholder="Phone" aria-label="Phone" aria-describedby="Phone" value="{{ Auth::user()->phone }}">
 							  
 							</div>
 							<div class="input-group mb-2 mt-2">
-							  <input type="text" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon2" value="{{ Auth::user()->email }}" disabled>
+							  <input type="text" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="Email" value="{{ Auth::user()->email }}" disabled>
 							</div>
 							<span class="invalid-feedback-custom">
                                 <strong id="personal_error"></strong>
