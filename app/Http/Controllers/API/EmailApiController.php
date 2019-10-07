@@ -59,10 +59,18 @@ class EmailApiController extends Controller
 				      {
 				         $status="No Mailbox";
 				      }
-				      if($json_output[0]->status=='Catch All')
+				      if($json_output[0]->status==null || $json_output[0]->status=='')
+		              {
+		                $status="Not Found";
+		              }
+				      else if($json_output[0]->status=='Catch All')
 				      {
 				         $email=strtolower($first_name).'@'.strtolower($domain);
 				      }
+				      else if($json_output[0]->status=='Risky')
+		              {
+		                $email=$json_output[0]->email;
+		              }
 
 				   }
 				   else

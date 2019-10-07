@@ -141,13 +141,17 @@ class EmailController extends Controller
               {
                 $email=$first_name.'@'.$domain;
               }
-
-            }
-              else
+              else if($json_output[0]->status=='Risky')
               {
                 $email=$json_output[0]->email;
-                $user->decrement('credits');
               }
+
+            }
+            else
+            {
+              $email=$json_output[0]->email;
+              $user->decrement('credits');
+            }
              
           } 
         }
