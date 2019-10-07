@@ -25,7 +25,7 @@ class VerificationController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/find';
+    protected $redirectTo = '/upgrade_account';
 
     /**
      * Create a new controller instance.

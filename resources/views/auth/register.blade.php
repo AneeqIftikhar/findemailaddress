@@ -14,7 +14,7 @@
                         @csrf
 
                         <div class="form-group row">
-                            <label for="firstname" class="col-md-4 col-form-label text-md-right">{{ __('Firstname') }}<i class="asteric fas fa-asterisk"></i></label>
+                            <label for="firstname" class="col-md-4 col-form-label text-md-right">{{ __('First Name') }}<i class="asteric fas fa-asterisk"></i></label>
 
                             <div class="col-md-6">
                                 <input id="firstname" type="text" class="form-control @error('firstname') is-invalid @enderror" name="firstname" value="{{ old('firstname') }}" required autocomplete="firstname" autofocus>
@@ -28,7 +28,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="lastname" class="col-md-4 col-form-label text-md-right">{{ __('Lastname') }}<i class="asteric fas fa-asterisk"></i></label>
+                            <label for="lastname" class="col-md-4 col-form-label text-md-right">{{ __('Last Name') }}<i class="asteric fas fa-asterisk"></i></label>
 
                             <div class="col-md-6">
                                 <input id="lastname" type="text" class="form-control @error('lastname') is-invalid @enderror" name="lastname" value="{{ old('lastname') }}" required autocomplete="lastname" autofocus>

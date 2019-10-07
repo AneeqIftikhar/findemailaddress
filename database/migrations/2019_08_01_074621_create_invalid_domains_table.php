@@ -58,7 +58,10 @@ class CreateInvalidDomainsTable extends Migration
             array('domain'=>'smart-email.me'),
             array('domain'=>'lalala.fun'),
             array('domain'=>'yevme.com'),
-            array('domain'=>'maildrop.cc'),    
+            array('domain'=>'maildrop.cc'),
+            array('domain'=>'inappmail.com'),
+            array('domain'=>'app-mailer.com'), 
+ 
         );
         DB::table('invalid_domains')->insert($data);
     }
