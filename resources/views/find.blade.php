@@ -296,7 +296,7 @@ function find_email_ajax()
                 url: 'find_email', 
                 data: {'first_name' : first_name,'last_name':last_name,'domain':domain,"_token": "{{ csrf_token() }}"}, 
                 success: function(response){ // What to do if we succeed
-                    console.log(response);
+                    // console.log(response);
                     
 
                     if('status' in response && 'emails' in response)
@@ -421,7 +421,7 @@ function find_email_ajax()
                     }
                     else if( jqXHR.status === 419 )
                     {
-                        console.log(jqXHR);
+                        // console.log(jqXHR);
                         // if(jqXHR.statusText=="unknown status")
                         // {
                         //     document.getElementById('find_error').innerHTML="Login Again";
@@ -450,7 +450,7 @@ function find_email_ajax()
                     }
                     else
                     {
-                        console.log(jqXHR);
+                        // console.log(jqXHR);
                         if(jqXHR.statusText=="timeout")
                         {
                             newRow.cells[2].innerHTML='<div style="color:red">Request Time Out</div>';

@@ -186,12 +186,12 @@
             data: {"_token": "{{ csrf_token() }}"}, 
             success: function(response){ 
               location.reload();
-              console.log(response);
+              // console.log(response);
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
 
-                console.log(jqXHR);
+                // console.log(jqXHR);
                 
             }
         });
@@ -217,14 +217,14 @@
           data: {'package_name' : package_name,"_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
             location.reload();
-            console.log(response);
+            // console.log(response);
 
           },
           error: function(error) {
               $('#uncancel_'+package_name).html('Reactivate');
               $('#uncancel_'+package_name).attr('disabled',false);
               alert("Something Went Wrong");
-              console.log(error);
+              // console.log(error);
               
           }
       });
@@ -251,13 +251,13 @@
           data: {'package_name' : package_name,"_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
             location.reload();
-            console.log(response);
+            // console.log(response);
 
           },
           error: function(jqXHR, textStatus, errorThrown) {
               $('#select_'+package_name).html('Select');
               $('#select_'+package_name).attr('disabled',false);
-              console.log(jqXHR);
+              // console.log(jqXHR);
               
           }
       });
@@ -272,7 +272,7 @@
           url: 'get_fastspring_session', 
           data: {'package_name' : $package_name,"_token": "{{ csrf_token() }}"}, 
           success: function(response){ 
-            console.log(response);
+            // console.log(response);
             $('#buy_'+$package_name).html('Buy Now!');
             $('#buy_'+$package_name).attr('disabled',false);
             fastspring.builder.checkout(response['id']);
@@ -280,7 +280,7 @@
           error: function(jqXHR, textStatus, errorThrown) {
               $('#buy1').html('Buy Now!');
               $('#buy1').attr('disabled',false);
-              console.log(jqXHR);
+              // console.log(jqXHR);
 
               
           }
@@ -299,7 +299,7 @@ function onFSPopupClosed(orderReference)
   } 
   else 
   {
-    console.log("no order ID");
+    // console.log("no order ID");
   }
 }
 

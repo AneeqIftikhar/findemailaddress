@@ -149,8 +149,8 @@ function update_personal_info()
             data: data, 
             success: function(response){ // What to do if we succeed
                 
-                console.log(response['status']);
-                console.log(response['message']);
+                // console.log(response['status']);
+                // console.log(response['message']);
                 localStorage.setItem("status","Success");
                 localStorage.setItem("message",response['message']);
                 window.location.reload();
@@ -219,8 +219,8 @@ function update_password()
         data: {'password' : password,"_token": "{{ csrf_token() }}"}, 
         success: function(response){ // What to do if we succeed
             
-            console.log(response['status']);
-            console.log(response['message']);
+            // console.log(response['status']);
+            // console.log(response['message']);
             if(response['status'] && response['status']=='success')
             {
                 localStorage.setItem("status","Success");

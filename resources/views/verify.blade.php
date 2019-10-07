@@ -354,7 +354,7 @@ function verify_email_ajax()
                 }
                 else if( jqXHR.status === 419 )
                 {
-                    console.log(jqXHR);
+                    // console.log(jqXHR);
 
                     $("#login_again").modal()
                     document.getElementById("verify_email_button").disabled = false;
@@ -373,7 +373,7 @@ function verify_email_ajax()
                 {
                     newRow.cells[2].innerHTML='<div style="color:red">'+"-"+'</div>';
                     newRow.cells[1].innerHTML='<div style="color:red">'+"-"+'</div>';
-                    console.log(jqXHR);
+                    // console.log(jqXHR);
                 }
 
             },
