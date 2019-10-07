@@ -154,7 +154,7 @@ class EmailController extends Controller
 
         Emails::insert_email($first_name,$last_name,$domain,$email,$status,$user->id,$type,$server_output,$server_status);
 
-        return json_encode(array('status'=>$status,'emails'=>$email,'logs'=>$json_output,'credits_left'=>$user->credits,'error'=>$error));
+        return json_encode(array('status'=>$status,'emails'=>$email,'credits_left'=>$user->credits,'error'=>$error));
       }
       else
       {
@@ -227,7 +227,7 @@ class EmailController extends Controller
 
             Emails::insert_email($first_name,$last_name,$domain,$email,$email_status,$user->id,$type,$server_output,$server_status);
 
-      			return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status,'logs'=>$json_output,'credits_left'=>$user->credits,'error'=>$error));
+      			return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status,'credits_left'=>$user->credits,'error'=>$error));
           }
           else
           {

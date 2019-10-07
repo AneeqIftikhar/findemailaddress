@@ -72,7 +72,7 @@ class EmailApiController extends Controller
 				   
 				} 
 			}
-			return json_encode(array('status'=>$status,'emails'=>$email,'logs'=>$json_output[0],'error'=>$error));
+			return json_encode(array('status'=>$status,'emails'=>$email,'error'=>$error));
 
 		}
 		catch(Exception $e)
