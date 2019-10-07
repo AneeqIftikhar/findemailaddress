@@ -377,7 +377,7 @@ function verify_email_ajax()
                 }
 
             },
-            timeout: 60000
+            timeout: 100000
         });
     }
     

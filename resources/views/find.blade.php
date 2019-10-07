@@ -460,7 +460,7 @@ function find_email_ajax()
                         request_counter--;
                     }
                 },
-                timeout: 600000 // sets timeout to 60 seconds
+                timeout: 180000 // sets timeout to 60 seconds
             });
         }
 
