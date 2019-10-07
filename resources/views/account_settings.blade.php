@@ -44,11 +44,11 @@
 							  
 							</div>
 							<div class="input-group mb-2 mt-2">
-							  <input type="text" class="form-control" id="phone" placeholder="Phone" aria-label="Phone" aria-describedby="Phone" value="{{ Auth::user()->phone }}">
+							  <input type="text" class="form-control" autocomplete="phone" id="phone" placeholder="Phone" aria-label="Phone" aria-describedby="basic-addon2" value="{{ Auth::user()->phone }}">
 							  
 							</div>
 							<div class="input-group mb-2 mt-2">
-							  <input type="text" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="Email" value="{{ Auth::user()->email }}" disabled>
+							  <input type="text" class="form-control" id="email" placeholder="Email" aria-label="Email" aria-describedby="Email" value="{{ Auth::user()->email }}" disabled>
 							</div>
 							<span class="invalid-feedback-custom">
                                 <strong id="personal_error"></strong>
@@ -69,7 +69,7 @@
 					    <h5 class="card-title">Change Password</h5>
 						   
 		                    <div class="input-group mb-2 mt-2">
-							  <input type="password" class="form-control" placeholder="New Password" aria-label="New Password" aria-describedby="basic-addon2" id="password">
+							  <input type="password" class="form-control" autocomplete="new-password" placeholder="New Password" aria-label="New Password" aria-describedby="basic-addon2" id="password">
 							  
 							</div>
 							<div class="input-group mb-2 mt-2">
@@ -142,7 +142,6 @@ function update_personal_info()
             data['phone']=phone;
         }
         data['_token']="{{ csrf_token() }}";
-        //var post_data=JSON.parse('{ "full_name":"John ALi", "age":30, "_token":"{{ csrf_token() }}"}');
         $.ajax({
             method: 'POST',
             dataType: 'json', 
@@ -152,7 +151,6 @@ function update_personal_info()
                 
                 console.log(response['status']);
                 console.log(response['message']);
-                //document.getElementById('personal_success').innerHTML=;
                 localStorage.setItem("status","Success");
                 localStorage.setItem("message",response['message']);
                 window.location.reload();

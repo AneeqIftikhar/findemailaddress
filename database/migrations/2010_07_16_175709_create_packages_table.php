@@ -32,21 +32,21 @@ class CreatePackagesTable extends Migration
             ),
             array(
                 'name' => "basic",
-                'amount' => 29,
+                'amount' => 29.99,
                 'credits'=>1000,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ),
             array(
                 'name' => "extended",
-                'amount' => 49,
+                'amount' => 49.99,
                 'credits'=>2500,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ),
             array(
                 'name' => "corporate",
-                'amount' => 99,
+                'amount' => 99.99,
                 'credits'=>10000,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')

@@ -60,7 +60,7 @@
             </ul>
 
             @if (Auth::user()->package->name=="free" && $data['pending_status']=="")
-              <button href="#buy" id="buy_basic" onClick="buy('test-payment')" class="btn btn-block btn-primary text-uppercase">Buy Now!</button>
+              <button href="#buy" id="buy_basic" onClick="buy('basic')" class="btn btn-block btn-primary text-uppercase">Buy Now!</button>
             @elseif(Auth::user()->package->name=="free" && $data['current_pending_package']=="basic" && $data['pending_is_active']==0)
               <button href="#" id="uncancel_basic" onClick="uncancel('basic')" class="btn btn-block btn-primary text-uppercase">Reactivate</button>
             @elseif(Auth::user()->package->name=="basic")
