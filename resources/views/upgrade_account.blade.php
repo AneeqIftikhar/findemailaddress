@@ -160,9 +160,7 @@
         src="https://d1f8f9xcsvx3ha.cloudfront.net/sbl/0.8.1/fastspring-builder.min.js"
         type="text/javascript"
         data-popup-closed="onFSPopupClosed"
-        data-storefront="devrec.test.onfastspring.com/popup-devrec">
-        
-        // data-storefront="devrec.onfastspring.com/popup-devrec">
+        data-storefront="devrec.onfastspring.com/popup-devrec">
 
 </script>
 <script type="text/javascript">

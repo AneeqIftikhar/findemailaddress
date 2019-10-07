@@ -14,182 +14,145 @@ class WebhookController extends Controller
 {
     public function webhook(Request $request)
     {
-    
-        $json_dump=$request->getContent();	
-        $response=json_decode($json_dump,true);
+        $signature = $request->header('X-FS-Signature');
+        $json_dump=$request->getContent();
+        $s = base64_encode(hash_hmac('sha256', $json_dump, env('FASTSPRING_WEBHOOK_HMAC_SECRET','12345678'), true));
+        if($s==$signature)
+        {   
+            $response=json_decode($json_dump,true);
 
-        if($response)
-        {
-            if($response['events'])
+            if($response)
             {
-                foreach ($response['events'] as $key => $event) 
+                if($response['events'])
                 {
-                    if($event['type']=="subscription.activated")
+                    foreach ($response['events'] as $key => $event) 
                     {
-                        $user=User::where('payment_user_reference',$event['data']['account'])->first();
-                        $subscription_id=$event['data']['subscription'];
-
-                        $Webhook=new Webhooks();
-                        $Webhook->webhook_dump=$json_dump;
-                        $Webhook->user_id=$user->id;
-                        $Webhook->save();
-
-                        $product_name=$event['data']['product'];
-                        $package=Package::where('name',$product_name)->first();
-
-                        $user->package_id=$package->id;
-                        $user->subscription_id=$subscription_id;
-                        $user->credits=$package->credits;
-                        $user->save();
-
-                        $user_package_log = new UserPackagesLogs;
-                        $user_package_log->package()->associate($package);
-                        $user_package_log->user()->associate($user);
-                        $user_package_log->save();
-                    }
-                    else if($event['type']=="subscription.updated")
-                    {
-                        // $user=User::where('payment_user_reference',$event['data']['account'])->first();
-                        // $product_name=$event['data']['product'];
-                        // $package=Package::where('name',$product_name)->first();
-
-                        // // if($user->package->amount>$package->amount)
-                        // // {
-                        // //     $subscription=PendingSubscriptions::where('user_id',$user->id)->where('package_id',$package->id)->first();
-                        // //     if(!$subscription)
-                        // //     {
-                        // //         $subscription=new PendingSubscriptions();
-                        // //         $subscription->user_id=$user->id;
-                        // //         $subscription->package_id=$package->id;
-                        // //     }
-                        // //     $subscription->credits=$user->credits;
-                        // //     $subscription->status="DOWNGRADED";
-                        // //     $subscription->save();
-                        // // }
-                        // // else
-                        // // {
-                        // //     $subscription=PendingSubscriptions::where('user_id',$user->id)->where('package_id',$package->id)->first();
-                        // //     if(!$subscription)
-                        // //     {
-                        // //         $subscription=new PendingSubscriptions();
-                        // //         $subscription->user_id=$user->id;
-                        // //         $subscription->package_id=$package->id;
-                        // //     }
-                        // //     $subscription->credits=$user->credits;
-                        // //     $subscription->status="UPGRADED";
-                        // //     $subscription->save();
-                        // // }
-
-                        $Webhook=new Webhooks();
-                        $Webhook->webhook_dump=$json_dump;
-                        $Webhook->user_id=$user->id;
-                        $Webhook->save();
-
-                    }
-                    else if($event['type']=="subscription.charge.completed")
-                    {
-                        $user=User::where('payment_user_reference',$event['data']['subscription']['account'])->first();
-                        $new_package=Package::where('name',$event['data']['subscription']['product'])->first();
-
-                        if($user->package->amount<$new_package->amount)
+                        if($event['type']=="subscription.activated")
                         {
-                            $previous_package=Package::find($user->package_id);
-                            $user->credits=Package::calculateProratedCredits($previous_package,$new_package,$event['data']['subscription']['nextInSeconds'],$user);
-                            $subscription=PendingSubscriptions::where('user_id',$user->id)->first();
-                            if($subscription)
-                            {
-                                $subscription->delete();
-                            }
+                            $user=User::where('payment_user_reference',$event['data']['account'])->first();
+                            $subscription_id=$event['data']['subscription'];
+
+                            $Webhook=new Webhooks();
+                            $Webhook->webhook_dump=$json_dump;
+                            $Webhook->user_id=$user->id;
+                            $Webhook->save();
+
+                            $product_name=$event['data']['product'];
+                            $package=Package::where('name',$product_name)->first();
+
+                            $user->package_id=$package->id;
+                            $user->subscription_id=$subscription_id;
+                            $user->credits=$package->credits;
+                            $user->save();
+
+                            $user_package_log = new UserPackagesLogs;
+                            $user_package_log->package()->associate($package);
+                            $user_package_log->user()->associate($user);
+                            $user_package_log->save();
                         }
-                        else
+                        else if($event['type']=="subscription.updated")
                         {
-                            $subscription=PendingSubscriptions::where('user_id',$user->id)->first();
-                            if($subscription)
-                            {
-                                $subscription->delete();
-                            }
-                            $user->credits=$user->credits+$new_package->credits;
-                        }
-                        $user->package_id=$new_package->id;
-                        $user->save();
+                            $user=User::where('payment_user_reference',$event['data']['account'])->first();
 
-                        $Webhook=new Webhooks();
-                        $Webhook->webhook_dump=$json_dump;
-                        $Webhook->user_id=$user->id;
-                        $Webhook->save();
-                    }
-                    else if($event['type']=="subscription.canceled")
-                    {
-                        $user=User::where('payment_user_reference',$event['data']['account'])->first();
-                        $package=Package::where('name',$event['data']['product'])->first();
-
-                        $subscription=PendingSubscriptions::where('user_id',$user->id)->first();
-                        if(!$subscription)
-                        {
-                            $subscription=new PendingSubscriptions();
-                            $subscription->user_id=$user->id;
-                            $subscription->current_package_id=$user->package->id;
-                            $subscription->next_package_id=$package->id;
-                            $subscription->status="CANCELED";
-                            $subscription->is_active=0;
-                            $subscription->credits=$user->credits;
-                            $subscription->reson="Charge Failed";
-                            $subscription->save();
+                            $Webhook=new Webhooks();
+                            $Webhook->webhook_dump=$json_dump;
+                            $Webhook->user_id=$user->id;
+                            $Webhook->save();
 
                         }
-                        else
+                        else if($event['type']=="subscription.charge.completed")
                         {
-                            if($subscription->is_active==1)
+                            $user=User::where('payment_user_reference',$event['data']['subscription']['account'])->first();
+                            $new_package=Package::where('name',$event['data']['subscription']['product'])->first();
+
+                            if($user->package->amount<$new_package->amount)
                             {
-                                $subscription->reson="Charge Failed on Update";
+                                $previous_package=Package::find($user->package_id);
+                                $user->credits=Package::calculateProratedCredits($previous_package,$new_package,$event['data']['subscription']['nextInSeconds'],$user);
+                                $subscription=PendingSubscriptions::where('user_id',$user->id)->first();
+                                if($subscription)
+                                {
+                                    $subscription->delete();
+                                }
                             }
                             else
                             {
-                                $subscription->reson="User Canceled the Subscription";
+                                $subscription=PendingSubscriptions::where('user_id',$user->id)->first();
+                                if($subscription)
+                                {
+                                    $subscription->delete();
+                                }
+                                $user->credits=$user->credits+$new_package->credits;
                             }
-                            $subscription->is_active=0;
-                            $subscription->credits=$user->credits;
-                            $subscription->save();
-                        } 
-                        
-                        $free=Package::where('name','free')->first();
-                        $user->package_id=$free->id;
-                        $user->save();
-                       
+                            $user->package_id=$new_package->id;
+                            $user->save();
 
-                        $Webhook=new Webhooks();
-                        $Webhook->webhook_dump=$json_dump;
-                        $Webhook->user_id=$user->id;
-                        $Webhook->save();
+                            $Webhook=new Webhooks();
+                            $Webhook->webhook_dump=$json_dump;
+                            $Webhook->user_id=$user->id;
+                            $Webhook->save();
+                        }
+                        else if($event['type']=="subscription.canceled")
+                        {
+                            $user=User::where('payment_user_reference',$event['data']['account'])->first();
+                            $package=Package::where('name',$event['data']['product'])->first();
 
-                        
-                    }
-                    else if($event['type']=="subscription.deactivated")
-                    {
-                        $user=User::where('payment_user_reference',$event['data']['account'])->first();
-                        // $package=Package::where('name',$event['data']['product'])->first();
+                            $subscription=PendingSubscriptions::where('user_id',$user->id)->first();
+                            if(!$subscription)
+                            {
+                                $subscription=new PendingSubscriptions();
+                                $subscription->user_id=$user->id;
+                                $subscription->current_package_id=$user->package->id;
+                                $subscription->next_package_id=$package->id;
+                                $subscription->status="CANCELED";
+                                $subscription->is_active=0;
+                                $subscription->credits=$user->credits;
+                                $subscription->reson="Charge Failed";
+                                $subscription->save();
 
-                        // $subscription=PendingSubscriptions::where('user_id',$user->id)->where('package_id',$package->id)->first();
-                        // if(!$subscription)
-                        // {
-                        //     $subscription=new PendingSubscriptions();
-                        //     $subscription->user_id=$user->id;
-                        //     $subscription->package_id=$package->id;
-                        // }
-                        // $subscription->credits=$user->credits;
-                        // $subscription->status="DEACTIVATED";
-                        // $subscription->save();
+                            }
+                            else
+                            {
+                                if($subscription->is_active==1)
+                                {
+                                    $subscription->reson="Charge Failed on Update";
+                                }
+                                else
+                                {
+                                    $subscription->reson="User Canceled the Subscription";
+                                }
+                                $subscription->is_active=0;
+                                $subscription->credits=$user->credits;
+                                $subscription->save();
+                            } 
+                            
+                            $free=Package::where('name','free')->first();
+                            $user->package_id=$free->id;
+                            $user->save();
+                           
 
-                        $Webhook=new Webhooks();
-                        $Webhook->webhook_dump=$json_dump;
-                        $Webhook->user_id=$user->id;
-                        $Webhook->save();
+                            $Webhook=new Webhooks();
+                            $Webhook->webhook_dump=$json_dump;
+                            $Webhook->user_id=$user->id;
+                            $Webhook->save();
 
-                        $free=Package::where('name','free')->first();
-                        $user->package_id=$free->id;
-                        $user->subscription_id=null;
-                        $user->credits=$free->credits;
-                        $user->save();
+                            
+                        }
+                        else if($event['type']=="subscription.deactivated")
+                        {
+                            $user=User::where('payment_user_reference',$event['data']['account'])->first();
+
+                            $Webhook=new Webhooks();
+                            $Webhook->webhook_dump=$json_dump;
+                            $Webhook->user_id=$user->id;
+                            $Webhook->save();
+
+                            $free=Package::where('name','free')->first();
+                            $user->package_id=$free->id;
+                            $user->subscription_id=null;
+                            $user->credits=$free->credits;
+                            $user->save();
+                        }
                     }
                 }
             }
