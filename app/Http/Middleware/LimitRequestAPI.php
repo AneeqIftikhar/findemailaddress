@@ -28,7 +28,7 @@ class LimitRequestAPI
             if($pr->count==10)
             {
                 $errors=array(
-                    'Limit Reached'=>['Too Many Requests.']
+                    'Limit Reached'=>['You have reached your credit limit. Register to claim more credits.']
                 );
                 return response()->json(["errors"=>$errors],422);
             }
