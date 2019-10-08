@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Emails;
+use App\PluginEmails;
 use App\Rules\BlackListDomains;
 use App\Rules\IsValidDomain;
 use Validator;
@@ -52,12 +52,14 @@ class EmailApiController extends Controller
 				if($json_output && count($json_output)>0)
 				{
 				   $status=$json_output[0]->status;
+				   $server_status="Valid";
 				   if($json_output[0]->status != 'Valid')
 				   {
 				      
 				      if($json_output[0]->mx==null || $json_output[0]->mx=='')
 				      {
 				         $status="No Mailbox";
+				         $server_status="No Mailbox";
 				      }
 				      if($json_output[0]->status==null || $json_output[0]->status=='')
 		              {
@@ -80,6 +82,7 @@ class EmailApiController extends Controller
 				   
 				} 
 			}
+			PluginEmails::insert_email($first_name,$last_name,$domain,$email,$status,$type,$server_output,$server_status);
 			return json_encode(array('status'=>$status,'emails'=>$email,'error'=>$error));
 
 		}
@@ -139,7 +142,7 @@ class EmailApiController extends Controller
 					}
 	            }
 			}
-
+			PluginEmails::insert_email($first_name,$last_name,$domain,$email,$email_status,$type,$server_output,$server_status);
 			return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status));
 		}
 		catch(Exception $e)
