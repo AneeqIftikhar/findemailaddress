@@ -25,7 +25,23 @@ class VerificationController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/upgrade_account';
+    // protected $redirectTo = '/find';
+    public function redirectTo()
+    {
+        $user=auth()->user();
+        if ($user->email_verified_at && $user->first_login) 
+        {
+            $user->first_login=false;
+            $user->save();
+            return '/upgrade_account';
+        }
+        else 
+        {
+            return '/find';
+        }
+    }
+    
+
 
     /**
      * Create a new controller instance.
