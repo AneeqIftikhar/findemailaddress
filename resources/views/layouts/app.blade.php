@@ -185,29 +185,20 @@
                                 </a>
                                 
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">Find and Verify Emails (coming soon)
-                                        <small id="fileHelp" class="form-text text-muted">Find and verify emails from list of names and domains</small>
+                                    <a class="dropdown-item" href="bulk_find">Find Emails
+                                        <small id="fileHelp" class="form-text text-muted">Find list of names and domains</small>
                                     </a>
-                                    <a class="dropdown-item" href="#">Verify Emails (coming soon)
+                                    <a class="dropdown-item" href="bulk_verify">Verify Emails
                                         <small id="fileHelp" class="form-text text-muted">Verify a list of Emails</small></a>
                                     
                                 </div>
                             </li>
-                            <!-- <li class="nav-item">
-                                <a class="nav-link" href="#"><span class="padding_right"><i class="fas fa-folder-open fa-sm"></i></span>Files (coming soon)</a>
-                            </li> -->
-                           <!--  <li class="nav-item">
-                                <a class="nav-link" href="#">Advanced Search (coming soon)</a>
-                            </li> -->
-                           <!--  <li class="nav-item">
-                                <a class="nav-link" href="leads">Get Leads</a>
-                            </li> -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="list"><span class="padding_right"><i class="fas fa-folder-open fa-sm"></i></span>Files</a>
+                            </li>
                         @endguest
                     </ul>
-
-                    <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>

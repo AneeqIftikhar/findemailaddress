@@ -3,15 +3,15 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
-                <div class="card-header"><h3>Batch Find Email</h3></div>
+                <div class="card-header"><h3>Bulk Find Email</h3></div>
 
                 <div class="card-body">
                 	@if ($errors->any())
 					        {{ implode('', $errors->all('<div>:message</div>')) }}
 					@endif
-                   <form method="POST" action="{{ route('batch') }}" enctype="multipart/form-data" aria-label="{{ __('Upload') }}">
+                   <form method="POST" action="{{ route('bulk_import_find') }}" enctype="multipart/form-data" aria-label="{{ __('Upload') }}">
                     @csrf
                     	
 	                    <div class="form-group row">
