@@ -35,7 +35,7 @@ class Emails extends Model
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'user_file_id', 'first_name', 'last_name','domain', 'email', 'industry', 'status','server_status', 'country', 'state', 'city', 'designation', 'contact','server_json_dump', 'created_at', 'updated_at'];
+    protected $fillable = ['user_id', 'user_file_id', 'first_name', 'last_name','domain', 'email', 'industry', 'status','server_status', 'country', 'state', 'city', 'designation', 'contact','server_json_dump','type', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

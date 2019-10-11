@@ -11,7 +11,7 @@
                 	@if ($errors->any())
 					        {{ implode('', $errors->all('<div>:message</div>')) }}
 					@endif
-                   <form method="POST" action="{{ route('batch') }}" enctype="multipart/form-data" aria-label="{{ __('Upload') }}">
+                   <form method="POST" action="{{ route('bulk_import_find') }}" enctype="multipart/form-data" aria-label="{{ __('Upload') }}">
                     @csrf
                     	
 	                    <div class="form-group row">

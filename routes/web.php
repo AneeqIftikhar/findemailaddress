@@ -24,15 +24,15 @@ Route::get('/', function () {
 
 //Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
 
+
+//getting views
+
 Route::get('/find', 'EmailController@find_email_page')->name('find')->middleware('verified');
 Route::get('/verify', 'EmailController@verify_email_page')->name('verify')->middleware('verified');
-
-
 Route::get('find-old', function()
 {
     return view('find-old');
 })->name('find-old')->middleware('verified');
-
 Route::get('verify-old', function()
 {
     return view('verify-old');
@@ -54,9 +54,6 @@ Route::get('account_settings', function()
 {
     return view('account_settings');
 })->name('account_settings')->middleware('verified');
-
-
-
 Route::get('contact_form', function()
 {
     return view('contact_form');
@@ -70,7 +67,7 @@ Route::get('verify_history','EmailController@getUserVerifiedEmails')->name('veri
 Route::get('list','EmailController@getUserFiles')->name('list')->middleware('verified');
 Route::get('emails/{id}','EmailController@getEmailsFromFile')->name('emails')->middleware('verified');
 
-Route::post('batch','EmailController@import')->name('batch')->middleware('verified');
+Route::post('bulk_import_find','BulkController@import_find')->name('bulk_import_find')->middleware('verified');
 
 Route::get('downloadcsv/{id}/{type}/{records}','EmailController@downloadExcel')->name('downloadcsv')->middleware('verified');
 

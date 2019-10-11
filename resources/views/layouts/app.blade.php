@@ -185,7 +185,7 @@
                                 </a>
                                 
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="bulk_find">Find and Verify Emails
+                                    <a class="dropdown-item" href="bulk_find">Find Emails
                                         <small id="fileHelp" class="form-text text-muted">Find list of names and domains</small>
                                     </a>
                                     <a class="dropdown-item" href="bulk_verify">Verify Emails
