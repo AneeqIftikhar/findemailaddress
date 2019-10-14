@@ -290,6 +290,18 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/jquery.toaster.js') }}" defer></script>
     <script src="{{ asset('js/popper.min.js') }}" defer></script>
+    @if (App::environment('production'))
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-148373168-2"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-148373168-2');
+
+        </script>
+    @endif 
     @stack('scripts')
    
     @yield('footer')
