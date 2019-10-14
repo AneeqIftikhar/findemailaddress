@@ -68,6 +68,7 @@ Route::get('list','EmailController@getUserFiles')->name('list')->middleware('ver
 Route::get('emails/{id}','EmailController@getEmailsFromFile')->name('emails')->middleware('verified');
 
 Route::post('bulk_import_find','BulkController@import_find')->name('bulk_import_find')->middleware('verified');
+Route::post('bulk_import_verify','BulkController@import_verify')->name('bulk_import_verify')->middleware('verified');
 
 Route::get('downloadcsv/{id}/{type}/{records}','EmailController@downloadExcel')->name('downloadcsv')->middleware('verified');
 

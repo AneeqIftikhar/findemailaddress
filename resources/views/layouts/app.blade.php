@@ -185,16 +185,16 @@
                                 </a>
                                 
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="bulk_find">Find Emails
+                                    <a class="dropdown-item" href="{{URL::route('bulk_find')}}">Find Emails
                                         <small id="fileHelp" class="form-text text-muted">Find list of names and domains</small>
                                     </a>
-                                    <a class="dropdown-item" href="bulk_verify">Verify Emails
+                                    <a class="dropdown-item" href="{{URL::route('bulk_verify')}}">Verify Emails
                                         <small id="fileHelp" class="form-text text-muted">Verify a list of Emails</small></a>
                                     
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="list"><span class="padding_right"><i class="fas fa-folder-open fa-sm"></i></span>Files</a>
+                                <a class="nav-link" href="{{URL::route('list')}}"><span class="padding_right"><i class="fas fa-folder-open fa-sm"></i></span>Files</a>
                             </li>
                         @endguest
                     </ul>

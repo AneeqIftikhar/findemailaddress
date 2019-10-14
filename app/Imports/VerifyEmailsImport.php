@@ -1,28 +1,32 @@
 <?php
 
-namespace App;
+namespace App\Imports;
 
 use App\Emails;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
-
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\RegistersEventListeners;
+use Maatwebsite\Excel\Events\AfterImport;
+use App\User;
+use App\UserFiles;
 class VerifyEmailsImport implements ToModel, WithChunkReading, ShouldQueue
 {
-    protected $_user_id = null;
-    protected $_file_id = null;
-    public function setUserId($user_id) 
+    protected $user = null;
+    protected $file = null;
+    public function setUser($user) 
     {     
-        $this->_user_id = $user_id;
+        $this->user = $user;
     }
-    public function setUserFileId($file_id) 
+    public function setUserFile($file) 
     {     
-        $this->_file_id = $file_id;
+        $this->file = $file;
     }
     public function model(array $row)
     {
-        $user_id=$this->_user_id;
-        $file_id=$this->_file_id;
+        $user_id=$this->user->id;
+        $file_id=$this->file->id;
         return new Emails([
             'email' => $row[0],
             'status' => 'Unverified',
@@ -34,6 +38,7 @@ class VerifyEmailsImport implements ToModel, WithChunkReading, ShouldQueue
     
     public function chunkSize(): int
     {
-        return 100;
+        return 1500;
     }
+    
 }

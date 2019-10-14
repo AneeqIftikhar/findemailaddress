@@ -14,7 +14,7 @@ use App\UserFiles;
 class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue
 {
     protected $user = null;
-    protected $_file = null;
+    protected $file = null;
     public function setUser($user) 
     {     
         $this->user = $user;
