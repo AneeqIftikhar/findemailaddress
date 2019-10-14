@@ -13,20 +13,20 @@ use App\User;
 use App\UserFiles;
 class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue
 {
-    protected $_user = null;
+    protected $user = null;
     protected $_file = null;
     public function setUser($user) 
     {     
-        $this->_user = $user;
+        $this->user = $user;
     }
     public function setUserFile($file) 
     {     
-        $this->_file = $file;
+        $this->file = $file;
     }
     public function model(array $row)
     {
-        $user_id=$this->_user->id;
-        $file_id=$this->_file->id;
+        $user_id=$this->user->id;
+        $file_id=$this->file->id;
         return new Emails([
             'first_name' => $row[0],
             'last_name' => $row[1],
