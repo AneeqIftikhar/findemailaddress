@@ -50,7 +50,7 @@ class BulkController extends Controller
 		}
 
 	}
-	public function import_find(Request $request) 
+	public function import_verify(Request $request) 
 	{
 		$user=Auth::user();
 		$filename=''.time() . uniqid(rand());
