@@ -9,20 +9,12 @@ use App\Emails;
 use Validator;
 class BulkApiController extends Controller
 {
-    public function fetch_file(Request $request) 
+    public function fetch_unprocessed_files(Request $request) 
 	{
 		try
 		{
 
-			$validator = Validator::make($request->all(), [
-			    'id' => ['required'],
-			]);
-
-			if ($validator->fails()) {
-			  $errors = $validator->errors();
-			    return response()->json(["errors"=>$errors],422);
-			}
-			$file=UserFiles::where('id',$request->id)->first();
+			$file=UserFiles::where('status','Import Completed')->get();
 			if($file)
 			{
 				return json_encode(array('status'=>'success','data'=>$file));

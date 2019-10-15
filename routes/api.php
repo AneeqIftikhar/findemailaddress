@@ -35,3 +35,4 @@ Route::middleware('LimitRequestAPI')->group(function () {
 
 Route::post('update_emails','BulkApiController@update_emails');
 Route::post('fetch_file_emails','BulkApiController@fetch_file_emails');
+Route::get('fetch_unprocessed_files','BulkApiController@fetch_unprocessed_files');
