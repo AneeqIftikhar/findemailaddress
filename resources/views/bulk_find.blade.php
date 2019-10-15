@@ -50,7 +50,6 @@
             <div class="modal" tabindex="-1" role="dialog" id="bulk_find_modal">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                <div class="alert alert-danger" style="display:none"></div>
                   
                   <div class="modal-body">
                     <div class="card activity_log" style="height: 100%">
@@ -71,7 +70,7 @@
 
                   </div>
                   <div class="modal-footer">
-                    <button  class="btn btn-success" onClick="map_find">Import</button>
+                    <button  class="btn btn-success" onClick="map_find()">Import</button>
                     </div>
                 </div>
               </div>
@@ -100,6 +99,20 @@ function populate_emails(data)
             }
                
         }
+        newRow   = tableRef.insertRow();
+        for(var j = 0;j<data[1].length;j++)
+        {
+            newCell  = newRow.insertCell(j);
+            select = document.createElement("select");
+            select.id=j;
+            select.className="browser-default";
+            select.options.add( new Option("Select","", true, true) );
+            select.options.add( new Option("First Name","first_name") );
+            select.options.add( new Option("Last Name","last_name") );
+            select.options.add( new Option("Domain Name","domain") );
+            newCell.appendChild(select);
+        }
+        
 }
 $(document).ready(function (e) {
  $("#bulk_find_form").on('submit',(function(e) {
@@ -130,5 +143,13 @@ $(document).ready(function (e) {
         });
     }));
 });
+function map_find()
+{
+    select_options=document.getElementsByTagName('select');
+    for(var i=0;i<select_options.length;i++)
+    {
+        console.log(select_options.value);
+    }
+}
 </script>
 @endpush

@@ -21,7 +21,7 @@ class BulkController extends Controller
 		{
 			$path = $file->getRealPath();
 			$data = array_map('str_getcsv', file($path));
-	    	$csv_data = array_slice($data, 0, 2);
+	    	$csv_data = array_slice($data, 0, 3);
 	    	$csv_data[0] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $csv_data[0]);
 			$excel_name=$filename.'.'.$file->getClientOriginalExtension();
 			if(!$file->move(public_path('excel'),$excel_name))
@@ -45,9 +45,7 @@ class BulkController extends Controller
 		else
 		{
 			return json_encode(array('status'=>"fail",'message','Unexpected error occurred while trying to process your request'));
-		}
-
-	    
+		} 
 
 	}
     public function old_import_find(Request $request) 
