@@ -11,7 +11,46 @@ use App\UserFiles;
 use Excel;
 class BulkController extends Controller
 {
-    public function import_find(Request $request) 
+	public function import_find(Request $request)
+	{
+
+		$user=Auth::user();
+		$filename=''.time() . uniqid(rand());
+		$file=request()->file('excel_file');
+		if($file)
+		{
+			$path = $file->getRealPath();
+			$data = array_map('str_getcsv', file($path));
+	    	$csv_data = array_slice($data, 0, 2);
+	    	$csv_data[0] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $csv_data[0]);
+			$excel_name=$filename.'.'.$file->getClientOriginalExtension();
+			if(!$file->move(public_path('excel'),$excel_name))
+			{
+			   return json_encode(array('status'=>"fail",'message','Unexpected Storage Error'));
+			}
+			$user_file = new UserFiles;
+			$user_file->name = $excel_name;
+			$user_file->user_id=$user->id;
+			$user_file->title=$request->title;
+			$user_file->type='find';
+			$user_file->status='Pending Import';
+			$user_file->save();
+
+			// $path = request()->file('excel_file')->getRealPath();
+			// $data = array_map('str_getcsv', file($path));
+	  //   	$csv_data = array_slice($data, 0, 2);
+	  //   	$csv_data[0] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $csv_data[0]);
+			return json_encode(array('status'=>"success",'data'=>$csv_data,'file_id'=>$user_file->id));
+		}
+		else
+		{
+			return json_encode(array('status'=>"fail",'message','Unexpected error occurred while trying to process your request'));
+		}
+
+	    
+
+	}
+    public function old_import_find(Request $request) 
 	{
 		$user=Auth::user();
 		$filename=''.time() . uniqid(rand());
@@ -41,6 +80,7 @@ class BulkController extends Controller
 		            new NotifyServer($user,$user_file),
 		         ]);
 			}
+			return json_encode(array('status'=>"success"));
 			$files=$user->userFiles()->get();
 			return redirect()->route('list', compact('files'));
 		}
