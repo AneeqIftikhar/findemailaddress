@@ -73,75 +73,77 @@ class BulkApiController extends Controller
 		}
 
 	}
-	// public function update_emails(Request $request) 
-	// {
-	// 	try
-	// 	{
+	public function update_emails(Request $request) 
+	{
+		try
+		{
 
-	// 		$validator = Validator::make($request->all(), [
-	// 		    'id' => ['required'],
-	// 		    'json_response' => ['required'],
-	// 		]);
+			$validator = Validator::make($request->all(), [
+			    'json_response' => ['required'],
+			]);
 
-	// 		if ($validator->fails()) {
-	// 		  $errors = $validator->errors();
-	// 		    return response()->json(["errors"=>$errors],422);
-	// 		}
-	// 		$email=Emails::where('id',$request->id)->first();
-	// 		if($email)
-	// 		{
-	// 			$first_name=$email->first_name;
-	//         	$last_name=$email->last_name;
-	//         	$domain=$email->domain;
-	//         	$json_output=json_decode($request->json_response);
-	// 			$status="";
-	// 			$type=$email->type;
-	// 			$email="";
-	// 			$error="";
-	// 			if($json_output && count($json_output)>0)
-	// 			{
-	// 			   $status=$json_output[0]->status;
-	// 			   $server_status="Valid";
-	// 			   if($json_output[0]->status != 'Valid')
-	// 			   {
+			if ($validator->fails()) {
+			    $errors = $validator->errors();
+			    return response()->json(["errors"=>$errors],422);
+			}
+			$json_output_array=json_decode($request->json_response);
+			if($json_output_array)
+			{
+				foreach ($json_output_array as $key => $json_output) 
+				{
+					$status="";
+					$email="";
+					$error="";
+					$status=$json_output->status;
+				    $server_status="Valid";
+				    if($json_output->status != 'Valid')
+				    {
 				      
-	// 			      if($json_output[0]->mx==null || $json_output[0]->mx=='')
-	// 			      {
-	// 			         $status="No Mailbox";
-	// 			         $server_status="No Mailbox";
-	// 			      }
-	// 			      if($json_output[0]->status==null || $json_output[0]->status=='')
-	// 	              {
-	// 	                $status="Not Found";
-	// 	              }
-	// 			      else if($json_output[0]->status=='Catch All')
-	// 			      {
-	// 			         $email=strtolower($first_name).'@'.strtolower($domain);
-	// 			      }
-	// 			      else if($json_output[0]->status=='Risky')
-	// 	              {
-	// 	                $email=$json_output[0]->email;
-	// 	              }
+				      if($json_output->mx==null || $json_output->mx=='')
+				      {
+				         $status="No Mailbox";
+				         $server_status="No Mailbox";
+				      }
+				      if($json_output->status==null || $json_output->status=='')
+		              {
+		                $status="Not Found";
+		              }
+				      else if($json_output->status=='Catch All')
+				      {
+				         $email=strtolower($first_name).'@'.strtolower($domain);
+				      }
+				      else if($json_output->status=='Risky')
+		              {
+		                $email=$json_output->email;
+		              }
 
-	// 			   }
-	// 			   else
-	// 			   {
-	// 			      $email=$json_output[0]->email;
-	// 			   }
-	// 			return json_encode(array('status'=>'success','data'=>$email));
-	// 		}
-	// 		else
-	// 		{
-	// 			return json_encode(array('status'=>'fail','message'=>"Email Not Found"));
-	// 		}
+				    }
+				    else
+				    {
+				      $email=$json_output->email;
+				    }
+				    $email_db=Emails::where('id',$json_output->id)->first();
+				    if($email_db)
+				    {
+				    	Emails::update_email($email_db,$email,$status,$server_status,json_encode($json_output));
+				    }
+				    
+				}
+				   
+				return json_encode(array('status'=>'success','data'=>[]));
+			}
+			else
+			{
+				return json_encode(array('status'=>'fail','message'=>"Json Response Error"));
+			}
 			
 			
 
-	// 	}
-	// 	catch(Exception $e)
-	// 	{
-	// 		return json_encode(array('status'=>'fail','message'=>"Unexpected Error"));
-	// 	}
+		}
+		catch(Exception $e)
+		{
+			return json_encode(array('status'=>'fail','message'=>"Unexpected Error"));
+		}
 
-	// }
+	}
 }

@@ -72,17 +72,13 @@ class Emails extends Model
        $emails_db->server_status = $server_status ? $server_status : '';
        $emails_db->save();
     }
-    public static function update_email($email_id,$first_name,$last_name,$domain,$email,$status,$user_id,$type)
+    public static function update_email($email_db,$email,$status,$server_status,$server_json_dump)
     {
-       $emails_db = Emails::find($email_id);
-       $emails_db->first_name = $first_name ? $first_name : '';
-       $emails_db->last_name = $last_name ? $last_name : '';
-       $emails_db->domain = $domain ? $domain : '';
-       $emails_db->email = $email ? $email : '';
-       $emails_db->status = $status;
-       $emails_db->user_id = $user_id;
-       $emails_db->type = $type;
-       $emails_db->save();
+       $email_db->email = $email ? $email : '';
+       $email_db->status = $status;
+       $email_db->server_status = $server_status ? $server_status : '';
+       $email_db->server_json_dump = $server_json_dump ? $server_json_dump : '';
+       $email_db->save();
     }
     public static function update_updated_at($email_id)
     {
