@@ -88,6 +88,7 @@ class BulkApiController extends Controller
 					$error="";
 					$status=$json_output->status;
 				    $server_status="Valid";
+				    $email_db=Emails::where('id',$json_output->id)->first();
 				    if($json_output->status != 'Valid')
 				    {
 				      
@@ -102,7 +103,16 @@ class BulkApiController extends Controller
 		              }
 				      else if($json_output->status=='Catch All')
 				      {
-				         $email=strtolower($first_name).'@'.strtolower($domain);
+
+				      	if($email_db->email)
+				      	{
+				      		$email=$email_db->email;
+				      	}
+				      	else
+				      	{
+				      		$email=strtolower($email_db->first_name).'@'.strtolower($email_db->domain);
+				      	}
+				        
 				      }
 				      else if($json_output->status=='Risky')
 		              {
@@ -114,7 +124,6 @@ class BulkApiController extends Controller
 				    {
 				      $email=$json_output->email;
 				    }
-				    $email_db=Emails::where('id',$json_output->id)->first();
 				    if($email_db)
 				    {
 				    	Emails::update_email($email_db,$email,$status,$server_status,json_encode($json_output));
