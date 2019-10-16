@@ -247,8 +247,13 @@ class EmailController extends Controller
       
       public function getUserFiles(Request $request)
       {
-         $files=Auth::user()->userFiles()->get();
+         $files=Auth::user()->userFiles()->orderBy('id', 'DESC')->get();
          return view('list',compact('files'));
+      }
+      public function getUserFilesAjax(Request $request)
+      {
+         $files=Auth::user()->userFiles()->orderBy('id', 'DESC')->get();
+         return json_encode(array('files'=>$files));
       }
       public function getUserFoundEmails(Request $request)
       {

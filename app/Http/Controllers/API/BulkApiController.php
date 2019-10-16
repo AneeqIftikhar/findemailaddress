@@ -53,6 +53,12 @@ class BulkApiController extends Controller
 			}
 			else
 			{
+				$file=UserFiles::where('id',$request->id)->first();
+				if($file)
+				{
+					$file->status="Completed";
+					$file->save();
+				}
 				return json_encode(array('status'=>'fail','message'=>"Emails Not Found"));
 			}
 			

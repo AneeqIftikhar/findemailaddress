@@ -36,10 +36,6 @@ class BulkController extends Controller
 			$user_file->status='Pending Import';
 			$user_file->save();
 
-			// $path = request()->file('excel_file')->getRealPath();
-			// $data = array_map('str_getcsv', file($path));
-	  //   	$csv_data = array_slice($data, 0, 2);
-	  //   	$csv_data[0] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $csv_data[0]);
 			return json_encode(array('status'=>"success",'data'=>$csv_data,'file_id'=>$user_file->id));
 		}
 		else
@@ -47,6 +43,28 @@ class BulkController extends Controller
 			return json_encode(array('status'=>"fail",'message','Unexpected error occurred while trying to process your request'));
 		} 
 
+	}
+	public function process_import(Request $request)
+	{
+	    $user=Auth::user();
+	    $user_file = UserFiles::where('id',$request->file_id)->first();
+	    if($user_file)
+	    {
+	    	$email_import=new FindEmailsImport;
+	        $email_import->setUser($user);
+	        $email_import->setUserFile($user_file);
+	        $email_import->setHeaderMappings($request->first_name,$request->last_name,$request->domain);
+	        Excel::import($email_import , public_path('excel/'.$user_file->name))->chain([
+
+	            new NotifyServer($user,$user_file),
+	         ]);
+	        return json_encode(array('status'=>"success",'data'=>[]));
+	    }
+	    else
+	    {
+	    	return json_encode(array('status'=>"fail",'message','File Not Found'));
+	    }
+	    
 	}
     public function old_import_find(Request $request) 
 	{

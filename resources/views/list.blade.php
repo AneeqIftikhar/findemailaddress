@@ -43,10 +43,94 @@
 @endsection
 @push('scripts')
 <script type="text/javascript">
+var interval = null;
+function populate_files(data)
+{       
+        var total_pending=0;
+        var tableRef = document.getElementById('files_table').getElementsByTagName('tbody')[0];
+        for(var i = tableRef.rows.length - 1; i >= 0; i--)
+        {
+            tableRef.deleteRow(i);
+        }
+        for(var i = 0;i<data.length;i++)
+        {
+            newRow   = tableRef.insertRow();
+            newRow.className="table-row";
+            var url = '{{ route("emails", ":id") }}';
+            url = url.replace(':id', data[i]['id']);
+            newRow.setAttribute('data-href',url);
+            newRow.setAttribute('value',data[i]['id']);
+            // newRow.setAttribute('class',"table-row");
+            
+
+            newCell  = newRow.insertCell(0);
+            newText  = document.createTextNode(data[i]['title']);
+            newCell.appendChild(newText);
+
+            newCell  = newRow.insertCell(1);
+            if(data[i]['status']=="Pending Import")
+            {
+              spinner = document.createElement("i");
+              spinner.className="fa fa-spinner fa-spinner fa-spin";
+              newCell.appendChild(spinner);
+              total_pending++;
+              
+            }
+            else
+            {
+              newText  = document.createTextNode(data[i]['status']);
+              newCell.appendChild(newText);
+            }
+            
+
+            newCell  = newRow.insertCell(2);
+            newText  = document.createTextNode(data[i]['created_at']);
+            newCell.appendChild(newText);
+
+               
+        }
+        if(!interval && total_pending>0)
+        {
+          interval=setInterval(get_user_files_interval_set,1000);
+        }
+        else if(interval && total_pending==0)
+        {
+          get_user_files_interval_stop();
+        }  
+}
+function get_user_files_interval_set()
+{
+   $.ajax({
+          method: 'GET',
+          dataType: 'json', 
+          url: 'get_user_files_ajax', 
+          data: {"_token": "{{ csrf_token() }}"}, 
+          success: function(response)
+          { 
+              
+              populate_files(response['files']);
+              $(".table-row").click(function() {
+                  window.document.location = $(this).data("href");
+              });
+             
+              
+
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+             
+          },
+          timeout: 1000 
+      });
+}
+function get_user_files_interval_stop() {
+  clearInterval(interval);
+}
 $(document).ready(function() {
       $(".table-row").click(function() {
           window.document.location = $(this).data("href");
       });
+      data = {!! json_encode($files->toArray(), JSON_HEX_TAG) !!};
+      populate_files(data);    
   });
 </script>
 @endpush

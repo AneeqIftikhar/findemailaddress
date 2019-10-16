@@ -52,6 +52,7 @@
                 <div class="modal-content">
                   
                   <div class="modal-body">
+                    <input type="hidden" name="file_id" id="file_id">
                     <div class="card activity_log" style="height: 100%">
                         <div class="card-header"><h4>Mapping CSV Results</h4></div>
                         <div class="card-body p-0 py-4" style="overflow-y: auto; max-height: 68vh;">
@@ -70,6 +71,9 @@
 
                   </div>
                   <div class="modal-footer">
+                    <span class="invalid-feedback-custom">
+                        <strong id="bulk_map_find_error"></strong>
+                    </span>
                     <button  class="btn btn-success" onClick="map_find()">Import</button>
                     </div>
                 </div>
@@ -81,6 +85,7 @@
 @endsection
 @push('scripts')
 <script type="text/javascript">
+
 function populate_emails(data)
 {       
         var tableRef = document.getElementById('bulk_find_popup_table').getElementsByTagName('tbody')[0];
@@ -115,6 +120,7 @@ function populate_emails(data)
         
 }
 $(document).ready(function (e) {
+    
  $("#bulk_find_form").on('submit',(function(e) {
   e.preventDefault();
       $.ajax({
@@ -134,6 +140,7 @@ $(document).ready(function (e) {
             {
                 console.log(data['data']);
                 populate_emails(data['data']);
+                $('#file_id').val(data['file_id']);
                 $("#bulk_find_modal").modal()
             },
             error: function(e) 
@@ -145,11 +152,101 @@ $(document).ready(function (e) {
 });
 function map_find()
 {
+    document.getElementById('bulk_map_find_error').innerHTML="";
     select_options=document.getElementsByTagName('select');
+    var first_name=-1;
+    var last_name=-1;
+    var domain=-1;
+    var first_name_count=0;
+    var last_name_count=0;
+    var domain_count=0;
     for(var i=0;i<select_options.length;i++)
     {
-        console.log(select_options.value);
+        if(select_options[i].value=="first_name")
+        {
+            first_name_count++;
+        }
+        else if(select_options[i].value=="last_name")
+        {
+            last_name_count++;
+        }
+        else if(select_options[i].value=="domain")
+        {
+            domain_count++;
+        }
     }
+    if(first_name_count==0 || first_name_count>1)
+    {
+        document.getElementById('bulk_map_find_error').innerHTML="Please Select First Name Field For One Column";
+    }
+    else if(last_name_count==0 || last_name_count>1)
+    {
+        document.getElementById('bulk_map_find_error').innerHTML="Please Select Last Name Field For One Column";
+    }
+    else if(domain_count==0 || domain_count>1)
+    {
+        document.getElementById('bulk_map_find_error').innerHTML="Please Select Domain Name Field For One Column";
+    }
+    else
+    {
+        for(var i=0;i<select_options.length;i++)
+        {
+            if(select_options[i].value=="first_name")
+            {
+                first_name=select_options[i].id;
+            }
+            else if(select_options[i].value=="last_name")
+            {
+                last_name=select_options[i].id;
+            }
+            else if(select_options[i].value=="domain")
+            {
+                domain=select_options[i].id;
+            }
+        }
+        var file_id=$('#file_id').val();
+        console.log(first_name+" "+last_name+" "+domain+" "+file_id);
+         $.ajax({
+                method: 'POST',
+                dataType: 'json', 
+                url: 'process_import', 
+                data: {'first_name' : first_name,'last_name':last_name,'domain':domain,'file_id':file_id,"_token": "{{ csrf_token() }}"}, 
+                success: function(response)
+                { 
+                    
+                    
+                    window.location.href = "{{ route('list') }}";
+                    
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    
+                    if( jqXHR.status === 422 )
+                    {
+                        
+                    }
+                    else if( jqXHR.status === 419 )
+                    {
+
+                        $("#login_again").modal();
+                        
+                    }
+                    else if(jqXHR.status === 403)
+                    {
+                        $("#login_again").modal()
+                        
+                    }
+                    else
+                    {
+                         console.log(jqXHR);
+                       
+                    }
+                },
+                timeout: 60000 // sets timeout to 60 seconds
+            });
+    }
+
+    
 }
 </script>
 @endpush
