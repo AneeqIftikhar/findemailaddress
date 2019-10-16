@@ -25,13 +25,13 @@
                         </tr>
                       </thead>
                       <tbody>
-                        @foreach($files as $file)
+                       <!--  @foreach($files as $file)
                           <tr class="table-row" data-href="{{URL::route('emails', ['id' => $file->id])}}" value="{{$file->id}}">        
                               <td> {{$file->title}} </td>
                               <td> {{$file->status}} </td>
                               <td> {{$file->created_at}} </td>
                           </tr>
-                         @endforeach
+                         @endforeach -->
                       </tbody>
                     </table>
 
@@ -126,11 +126,12 @@ function get_user_files_interval_stop() {
   clearInterval(interval);
 }
 $(document).ready(function() {
+      data = {!! json_encode($files->toArray(), JSON_HEX_TAG) !!};
+      populate_files(data); 
       $(".table-row").click(function() {
           window.document.location = $(this).data("href");
       });
-      data = {!! json_encode($files->toArray(), JSON_HEX_TAG) !!};
-      populate_files(data);    
+         
   });
 </script>
 @endpush
