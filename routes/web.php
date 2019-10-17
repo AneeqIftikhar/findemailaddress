@@ -105,6 +105,7 @@ Route::get('get_user_files_ajax','EmailController@getUserFilesAjax')->name('get_
 Route::get('emails/{id}','EmailController@getEmailsFromFile')->name('emails')->middleware('verified');
 
 Route::post('bulk_import_find','BulkController@import_find')->name('bulk_import_find')->middleware('verified');
+Route::post('bulk_import_find_with_file_id','BulkController@import_find_with_file_id')->name('bulk_import_find_with_file_id')->middleware('verified');
 Route::post('bulk_import_verify','BulkController@import_verify')->name('bulk_import_verify')->middleware('verified');
 Route::post('process_import','BulkController@process_import')->name('process_import')->middleware('verified');
 
