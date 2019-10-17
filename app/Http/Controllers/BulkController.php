@@ -33,9 +33,29 @@ class BulkController extends Controller
 			$user_file->user_id=$user->id;
 			$user_file->title=$request->title;
 			$user_file->type='find';
-			$user_file->status='Pending Import';
+			$user_file->status='Mapping Required';
 			$user_file->save();
 
+			return json_encode(array('status'=>"success",'data'=>$csv_data,'file_id'=>$user_file->id));
+		}
+		else
+		{
+			return json_encode(array('status'=>"fail",'message','Unexpected error occurred while trying to process your request'));
+		} 
+
+	}
+	public function import_find_with_file_id(Request $request)
+	{
+
+		$user=Auth::user();
+		$user_file=UserFiles::where('id',$request->file_id)->first();
+		if($user_file)
+		{
+			$path = public_path('excel')."/".$user_file->name;
+			$data = array_map('str_getcsv', file($path));
+	    	$csv_data = array_slice($data, 0, 3);
+	    	$csv_data[0] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $csv_data[0]);
+			
 			return json_encode(array('status'=>"success",'data'=>$csv_data,'file_id'=>$user_file->id));
 		}
 		else
@@ -50,6 +70,8 @@ class BulkController extends Controller
 	    $user_file = UserFiles::where('id',$request->file_id)->first();
 	    if($user_file)
 	    {
+	    	$user_file->status='Pending Import';
+			$user_file->save();
 	    	$email_import=new FindEmailsImport;
 	        $email_import->setUser($user);
 	        $email_import->setUserFile($user_file);

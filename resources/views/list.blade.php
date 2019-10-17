@@ -55,11 +55,7 @@ function populate_files(data)
         for(var i = 0;i<data.length;i++)
         {
             newRow   = tableRef.insertRow();
-            newRow.className="table-row";
-            var url = '{{ route("emails", ":id") }}';
-            url = url.replace(':id', data[i]['id']);
-            newRow.setAttribute('data-href',url);
-            newRow.setAttribute('value',data[i]['id']);
+            
             // newRow.setAttribute('class',"table-row");
             
 
@@ -76,8 +72,24 @@ function populate_files(data)
               total_pending++;
               
             }
+            else if(data[i]['status']=="Mapping Required")
+            {
+              newRow.className="mapping-row";
+              var url = '{{ route("emails", ":id") }}';
+              url = url.replace(':id', data[i]['id']);
+              newRow.setAttribute('data-href',url);
+              newRow.setAttribute('value',data[i]['id']);
+              newText  = document.createTextNode(data[i]['status']);
+              newCell.appendChild(newText);
+            }
             else
             {
+
+              newRow.className="table-row";
+              var url = '{{ route("emails", ":id") }}';
+              url = url.replace(':id', data[i]['id']);
+              newRow.setAttribute('data-href',url);
+              newRow.setAttribute('value',data[i]['id']);
               newText  = document.createTextNode(data[i]['status']);
               newCell.appendChild(newText);
             }
@@ -112,7 +124,9 @@ function get_user_files_interval_set()
               $(".table-row").click(function() {
                   window.document.location = $(this).data("href");
               });
-             
+             $(".mapping-row").click(function() {
+                bulk_import_find_with_file_id($(this).id);
+            });
               
 
           },
@@ -125,11 +139,37 @@ function get_user_files_interval_set()
 function get_user_files_interval_stop() {
   clearInterval(interval);
 }
+function bulk_import_find_with_file_id(id)
+{
+  console.log(id);
+  $.ajax({
+          method: 'POST',
+          dataType: 'json', 
+          url: 'bulk_import_find_with_file_id', 
+          data: {"file_id":id,"_token": "{{ csrf_token() }}"}, 
+          success: function(response)
+          { 
+              console.log(response);
+              bulk_find_popup_populate_emails(response['data']);
+              $('#bulk_import_file_id').val(response['file_id']);
+              $("#bulk_find_modal").modal()
+              
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+             
+          },
+          timeout: 6000 
+      });
+}
 $(document).ready(function() {
       data = {!! json_encode($files->toArray(), JSON_HEX_TAG) !!};
       populate_files(data); 
       $(".table-row").click(function() {
           window.document.location = $(this).data("href");
+      });
+      $(".mapping-row").click(function() {
+
+          bulk_import_find_with_file_id($(this).attr("value"));
       });
          
   });

@@ -141,6 +141,38 @@
             </div>
           </div>
         </div>
+        <div class="modal" tabindex="-1" role="dialog" id="bulk_find_modal">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  
+                  <div class="modal-body">
+                    <input type="hidden" name="bulk_import_file_id" id="bulk_import_file_id">
+                    <div class="card activity_log" style="height: 100%">
+                        <div class="card-header"><h4>Mapping CSV Results</h4></div>
+                        <div class="card-body p-0 py-4" style="overflow-y: auto; max-height: 68vh;">
+                            <div class="row m-0 mb-4">
+                                <div class="col-12" style="padding-left: 1.4rem!important;">
+                                    <table id="bulk_find_popup_table" class="table">
+                                      <tbody>
+
+
+                                      </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                  </div>
+                  <div class="modal-footer">
+                    <span class="invalid-feedback-custom">
+                        <strong id="bulk_map_find_error"></strong>
+                    </span>
+                    <button  class="btn btn-success" onClick="map_find()">Import</button>
+                    </div>
+                </div>
+              </div>
+            </div>
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm" style="flex:0 1 auto">
 
             <div class="container">
@@ -324,6 +356,136 @@
           $('#bounce_email_type').val(type);
           $("#bounce_message").val('');
           $("#report_bounce").modal();        
+        }
+        function map_find()
+        {
+            document.getElementById('bulk_map_find_error').innerHTML="";
+            select_options=document.getElementsByClassName('map_find_select');
+            var first_name=-1;
+            var last_name=-1;
+            var domain=-1;
+            var first_name_count=0;
+            var last_name_count=0;
+            var domain_count=0;
+            for(var i=0;i<select_options.length;i++)
+            {
+                if(select_options[i].value=="first_name")
+                {
+                    first_name_count++;
+                }
+                else if(select_options[i].value=="last_name")
+                {
+                    last_name_count++;
+                }
+                else if(select_options[i].value=="domain")
+                {
+                    domain_count++;
+                }
+            }
+            if(first_name_count==0 || first_name_count>1)
+            {
+                document.getElementById('bulk_map_find_error').innerHTML="Please Select First Name Field For One Column";
+            }
+            else if(last_name_count==0 || last_name_count>1)
+            {
+                document.getElementById('bulk_map_find_error').innerHTML="Please Select Last Name Field For One Column";
+            }
+            else if(domain_count==0 || domain_count>1)
+            {
+                document.getElementById('bulk_map_find_error').innerHTML="Please Select Domain Name Field For One Column";
+            }
+            else
+            {
+                for(var i=0;i<select_options.length;i++)
+                {
+                    if(select_options[i].value=="first_name")
+                    {
+                        first_name=select_options[i].id;
+                    }
+                    else if(select_options[i].value=="last_name")
+                    {
+                        last_name=select_options[i].id;
+                    }
+                    else if(select_options[i].value=="domain")
+                    {
+                        domain=select_options[i].id;
+                    }
+                }
+                var file_id=$('#bulk_import_file_id').val();
+                 $.ajax({
+                        method: 'POST',
+                        dataType: 'json', 
+                        url: 'process_import', 
+                        data: {'first_name' : first_name,'last_name':last_name,'domain':domain,'file_id':file_id,"_token": "{{ csrf_token() }}"}, 
+                        success: function(response)
+                        { 
+                            
+                            console.log(response);
+                            window.location.href = "{{ route('list') }}";
+                            
+
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            
+                            if( jqXHR.status === 422 )
+                            {
+                                
+                            }
+                            else if( jqXHR.status === 419 )
+                            {
+
+                                $("#login_again").modal();
+                                
+                            }
+                            else if(jqXHR.status === 403)
+                            {
+                                $("#login_again").modal()
+                                
+                            }
+                            else
+                            {
+                                 console.log(jqXHR);
+                               
+                            }
+                        },
+                        timeout: 60000 // sets timeout to 60 seconds
+                    });
+            }
+
+            
+        }
+        function bulk_find_popup_populate_emails(data)
+        {       
+                var tableRef = document.getElementById('bulk_find_popup_table').getElementsByTagName('tbody')[0];
+                for(var i = tableRef.rows.length - 1; i >= 0; i--)
+                {
+                    tableRef.deleteRow(i);
+                }
+                for(var i = 0;i<data.length;i++)
+                {
+                    newRow   = tableRef.insertRow();
+                    for(var j = 0;j<data[i].length;j++)
+                    {
+                          newCell  = newRow.insertCell(j);
+                          newText  = document.createTextNode(data[i][j]);
+                          newCell.appendChild(newText);
+                    }
+                       
+                }
+                newRow   = tableRef.insertRow();
+                for(var j = 0;j<data[1].length;j++)
+                {
+                    newCell  = newRow.insertCell(j);
+                    select = document.createElement("select");
+                    select.id=j;
+                    select.className="map_find_select browser-default";
+                    select.options.add( new Option("Select","", true, true) );
+                    select.options.add( new Option("First Name","first_name") );
+                    select.options.add( new Option("Last Name","last_name") );
+                    select.options.add( new Option("Domain Name","domain") );
+                    newCell.appendChild(select);
+                }
+                
         }
     </script>
 </body>
