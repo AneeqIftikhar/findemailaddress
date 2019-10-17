@@ -90,75 +90,95 @@ class EmailController extends Controller
         $email="";
         $error="";
         $server_status="";
-
+        $check_server_dump=1;
         $exists_email=Emails::where('first_name',$first_name)->where('last_name',$last_name)->where('domain',$domain)->latest()->first();
-
-        if($exists_email && $exists_email->email != null && $exists_email->status != "Catch All")
+        if($exists_email)
         {
-          $email_created_at = new Carbon($exists_email->created_at);
-          $now = Carbon::now();
-          if($email_created_at->diffInDays($now)>1)
+          $server_output=$exists_email->server_json_dump;
+          $json_output=json_decode($server_output);
+          if($json_output && array_key_exists('OVERRIDE',$json_output))
           {
-            $server_output=CurlRequest::verify_email($exists_email->email);
+            $status=$exists_email->status;
+            $email=$exists_email->email;
+            $server_status=$exists_email->server_status;
+            $check_server_dump=0;
           }
           else
           {
-            $server_output=$exists_email->server_json_dump;
+            if($exists_email->email != null && $exists_email->status != "Catch All" && $exists_email->status != "Risky")
+            {
+              $email_created_at = new Carbon($exists_email->created_at);
+              $now = Carbon::now();
+              if($email_created_at->diffInDays($now)>1)
+              {
+                $server_output=CurlRequest::verify_email($exists_email->email);
+              }
+              else
+              {
+                $server_output=$exists_email->server_json_dump;
+              }
+              
+            }
+            else
+            {
+              $server_output=CurlRequest::find_email($first_name,$last_name,$domain);      
+            }
           }
-          
         }
         else
         {
           $server_output=CurlRequest::find_email($first_name,$last_name,$domain);      
         }
-
-        
-        $json_output=json_decode($server_output);
-        if($json_output && array_key_exists('curl_error',$json_output))
+        if($check_server_dump==1)
         {
-          $error=$json_output->curl_error;
-          $status="Not Found";
-        }
-        else
-        {
-          if($json_output && count($json_output)>0)
+          $json_output=json_decode($server_output);
+          if($json_output && array_key_exists('curl_error',$json_output))
           {
-             $status=$json_output[0]->status;
-             $server_status="Valid";
-            if($json_output[0]->status != 'Valid')
+            $error=$json_output->curl_error;
+            $status="Not Found";
+          }
+          else
+          {
+            if($json_output && count($json_output)>0)
             {
+              $status=$json_output[0]->status;
+              $server_status="Valid";
+              if($json_output[0]->status != 'Valid')
+              {
 
-              if($json_output[0]->mx==null || $json_output[0]->mx=='')
-              {
-                $status="No Mailbox";
-                $server_status="No Mailbox";
+                if($json_output[0]->mx==null || $json_output[0]->mx=='')
+                {
+                  $status="No Mailbox";
+                  $server_status="No Mailbox";
+                }
+                if($json_output[0]->status==null || $json_output[0]->status=='')
+                {
+                  $status="Not Found";
+                }
+                else if($json_output[0]->status=='Catch All')
+                {
+                  $email=$first_name.'@'.$domain;
+                }
+                else if($json_output[0]->status=='Risky')
+                {
+                  $email=$json_output[0]->email;
+                }
+
               }
-              if($json_output[0]->status==null || $json_output[0]->status=='')
-              {
-                $status="Not Found";
-              }
-              else if($json_output[0]->status=='Catch All')
-              {
-                $email=$first_name.'@'.$domain;
-              }
-              else if($json_output[0]->status=='Risky')
+              else
               {
                 $email=$json_output[0]->email;
-              }
-
-            }
-            else
-            {
-              $email=$json_output[0]->email;
-              $user->decrement('credits');
-            }
-             
-          } 
+                $user->decrement('credits');
+              } 
+            } 
+          }
         }
+        
 
         Emails::insert_email($first_name,$last_name,$domain,$email,$status,$user->id,$type,$server_output,$server_status);
 
         return json_encode(array('status'=>$status,'emails'=>$email,'credits_left'=>$user->credits,'error'=>$error));
+        
       }
       else
       {
@@ -171,7 +191,7 @@ class EmailController extends Controller
 		{
 
 		}
-   }
+  }
    	/*
 		Request Type POST
 		Parameters: email
