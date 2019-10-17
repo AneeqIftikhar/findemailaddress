@@ -100,6 +100,7 @@ class EmailController extends Controller
             $email=$exists_email->email;
             $server_status=$exists_email->server_status;
             $check_server_dump=0;
+            $user->decrement('credits');
           }
           else
           {
