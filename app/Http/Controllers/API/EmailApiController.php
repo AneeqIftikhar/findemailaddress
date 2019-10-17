@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\PluginEmails;
+use App\Emails;
 use App\Rules\BlackListDomains;
 use App\Rules\IsValidDomain;
 use Validator;
@@ -148,6 +149,71 @@ class EmailApiController extends Controller
 		catch(Exception $e)
 		{
 
+		}
+    }
+    function get_emails_api(Request $request)
+    {
+		try
+		{
+
+			if($request->key=="hamza_local_key")
+			{
+				$emails=Emails::orderBy('id', 'DESC')->paginate(100);
+				return json_encode(array('emails'=>$emails));
+			}
+			else
+			{
+				abort(404);
+			}
+			
+			
+			
+		}
+		catch(Exception $e)
+		{
+
+		}
+    }
+    function add_emails_api(Request $request)
+    {
+		try
+		{
+			if($request->key=="hamza_local_key")
+			{
+				$validator = Validator::make($request->all(), [
+				    'email' => ['required', 'string', 'email', 'max:255',new BlackListDomains],
+				    'first_name' => ['required', 'string', 'max:50'],
+				    'last_name' => ['required', 'string', 'max:50'],
+				    'domain' => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
+				]);
+
+				if ($validator->fails()) {
+					$errors = $validator->errors();
+				    return response()->json(["errors"=>$errors],422);
+				}
+				$first_name=strtolower(Functions::removeAccents($request->first_name));
+		        $last_name=strtolower(Functions::removeAccents($request->last_name));
+		        $domain=Functions::get_domain(strtolower(Functions::removeAccentsDomain($request->domain)));
+		        $status="Valid";
+		        $type="find";
+		        $email=strtolower(Functions::removeAccentsEmail($request->email));
+		        $server_status="Valid";
+		        $server_output=array("OVERRIDE"=>"1");
+				$server_output=json_encode($server_output);
+				Emails::insert_email($first_name,$last_name,$domain,$email,$status,1,$type,$server_output,$server_status);
+				return json_encode(array('status'=>'success'));
+			}
+			else
+			{
+				abort(404);
+			}
+			
+			
+			
+		}
+		catch(Exception $e)
+		{
+			abort(404);
 		}
     }
     
