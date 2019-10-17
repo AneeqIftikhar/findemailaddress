@@ -48,7 +48,7 @@
             	</div>
             </div>
             <div class="modal" tabindex="-1" role="dialog" id="bulk_find_modal">
-              <div class="modal-dialog" role="document">
+              <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                   
                   <div class="modal-body">

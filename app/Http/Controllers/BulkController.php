@@ -33,7 +33,7 @@ class BulkController extends Controller
 			$user_file->user_id=$user->id;
 			$user_file->title=$request->title;
 			$user_file->type='find';
-			$user_file->status='Pending Import';
+			$user_file->status='Mapping Required';
 			$user_file->save();
 
 			return json_encode(array('status'=>"success",'data'=>$csv_data,'file_id'=>$user_file->id));
@@ -50,6 +50,8 @@ class BulkController extends Controller
 	    $user_file = UserFiles::where('id',$request->file_id)->first();
 	    if($user_file)
 	    {
+	    	$user_file->status='Pending Import';
+			$user_file->save();
 	    	$email_import=new FindEmailsImport;
 	        $email_import->setUser($user);
 	        $email_import->setUserFile($user_file);
