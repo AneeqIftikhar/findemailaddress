@@ -29,7 +29,7 @@ class WebhookController extends Controller
                     {
                         if($event['type']=="subscription.activated")
                         {
-                            $user=User::where('payment_user_reference',$event['data']['account'])->first();
+                            $user=User::where('payment_user_reference',$event['data']['account']['account'])->first();
                             $subscription_id=$event['data']['subscription'];
 
                             $Webhook=new Webhooks();
@@ -37,7 +37,7 @@ class WebhookController extends Controller
                             $Webhook->user_id=$user->id;
                             $Webhook->save();
 
-                            $product_name=$event['data']['product'];
+                            $product_name=$event['data']['product']['product'];
                             $package=Package::where('name',$product_name)->first();
 
                             $user->package_id=$package->id;
@@ -52,7 +52,7 @@ class WebhookController extends Controller
                         }
                         else if($event['type']=="subscription.updated")
                         {
-                            $user=User::where('payment_user_reference',$event['data']['account'])->first();
+                            $user=User::where('payment_user_reference',$event['data']['account']['account'])->first();
 
                             $Webhook=new Webhooks();
                             $Webhook->webhook_dump=$json_dump;
@@ -94,9 +94,8 @@ class WebhookController extends Controller
                         }
                         else if($event['type']=="subscription.canceled")
                         {
-                            $user=User::where('payment_user_reference',$event['data']['account'])->first();
-                            $package=Package::where('name',$event['data']['product'])->first();
-
+                            $user=User::where('payment_user_reference',$event['data']['account']['account'])->first();
+                            $package=Package::where('name',$event['data']['product']['product'])->first();
                             $subscription=PendingSubscriptions::where('user_id',$user->id)->first();
                             if(!$subscription)
                             {
@@ -107,7 +106,7 @@ class WebhookController extends Controller
                                 $subscription->status="CANCELED";
                                 $subscription->is_active=0;
                                 $subscription->credits=$user->credits;
-                                $subscription->reson="Charge Failed";
+                                $subscription->reason="Charge Failed";
                                 $subscription->save();
 
                             }
@@ -115,11 +114,11 @@ class WebhookController extends Controller
                             {
                                 if($subscription->is_active==1)
                                 {
-                                    $subscription->reson="Charge Failed on Update";
+                                    $subscription->reason="Charge Failed on Update";
                                 }
                                 else
                                 {
-                                    $subscription->reson="User Canceled the Subscription";
+                                    $subscription->reason="User Canceled the Subscription";
                                 }
                                 $subscription->is_active=0;
                                 $subscription->credits=$user->credits;
