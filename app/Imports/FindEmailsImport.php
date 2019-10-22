@@ -14,7 +14,7 @@ use App\UserFiles;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithLimit;
 use App\Package;
-class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithStartRow, WithLimit
+class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithStartRow,WithLimit
 {
     protected $user = null;
     protected $file = null;
@@ -27,9 +27,9 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
     {     
         $this->user = $user;
         $package=Package::where('id',$this->user->package_id)->first();
-        if($this->user->credits >= ($package->credits*0.2))
+        if($this->user->credits >= ($package->credits*0.1))
         {
-            $this->limit=(int) ($package->credits*0.2);
+            $this->limit=(int) ($package->credits*0.1);
         }
         else
         {
@@ -71,7 +71,7 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
     
     public function chunkSize(): int
     {
-        return ($this->limit/2);
+        return 1000;
     }
     public function startRow(): int
     {
