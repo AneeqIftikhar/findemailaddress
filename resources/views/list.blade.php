@@ -125,7 +125,7 @@ function get_user_files_interval_set()
                   window.document.location = $(this).data("href");
               });
              $(".mapping-row").click(function() {
-                bulk_import_find_with_file_id($(this).id);
+                bulk_import_find_with_file_id($(this).attr("value"));
             });
               
 
