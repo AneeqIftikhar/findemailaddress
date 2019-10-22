@@ -89,51 +89,55 @@ class BulkApiController extends Controller
 			{
 				foreach ($json_output_array as $key => $json_output) 
 				{
-					$status="";
-					$email="";
-					$error="";
-					$status=$json_output->status;
-				    $server_status="Valid";
-				    $email_db=Emails::where('id',$json_output->id)->first();
-				    if($json_output->status != 'Valid')
-				    {
-				      
-				      if($json_output->mx==null || $json_output->mx=='')
-				      {
-				         $status="No Mailbox";
-				         $server_status="No Mailbox";
-				      }
-				      if($json_output->status==null || $json_output->status=='')
-		              {
-		                $status="Not Found";
-		              }
-				      else if($json_output->status=='Catch All')
-				      {
+					if(array_key_exists('status',$json_output) && array_key_exists('mx',$json_output) && array_key_exists('id',$json_output))
+					{
+						$status="";
+						$email="";
+						$error="";
+						$status=$json_output->status;
+					    $server_status="Valid";
+					    $email_db=Emails::where('id',$json_output->id)->first();
+					    if($json_output->status != 'Valid')
+					    {
+					      
+					      if($json_output->mx==null || $json_output->mx=='')
+					      {
+					         $status="No Mailbox";
+					         $server_status="No Mailbox";
+					      }
+					      if($json_output->status==null || $json_output->status=='')
+			              {
+			                $status="Not Found";
+			              }
+					      else if($json_output->status=='Catch All')
+					      {
 
-				      	if($email_db->email)
-				      	{
-				      		$email=$email_db->email;
-				      	}
-				      	else
-				      	{
-				      		$email=strtolower($email_db->first_name).'@'.strtolower($email_db->domain);
-				      	}
-				        
-				      }
-				      else if($json_output->status=='Risky')
-		              {
-		                $email=$json_output->email;
-		              }
+					      	if($email_db->email)
+					      	{
+					      		$email=$email_db->email;
+					      	}
+					      	else
+					      	{
+					      		$email=strtolower($email_db->first_name).'@'.strtolower($email_db->domain);
+					      	}
+					        
+					      }
+					      else if($json_output->status=='Risky')
+			              {
+			                $email=$json_output->email;
+			              }
 
-				    }
-				    else
-				    {
-				      $email=$json_output->email;
-				    }
-				    if($email_db)
-				    {
-				    	Emails::update_email($email_db,$email,$status,$server_status,json_encode($json_output));
-				    }
+					    }
+					    else
+					    {
+					      $email=$json_output->email;
+					    }
+					    if($email_db)
+					    {
+					    	Emails::update_email($email_db,$email,$status,$server_status,json_encode($json_output));
+					    }
+					}
+					
 				    
 				}
 				   
