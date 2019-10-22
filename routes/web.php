@@ -109,6 +109,8 @@ Route::post('bulk_import_find_with_file_id','BulkController@import_find_with_fil
 Route::post('bulk_import_verify','BulkController@import_verify')->name('bulk_import_verify')->middleware('verified');
 Route::post('process_import','BulkController@process_import')->name('process_import')->middleware('verified');
 
+Route::get('downloadfoundrecordsfile/{id}/{type}/{records}','EmailController@downloadFoundRecordsFile')->name('downloadfoundrecordsfile')->middleware('verified');
+
 
 //Subscriptions
 

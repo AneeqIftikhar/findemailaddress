@@ -26,16 +26,16 @@
                                     <span><i class="fas fa-download fa-lg"></i></span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-left">
-                                <a class="dropdown-item" href="{{URL::route('downloadcsv',['id' => $id,'type'=>'csv','records'=>'all'])}}">
+                                <a class="dropdown-item" href="{{URL::route('downloadfoundrecordsfile',['id' => $id,'type'=>'csv','records'=>'all'])}}">
                                   Download ALL (CSV)
                                 </a>
-                                <a class="dropdown-item" href="{{URL::route('downloadcsv',['id' => $id,'type'=>'xls','records'=>'all'])}}">
+                                <a class="dropdown-item" href="{{URL::route('downloadfoundrecordsfile',['id' => $id,'type'=>'xls','records'=>'all'])}}">
                                   Download ALL (XLS)
                                 </a>
-                                <a class="dropdown-item" href="{{URL::route('downloadcsv',['id' => $id,'type'=>'csv','records'=>'valid'])}}">
+                                <a class="dropdown-item" href="{{URL::route('downloadfoundrecordsfile',['id' => $id,'type'=>'csv','records'=>'valid'])}}">
                                   Download Valid (CSV)
                                 </a>
-                                <a class="dropdown-item" href="{{URL::route('downloadcsv',['id' => $id,'type'=>'xls','records'=>'valid'])}}">
+                                <a class="dropdown-item" href="{{URL::route('downloadfoundrecordsfile',['id' => $id,'type'=>'xls','records'=>'valid'])}}">
                                   Download Valid (XLS)
                                 </a>
                               </div>
