@@ -39,9 +39,11 @@ class NotifyServer implements ShouldQueue
     public function handle()
     {
 
+
         $this->file->status="Import Completed";
         $this->file->save();
-        $endpoint = env('PYTHON_SERVER_IP_DEVELOPMENT','http://3.17.231.9:5000/')."bulk_find";
+        //$endpoint = env('PYTHON_SERVER_IP','http://3.17.231.9:5000/')."bulk_find";
+        $endpoint = 'http://3.17.231.9:5000/'.'bulk_find';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,$endpoint);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -49,9 +51,7 @@ class NotifyServer implements ShouldQueue
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $server_output = curl_exec ($ch);
+        curl_close ($ch);
 
-
-
-       
     }
 }

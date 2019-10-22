@@ -14,7 +14,7 @@ use App\UserFiles;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithLimit;
 use App\Package;
-class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithStartRow,WithLimit
+class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithStartRow
 {
     protected $user = null;
     protected $file = null;
