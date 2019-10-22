@@ -7,7 +7,7 @@ class CurlRequest{
 
     public static function find_email($first_name,$last_name,$domain){
 
-        ;
+        
     	$endpoint = env('PYTHON_SERVER_IP','http://3.17.231.9:5000/')."find";
         $postdata='data=[{"'.'firstName":"'.$first_name.'", "'.'lastName":"'.$last_name.'", "'.'domainName": "'.$domain.'"}]';
         $ch = curl_init();

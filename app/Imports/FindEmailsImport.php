@@ -27,9 +27,9 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
     {     
         $this->user = $user;
         $package=Package::where('id',$this->user->package_id)->first();
-        if($this->user->credits >= ($package->credits*0.1))
+        if($this->user->credits >= ($package->credits*0.2))
         {
-            $this->limit=(int) ($package->credits*0.1);
+            $this->limit=(int) ($package->credits*0.2);
         }
         else
         {
