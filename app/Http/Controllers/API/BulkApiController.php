@@ -47,7 +47,7 @@ class BulkApiController extends Controller
 			    return response()->json(["errors"=>$errors],422);
 			}
 			$emails=Emails::where('user_file_id',$request->id)->where('status','Unverified')->take(10)->get();
-			if($emails)
+			if($emails && count($emails)>0)
 			{
 				return json_encode(array('status'=>'success','data'=>$emails));
 			}
