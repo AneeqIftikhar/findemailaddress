@@ -23,18 +23,18 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
     protected $domain = 2;
     protected $exclude_header=false;
     protected $limit=10;
+    protected $chunk_size=1;
     public function setUser($user) 
     {     
-        $this->user = $user;
-        $package=Package::where('id',$this->user->package_id)->first();
-        if($this->user->credits >= ($package->credits*0.1))
-        {
-            $this->limit=(int) ($package->credits*0.1);
-        }
-        else
-        {
-            $this->limit=(int) ($this->user->credits);
-        }
+        $this->user = $user;        
+    }
+    public function setLimit($limit) 
+    {     
+        $this->limit=$limit;        
+    }
+    public function setChunkSize($chunk_size) 
+    {     
+        $this->chunk_size=$chunk_size;
         
     }
     public function setUserFile($file) 
@@ -71,7 +71,7 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
     
     public function chunkSize(): int
     {
-        return 1000;
+        return $this->chunk_size;
     }
     public function startRow(): int
     {

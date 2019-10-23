@@ -25,7 +25,7 @@ class UserFiles extends Model
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'name', 'created_at', 'updated_at'];
+    protected $fillable = ['user_id', 'name','total_rows','title','type','status', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

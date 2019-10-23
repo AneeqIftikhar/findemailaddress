@@ -77,6 +77,7 @@ $(document).ready(function (e) {
             {
                 bulk_find_popup_populate_emails(data['data']);
                 $('#bulk_import_file_id').val(data['file_id']);
+                $('#bulk_find_modal_button').html('Import '+data['limit']+' Rows');
                 $("#bulk_find_modal").modal()
             },
             error: function(e) 

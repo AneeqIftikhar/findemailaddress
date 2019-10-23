@@ -168,7 +168,7 @@
                     <span class="invalid-feedback-custom">
                         <strong id="bulk_map_find_error"></strong>
                     </span>
-                    <button  class="btn btn-success" onClick="map_find()">Import</button>
+                    <button id="bulk_find_modal_button" class="btn btn-success" onClick="map_find()">Import</button>
                     </div>
                 </div>
               </div>
