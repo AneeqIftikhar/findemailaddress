@@ -3,14 +3,14 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Lists</div>
+                <div class="card-header"><h3>Emails</h3></div>
 
                 <div class="card-body">
                     <div class="row" style="margin-bottom: 4px">
                         <div class="col-md-6">
-                            <h3>File Title</h3>
+                            
                         </div>
                         <div class="col-md-6" align="right">
                          
@@ -56,13 +56,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <!--  @foreach($emails as $email)
-                          <tr class="table-row">    
-                              <td> {{$email->first_name }} {{$email->last_name}} </td>
-                              <td> {{$email->email}} </td>
-                              <td> {{$email->status}} </td>
-                          </tr>
-                         @endforeach -->
+
                       </tbody>
                     </table>
 

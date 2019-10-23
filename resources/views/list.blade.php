@@ -3,15 +3,12 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Lists</div>
+                <div class="card-header"><h3>Files</h3></div>
 
                 <div class="card-body">
                     <div class="row" style="margin-bottom: 4px">
-                        <div class="col-md-10">
-                            <h3>Your Files are Listed Here</h3>
-                        </div>
                         <!-- <div class="col-md-2">
                             <button class="btn btn-danger">Delete</button>
                         </div> -->
@@ -103,7 +100,7 @@ function populate_files(data)
         }
         if(!interval && total_pending>0)
         {
-          interval=setInterval(get_user_files_interval_set,1000);
+          interval=setInterval(get_user_files_interval_set,2000);
         }
         else if(interval && total_pending==0)
         {

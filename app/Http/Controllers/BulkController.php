@@ -9,6 +9,7 @@ use App\Imports\FindEmailsImport;
 use App\Imports\VerifyEmailsImport;
 use App\UserFiles;
 use Excel;
+use App\Package;
 class BulkController extends Controller
 {
 	public function import_find(Request $request)
@@ -34,9 +35,29 @@ class BulkController extends Controller
 			$user_file->title=$request->title;
 			$user_file->type='find';
 			$user_file->status='Mapping Required';
+			$user_file->total_rows=count($data);
 			$user_file->save();
 
-			return json_encode(array('status'=>"success",'data'=>$csv_data,'file_id'=>$user_file->id));
+			$package=Package::where('id',$user->package_id)->first();
+	        if($user->credits >= ($package->credits))
+	        {
+	            $limit=(int) ($package->credits);
+	        }
+	        else
+	        {
+	            $limit=(int) ($user->credits);
+	        }
+
+	        if(count($data)>=$limit)
+	        {
+	        	$will_process=$limit;
+	        }
+	        else
+	        {
+				$will_process=count($data);
+	        }
+
+			return json_encode(array('status'=>"success",'data'=>$csv_data,'file_id'=>$user_file->id,'limit'=>$will_process));
 		}
 		else
 		{
@@ -55,8 +76,27 @@ class BulkController extends Controller
 			$data = array_map('str_getcsv', file($path));
 	    	$csv_data = array_slice($data, 0, 3);
 	    	$csv_data[0] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $csv_data[0]);
+
+	    	$package=Package::where('id',$user->package_id)->first();
+	        if($user->credits >= ($package->credits))
+	        {
+	            $limit=(int) ($package->credits);
+	        }
+	        else
+	        {
+	            $limit=(int) ($user->credits);
+	        }
+
+	        if(count($data)>=$limit)
+	        {
+	        	$will_process=$limit;
+	        }
+	        else
+	        {
+				$will_process=count($data);
+	        }
 			
-			return json_encode(array('status'=>"success",'data'=>$csv_data,'file_id'=>$user_file->id));
+			return json_encode(array('status'=>"success",'data'=>$csv_data,'file_id'=>$user_file->id,'limit'=>$will_process));
 		}
 		else
 		{
@@ -72,15 +112,81 @@ class BulkController extends Controller
 	    {
 	    	$user_file->status='Pending Import';
 			$user_file->save();
+			$package=Package::where('id',$user->package_id)->first();
+	        if($user->credits >= ($package->credits))
+	        {
+	            $limit=(int) ($package->credits);
+	        }
+	        else
+	        {
+	            $limit=(int) ($user->credits);
+	        }
+
+	        $exclude_header=false;
+	        $total_rows=$user_file->total_rows;
+	        $chunk_size=1;
+	        if($exclude_header)
+	        {
+	            $total_rows=$total_rows-1;
+	        }
+	        if($total_rows>=$limit)
+	        {
+	            if($limit>1000)
+	            {
+	                if($limit%10==0)
+	                {
+	                    $chunk_size = (int) ($limit/10);
+	                }
+	                else if($limit%2==0)
+	                {
+	                    $chunk_size = (int) ($limit/2);
+	                }
+	                else
+	                {
+	                    $chunk_size = (int) (($limit+1)/2);
+	                }
+	            }
+	            else
+	            {
+	                $chunk_size = $limit;
+	            }
+	            
+	            
+	        }
+	        else
+	        {
+	            if($total_rows>1000)
+	            {
+	                if($total_rows%10==0)
+	                {
+	                    $chunk_size = (int) ($total_rows/10);
+	                }
+	                else if($total_rows%2==0)
+	                {
+	                    $chunk_size = (int) ($total_rows/2);
+	                }
+	                else
+	                {
+	                    $chunk_size = (int) (($total_rows-1)/2);
+	                }
+	            }
+	            else
+	            {
+	                $chunk_size = $total_rows;
+	            }
+	        }
+
 	    	$email_import=new FindEmailsImport;
 	        $email_import->setUser($user);
+	        $email_import->setLimit($limit);
+	        $email_import->setChunkSize($chunk_size);
 	        $email_import->setUserFile($user_file);
 	        $email_import->setHeaderMappings($request->first_name,$request->last_name,$request->domain);
 	        Excel::import($email_import , public_path('excel/'.$user_file->name))->chain([
 
 	            new NotifyServer($user,$user_file),
 	         ]);
-	        return json_encode(array('status'=>"success",'data'=>[]));
+	        return json_encode(array('status'=>"success",'data'=>['limit'=>$limit]));
 	    }
 	    else
 	    {
