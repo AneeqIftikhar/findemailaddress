@@ -112,7 +112,7 @@ class BulkController extends Controller
 	    {
 	    	$user_file->status='Pending Import';
 			$user_file->save();
-			$package=Package::where('id',$user_file->package_id)->first();
+			$package=Package::where('id',$user->package_id)->first();
 	        if($user->credits >= ($package->credits))
 	        {
 	            $limit=(int) ($package->credits);
