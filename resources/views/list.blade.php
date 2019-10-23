@@ -149,6 +149,7 @@ function bulk_import_find_with_file_id(id)
               console.log(response);
               bulk_find_popup_populate_emails(response['data']);
               $('#bulk_import_file_id').val(response['file_id']);
+              $('#bulk_find_modal_button').html('Import '+response['limit']+' Rows');
               $("#bulk_find_modal").modal()
               
           },
