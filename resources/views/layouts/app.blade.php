@@ -213,7 +213,7 @@
                     <span class="invalid-feedback-custom">
                         <strong id="bulk_map_verify_error"></strong>
                     </span>
-                    <button id="bulk_verify_modal_button" class="btn btn-success" onClick="map_find()">Import</button>
+                    <button id="bulk_verify_modal_button" class="btn btn-success" onClick="map_verify()">Import</button>
                     </div>
                 </div>
               </div>
