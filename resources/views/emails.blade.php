@@ -50,6 +50,7 @@
                    <table class="table" id="emails_table">
                       <thead class="black white-text">
                         <tr>
+                            <th scope="col">#</th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">Status</th>
@@ -105,16 +106,19 @@ function populate_emails(filter)
         {
           var newRow   = tableRef.insertRow();
 
-
           newCell  = newRow.insertCell(0);
-          newText  = document.createTextNode(data[i]['first_name']+" "+data[i]['last_name']);
+          newText  = document.createTextNode(i+1);
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(1);
-          newText  = document.createTextNode(data[i]['email']);
+          newText  = document.createTextNode(data[i]['first_name']+" "+data[i]['last_name']);
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(2);
+          newText  = document.createTextNode(data[i]['email']);
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(3);
           newText  = document.createTextNode(data[i]['status']);
           newCell.appendChild(newText);
         }
@@ -122,16 +126,19 @@ function populate_emails(filter)
         {
           var newRow   = tableRef.insertRow();
 
-
           newCell  = newRow.insertCell(0);
-          newText  = document.createTextNode(data[i]['first_name']+" "+data[i]['last_name']);
+          newText  = document.createTextNode(i+1);
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(1);
-          newText  = document.createTextNode(data[i]['email']);
+          newText  = document.createTextNode(data[i]['first_name']+" "+data[i]['last_name']);
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(2);
+          newText  = document.createTextNode(data[i]['email']);
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(3);
           newText  = document.createTextNode(data[i]['status']);
           newCell.appendChild(newText);
         }

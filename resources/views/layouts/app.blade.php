@@ -164,11 +164,56 @@
                     </div>
 
                   </div>
+                    <div class="modal-footer">
+                                <div class="custom-control custom-checkbox" style="min-width: 200px!important;">
+                                    <input type="checkbox" class="custom-control-input" id="skip_header_map_find" name="skip_header">
+                                    <label class="custom-control-label" for="skip_header">Skip First Row?</label>
+                                </div>
+                                <span class="invalid-feedback-custom">
+                                    <strong id="bulk_map_find_error"></strong>
+                                </span>
+                            
+                                <button id="bulk_find_modal_button" class="btn btn-success" onClick="map_find()">Import</button>
+                         
+                        
+                        
+                        
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal" tabindex="-1" role="dialog" id="bulk_verify_modal">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  
+                  <div class="modal-body">
+                    <input type="hidden" name="bulk_import_file_id" id="bulk_import_verify_file_id">
+                    <div class="card activity_log" style="height: 100%">
+                        <div class="card-header"><h4>Mapping CSV Results</h4></div>
+                        <div class="card-body p-0 py-4" style="overflow-y: auto; max-height: 68vh;">
+                            <div class="row m-0 mb-4">
+                                <div class="col-12" style="padding-left: 1.4rem !important;">
+                                    <table id="bulk_verify_popup_table" class="table">
+                                      <tbody>
+
+
+                                      </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                  </div>
                   <div class="modal-footer">
+                    <div class="custom-control custom-checkbox" style="min-width: 200px!important;">
+                        <input type="checkbox" class="custom-control-input" id="skip_header_map_verify" name="skip_header_map_verify">
+                        <label class="custom-control-label" for="skip_header_map_verify">Skip First Row?</label>
+                    </div>
                     <span class="invalid-feedback-custom">
-                        <strong id="bulk_map_find_error"></strong>
+                        <strong id="bulk_map_verify_error"></strong>
                     </span>
-                    <button id="bulk_find_modal_button" class="btn btn-success" onClick="map_find()">Import</button>
+                    <button id="bulk_verify_modal_button" class="btn btn-success" onClick="map_find()">Import</button>
                     </div>
                 </div>
               </div>
@@ -474,6 +519,105 @@
                     newCell.appendChild(select);
                 }
                 
+        }
+        function map_verify()
+        {
+            document.getElementById('bulk_map_verify_error').innerHTML="";
+            select_options=document.getElementsByClassName('map_verify_select');
+            var email=-1;
+            var email_count=0;
+            for(var i=0;i<select_options.length;i++)
+            {
+                if(select_options[i].value=="email")
+                {
+                    email_count++;
+                }
+            }
+            if(email_count==0 || email_count>1)
+            {
+                document.getElementById('bulk_map_verify_error').innerHTML="Please Select Email Field For One Column";
+            }
+            else
+            {
+                for(var i=0;i<select_options.length;i++)
+                {
+                    if(select_options[i].value=="email")
+                    {
+                        email=select_options[i].id;
+                    }
+                }
+                var file_id=$('#bulk_import_verify_file_id').val();
+                 $.ajax({
+                        method: 'POST',
+                        dataType: 'json', 
+                        url: 'process_import', 
+                        data: {'email' : email,'file_id':file_id,"_token": "{{ csrf_token() }}"}, 
+                        success: function(response)
+                        { 
+                            
+                            console.log(response);
+                            window.location.href = "{{ route('list') }}";
+                            
+
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            
+                            if( jqXHR.status === 422 )
+                            {
+                                
+                            }
+                            else if( jqXHR.status === 419 )
+                            {
+
+                                $("#login_again").modal();
+                                
+                            }
+                            else if(jqXHR.status === 403)
+                            {
+                                $("#login_again").modal()
+                                
+                            }
+                            else
+                            {
+                                 console.log(jqXHR);
+                               
+                            }
+                        },
+                        timeout: 60000 // sets timeout to 60 seconds
+                    });
+            }
+
+            
+        }
+        function bulk_verify_popup_populate_emails(data)
+        {
+            var tableRef = document.getElementById('bulk_verify_popup_table').getElementsByTagName('tbody')[0];
+                for(var i = tableRef.rows.length - 1; i >= 0; i--)
+                {
+                    tableRef.deleteRow(i);
+                }
+                for(var i = 0;i<data.length;i++)
+                {
+                    newRow   = tableRef.insertRow();
+                    for(var j = 0;j<data[i].length;j++)
+                    {
+                          newCell  = newRow.insertCell(j);
+                          newText  = document.createTextNode(data[i][j]);
+                          newCell.appendChild(newText);
+                    }
+                       
+                }
+                newRow   = tableRef.insertRow();
+                for(var j = 0;j<data[1].length;j++)
+                {
+                    newCell  = newRow.insertCell(j);
+                    select = document.createElement("select");
+                    select.id=j;
+                    select.className="map_verify_select browser-default";
+                    select.options.add( new Option("Select","", true, true) );
+                    select.options.add( new Option("Email","email") );
+                    newCell.appendChild(select);
+                }
         }
     </script>
 </body>
