@@ -11,7 +11,7 @@
                 	@if ($errors->any())
 					        {{ implode('', $errors->all('<div>:message</div>')) }}
 					@endif
-                   <form method="POST" action="{{ route('bulk_import_verify') }}" enctype="multipart/form-data" aria-label="{{ __('Upload') }}">
+                   <form id="bulk_verify_form" method="POST" action="{{ route('bulk_import_verify') }}" enctype="multipart/form-data" aria-label="{{ __('Upload') }}">
                     @csrf
                     	
 	                    <div class="form-group row">
@@ -51,6 +51,41 @@
     </div>
 </div>
 @endsection
-@section('scripts')
-  
-@endsection
+@push('scripts')
+<script type="text/javascript">
+
+
+$(document).ready(function (e) {
+    
+ $("#bulk_verify_form").on('submit',(function(e) {
+  e.preventDefault();
+      $.ajax({
+            url: "bulk_import_verify",
+            type: "POST",
+            data:  new FormData(this),
+            dataType: 'json', 
+            contentType: false,
+            cache: false,
+            processData:false,
+            beforeSend : function()
+            {
+                $("#bulk_verify_form")[0].reset(); 
+                $("#bulk_verify_error").fadeOut();
+            },
+            success: function(data)
+            {
+                bulk_verify_popup_populate_emails(data['data']);
+                $('#bulk_import_verify_file_id').val(data['file_id']);
+                $('#bulk_verify_modal_button').html('Import '+data['limit']+' Rows');
+                $("#bulk_verify_modal").modal()
+            },
+            error: function(e) 
+            {
+                $("#bulk_verify_error").html(e).fadeIn();
+            }          
+        });
+    }));
+});
+
+</script>
+@endpush
