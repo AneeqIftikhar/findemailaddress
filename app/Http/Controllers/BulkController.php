@@ -175,7 +175,7 @@ class BulkController extends Controller
 	                $chunk_size = $total_rows;
 	            }
 	        }
-	        if($user_file->type="find")
+	        if($user_file->type=="find")
 	        {
 	        	$email_import=new FindEmailsImport;
 		        $email_import->setUser($user);
