@@ -147,10 +147,21 @@ function bulk_import_find_with_file_id(id)
           success: function(response)
           { 
               console.log(response);
-              bulk_find_popup_populate_emails(response['data']);
-              $('#bulk_import_file_id').val(response['file_id']);
-              $('#bulk_find_modal_button').html('Import '+response['limit']+' Rows');
-              $("#bulk_find_modal").modal()
+              if(response['file_type']=="find")
+              {
+                bulk_find_popup_populate_emails(response['data']);
+                $('#bulk_import_file_id').val(response['file_id']);
+                $('#bulk_find_modal_button').html('Import '+response['limit']+' Rows');
+                $("#bulk_find_modal").modal();
+              }
+              else
+              {
+                bulk_verify_popup_populate_emails(response['data']);
+                $('#bulk_import_verify_file_id').val(response['file_id']);
+                $('#bulk_verify_modal_button').html('Import '+response['limit']+' Rows');
+                $("#bulk_verify_modal").modal()
+              }
+              
               
           },
           error: function(jqXHR, textStatus, errorThrown) {

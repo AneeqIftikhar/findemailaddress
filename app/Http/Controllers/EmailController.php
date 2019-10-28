@@ -274,7 +274,8 @@ class EmailController extends Controller
          if($user_file)
          {
             $emails=Emails::where('user_file_id',$id)->get();
-            return view('emails',compact('emails','id'));
+            $data=['emails'=>$emails,'file'=>$user_file];
+            return view('emails',compact('data',$data));
          }
          else
          {
