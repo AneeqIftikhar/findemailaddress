@@ -33,5 +33,13 @@ Route::middleware('LimitRequestAPI')->group(function () {
 	Route::post('verify_email_api','API\EmailApiController@verify_email_api');
 });
 
-Route::post('get_emails_api','API\EmailApiController@get_emails_api');
-Route::post('add_emails_api','API\EmailApiController@add_emails_api');
+
+
+Route::middleware('cors')->group(function () {
+	
+    Route::post('get_emails_api','API\EmailApiController@get_emails_api');
+	Route::post('add_emails_api','API\EmailApiController@add_emails_api');
+	Route::post('failed_response_notification','API\EmailApiController@failed_response_notification');
+});
+
+
