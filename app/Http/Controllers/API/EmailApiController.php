@@ -11,6 +11,7 @@ use App\Rules\IsValidDomain;
 use Validator;
 use App\Helpers\CurlRequest;
 use App\Helpers\Functions;
+use Mail;
 class EmailApiController extends Controller
 {
 
@@ -215,6 +216,16 @@ class EmailApiController extends Controller
 		{
 			abort(404);
 		}
+    }
+
+    function failed_response_notification(Request $request)
+    {
+    	$data = $request->json_response;
+    	$email_address=env('FAILED_RESPONSE_EMAIL','notifications@findemailaddress.co');
+        Mail::send('emails.failed_response', ['json_response' => $data], function ($m) use ($data,$email_address) {
+            $m->to($email_address, "Team FEA")->subject('Failed Response');
+        });
+        return json_encode(array('status'=>'success'));
     }
     
 }
