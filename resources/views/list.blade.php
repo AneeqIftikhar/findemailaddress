@@ -17,6 +17,7 @@
                       <thead class="black white-text">
                         <tr>
                             <th scope="col">Title</th>
+                            <th scope="col">Type</th>
                             <th scope="col">Status</th>
                             <th scope="col">Date/Time Uploaded</th>
                         </tr>
@@ -61,6 +62,10 @@ function populate_files(data)
             newCell.appendChild(newText);
 
             newCell  = newRow.insertCell(1);
+            newText  = document.createTextNode(data[i]['type']);
+            newCell.appendChild(newText);
+
+            newCell  = newRow.insertCell(2);
             if(data[i]['status']=="Pending Import")
             {
               spinner = document.createElement("i");
@@ -92,7 +97,7 @@ function populate_files(data)
             }
             
 
-            newCell  = newRow.insertCell(2);
+            newCell  = newRow.insertCell(3);
             newText  = document.createTextNode(data[i]['created_at']);
             newCell.appendChild(newText);
 
@@ -147,10 +152,21 @@ function bulk_import_find_with_file_id(id)
           success: function(response)
           { 
               console.log(response);
-              bulk_find_popup_populate_emails(response['data']);
-              $('#bulk_import_file_id').val(response['file_id']);
-              $('#bulk_find_modal_button').html('Import '+response['limit']+' Rows');
-              $("#bulk_find_modal").modal()
+              if(response['file_type']=="find")
+              {
+                bulk_find_popup_populate_emails(response['data']);
+                $('#bulk_import_file_id').val(response['file_id']);
+                $('#bulk_find_modal_button').html('Import '+response['limit']+' Rows');
+                $("#bulk_find_modal").modal();
+              }
+              else
+              {
+                bulk_verify_popup_populate_emails(response['data']);
+                $('#bulk_import_verify_file_id').val(response['file_id']);
+                $('#bulk_verify_modal_button').html('Import '+response['limit']+' Rows');
+                $("#bulk_verify_modal").modal()
+              }
+              
               
           },
           error: function(jqXHR, textStatus, errorThrown) {

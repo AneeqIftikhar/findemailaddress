@@ -166,8 +166,8 @@
                   </div>
                     <div class="modal-footer">
                                 <div class="custom-control custom-checkbox" style="min-width: 200px!important;">
-                                    <input type="checkbox" class="custom-control-input" id="skip_header_map_find" name="skip_header">
-                                    <label class="custom-control-label" for="skip_header">Skip First Row?</label>
+                                    <input type="checkbox" class="custom-control-input" id="skip_header_map_find" name="skip_header_map_find">
+                                    <label class="custom-control-label" for="skip_header_map_find">Skip First Row?</label>
                                 </div>
                                 <span class="invalid-feedback-custom">
                                     <strong id="bulk_map_find_error"></strong>

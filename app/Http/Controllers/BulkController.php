@@ -29,15 +29,15 @@ class BulkController extends Controller
 			{
 			   return json_encode(array('status'=>"fail",'message','Unexpected Storage Error'));
 			}
+			$total_rows=count($data);
 			$user_file = new UserFiles;
 			$user_file->name = $excel_name;
 			$user_file->user_id=$user->id;
 			$user_file->title=$request->title;
 			$user_file->type='find';
 			$user_file->status='Mapping Required';
-			$user_file->total_rows=count($data);
+			$user_file->total_rows=$total_rows;
 			$user_file->save();
-
 			$package=Package::where('id',$user->package_id)->first();
 	        if($user->credits >= ($package->credits))
 	        {
@@ -96,7 +96,7 @@ class BulkController extends Controller
 				$will_process=count($data);
 	        }
 			
-			return json_encode(array('status'=>"success",'data'=>$csv_data,'file_id'=>$user_file->id,'limit'=>$will_process));
+			return json_encode(array('status'=>"success",'data'=>$csv_data,'file_id'=>$user_file->id,'file_type'=>$user_file->type,'limit'=>$will_process));
 		}
 		else
 		{
@@ -124,6 +124,10 @@ class BulkController extends Controller
 
 	        $exclude_header=false;
 	        $total_rows=$user_file->total_rows;
+	        if($limit>$total_rows)
+	        {
+	        	$limit=$total_rows;
+	        }
 	        $chunk_size=1;
 	        if($exclude_header)
 	        {
@@ -202,7 +206,7 @@ class BulkController extends Controller
 		         ]);
 	        }
 	    	
-	        return json_encode(array('status'=>"success",'data'=>['limit'=>$limit]));
+	        return json_encode(array('status'=>"success",'data'=>['limit'=>$limit,'chunk_size'=>$chunk_size]));
 	    }
 	    else
 	    {

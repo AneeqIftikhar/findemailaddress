@@ -42,8 +42,7 @@ class NotifyServer implements ShouldQueue
 
         $this->file->status="Import Completed";
         $this->file->save();
-        //$endpoint = env('PYTHON_SERVER_IP','http://3.17.231.9:5000/')."bulk_find";
-        $endpoint = 'http://3.17.231.9:5000/';
+        $endpoint = env('PYTHON_SERVER_IP','http://3.17.231.9:5000/');
         if($this->file->type=='find')
         {
             $endpoint = $endpoint.'bulk_find';
