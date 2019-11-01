@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\PluginEmails;
 use App\Emails;
+use App\Failed_Logs;
 use App\Rules\BlackListDomains;
 use App\Rules\IsValidDomain;
 use Validator;
@@ -221,10 +222,22 @@ class EmailApiController extends Controller
     function failed_response_notification(Request $request)
     {
     	$data = $request->json_response;
-    	$email_address=env('FAILED_RESPONSE_EMAIL','notifications@findemailaddress.co');
-        Mail::send('emails.failed_response', ['json_response' => $data], function ($m) use ($data,$email_address) {
+    	$server_output=json_decode($data);
+    	$failed_logs=new Failed_Logs;
+    	$failed_logs->server_json_dump=$data;
+    	if(isset($server_output[0]->proxy))
+    	{
+    		$failed_logs->proxy=json_encode($server_output[0]->proxy);
+    	}
+    	$failed_logs->save();
+    	if($request->send)
+    	{
+    		$email_address=env('FAILED_RESPONSE_EMAIL','notifications@findemailaddress.co');
+        	Mail::send('emails.failed_response', ['json_response' => $data], function ($m) use ($data,$email_address) {
             $m->to($email_address)->subject('Failed Response');
         });
+    	}
+    	
         return json_encode(array('status'=>'success'));
     }
     
