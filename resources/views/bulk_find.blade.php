@@ -55,7 +55,7 @@
                     		<label for="excel_file" class="col-sm-4 col-form-label text-md-left">{{ __('File') }}</label>
                     		<div class="col-md-12">
                                 <input type="file" class="form-control-file" name="excel_file" id="excel_file" aria-describedby="fileHelp" required>
-                                <small id="fileHelp" class="form-text text-muted">Please upload a valid Excel or CSV file. Size of file should not be more than 5MB.</small>
+                                <small id="fileHelp" class="form-text text-muted">Please upload a valid CSV file. Size of file should not be more than 5MB.</small>
                                 @if ($errors->has('excel_file'))
 								    <div class="error">{{ $errors->first('excel_file') }}</div>
 								@endif
@@ -70,6 +70,14 @@
                             
                     </form>
             	</div>
+                <div class="card-footer">
+                    <ul>
+                        <li>For better results, it's recommended to use the domain name instead of URL.</li>
+                        <li>Number of credits limit the amount of rows that can be queried for. Additional rows in the file will be skipped.</li>
+                        <li>Some special or unexpected characters may be deleted in the file.</li>
+                        <li>Rows that fail validations will be skipped</li>
+                    </ul>
+                </div>
             </div>
             
         </div>

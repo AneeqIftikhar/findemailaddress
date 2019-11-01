@@ -13,8 +13,16 @@ use App\User;
 use App\UserFiles;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithLimit;
-class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithStartRow, WithLimit
+use Maatwebsite\Excel\Concerns\WithValidation;
+use App\Rules\BlackListDomains;
+use App\Rules\IsValidDomain;
+use App\Helpers\Functions;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\Importable;
+class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithStartRow, WithLimit, WithValidation, SkipsOnFailure
 {
+    use Importable, SkipsFailures;
     protected $user = null;
     protected $file = null;
     protected $first_name = 0;
@@ -50,6 +58,19 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
     {     
         $this->exclude_header = $exclude_header;
     }
+    public function rules(): array
+    {
+        $first_name = strval($this->first_name);
+        $last_name = strval($this->last_name);
+        $domain = strval($this->domain);
+        
+        return [
+            $first_name => ['required', 'string', 'max:50'],
+            $last_name => ['required', 'string', 'max:50'],
+            $domain => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
+        ];
+
+    }
     public function model(array $row)
     {
         $user_id=$this->user->id;
@@ -57,10 +78,17 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
         $first_name = $this->first_name;
         $last_name = $this->last_name;
         $domain = $this->domain;
+
+        if (!isset($row[$first_name]) || !isset($row[$last_name]) || !isset($row[$domain])) {
+            return null;
+        }
+        $first_name_field=strtolower(Functions::removeAccents($row[$first_name]));
+        $last_name_field=strtolower(Functions::removeAccents($row[$last_name]));
+        $domain_field=Functions::get_domain(strtolower(Functions::removeAccentsDomain($row[$domain])));
         return new Emails([
-            'first_name' => $row[$first_name],
-            'last_name' => $row[$last_name],
-            'domain' => $row[$domain],
+            'first_name' => $first_name_field,
+            'last_name' => $last_name_field,
+            'domain' => $domain_field,
             'status' => 'Unverified',
             'user_id'=>$user_id,
             'user_file_id'=>$file_id,
