@@ -258,12 +258,12 @@ class EmailController extends Controller
       }
       public function getUserFoundEmails(Request $request)
       {
-         $emails=Auth::user()->emails()->where('type','find')->where('status','!=','Unverified')->orderBy('id', 'DESC')->with('bounce')->get();
+         $emails=Auth::user()->emails()->where('type','find')->where('status','!=','Unverified')->whereNull('user_file_id')->orderBy('id', 'DESC')->with('bounce')->get();
          return view('find_history',compact('emails'));
       }
       public function getUserVerifiedEmails(Request $request)
       {
-         $emails=Auth::user()->emails()->where('type','verify')->where('status','!=','Unverified')->orderBy('id', 'DESC')->with('bounce')->get();
+         $emails=Auth::user()->emails()->where('type','verify')->where('status','!=','Unverified')->whereNull('user_file_id')->orderBy('id', 'DESC')->with('bounce')->get();
          return view('verify_history',compact('emails'));
       }
 

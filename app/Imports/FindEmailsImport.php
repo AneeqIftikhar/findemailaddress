@@ -17,8 +17,12 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 use App\Rules\BlackListDomains;
 use App\Rules\IsValidDomain;
 use App\Helpers\Functions;
-class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithStartRow, WithLimit, WithValidation
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\Importable;
+class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithStartRow, WithLimit, WithValidation, SkipsOnFailure
 {
+    use Importable, SkipsFailures;
     protected $user = null;
     protected $file = null;
     protected $first_name = 0;
@@ -56,13 +60,14 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
     }
     public function rules(): array
     {
-        $first_name = $this->first_name;
-        $last_name = $this->last_name;
-        $domain = $this->domain;
+        $first_name = strval($this->first_name);
+        $last_name = strval($this->last_name);
+        $domain = strval($this->domain);
+        
         return [
             $first_name => ['required', 'string', 'max:50'],
             $last_name => ['required', 'string', 'max:50'],
-            $domain => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain]
+            $domain => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
         ];
 
     }
