@@ -11,6 +11,7 @@ use App\Imports\VerifyEmailsImport;
 use App\UserFiles;
 use Excel;
 use App\Package;
+//use PhpOffice\PhpSpreadsheet\IOFactory;
 class BulkController extends Controller
 {
 	public function import_find(Request $request)
@@ -23,6 +24,17 @@ class BulkController extends Controller
 		{
 			$path = $file->getRealPath();
 			$data = array_map('str_getcsv', file($path));
+			// $request_file_type=IOFactory::identify($file);
+			// $objReader = IOFactory::createReader($request_file_type);
+			// $objReader->setReadDataOnly(true);
+			// $objReader->setLoadSheetsOnly(0);
+			// $objPHPExcel = $objReader->load($file);
+			// $sheet = $objPHPExcel->getSheet(0);  
+
+			// $total_rows = $sheet->getHighestDataRow();
+			
+
+
 			$csv_data = Excel::toArray(new EmailsImportArray, $file);
 			$excel_name=$filename.'.'.$file->getClientOriginalExtension();
 			if(!$file->move(public_path('excel'),$excel_name))
@@ -48,13 +60,13 @@ class BulkController extends Controller
 	            $limit=(int) ($user->credits);
 	        }
 
-	        if(count($data)>=$limit)
+	        if($total_rows>=$limit)
 	        {
 	        	$will_process=$limit;
 	        }
 	        else
 	        {
-				$will_process=count($data);
+				$will_process=$total_rows;
 	        }
 
 			return json_encode(array('status'=>"success",'data'=>$csv_data[0],'file_id'=>$user_file->id,'limit'=>$will_process));
@@ -123,6 +135,10 @@ class BulkController extends Controller
 	        }
 
 	        $exclude_header=false;
+	        if($request->exclude_header=="1")
+	        {
+	        	$exclude_header=true;
+	        }
 	        $total_rows=$user_file->total_rows;
 	        if($limit>$total_rows)
 	        {
@@ -186,6 +202,7 @@ class BulkController extends Controller
 		        $email_import->setLimit($limit);
 		        $email_import->setChunkSize($chunk_size);
 		        $email_import->setUserFile($user_file);
+		        $email_import->setExcludeHeader($exclude_header);
 		        $email_import->setHeaderMappings($request->first_name,$request->last_name,$request->domain);
 		        Excel::import($email_import , public_path('excel/'.$user_file->name))->chain([
 
@@ -200,6 +217,7 @@ class BulkController extends Controller
 		        $email_import->setChunkSize($chunk_size);
 		        $email_import->setUserFile($user_file);
 		        $email_import->setHeaderMappings($request->email);
+		        $email_import->setExcludeHeader($exclude_header);
 		        Excel::import($email_import , public_path('excel/'.$user_file->name))->chain([
 
 		            new NotifyServer($user,$user_file),

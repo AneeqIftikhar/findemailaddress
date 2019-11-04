@@ -32,7 +32,7 @@
                             
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-7">
+                            <div class="col-md-8">
                                 <p>Your file must use commas as column delimiters.</p>
                                 <p>To find the email addresses, you need columns with:</p>
                                 <ul>
@@ -46,9 +46,10 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="col-md-5">
-                                <img src="{{ asset('images/csv_bulk_find.png') }}" style="max-width: 100%;"> 
+                            <div class="col-md-4">
+                                <img src="{{ asset('images/csv_bulk_find.png') }}" style="max-width: 100%; "> 
                             </div>
+
                         </div>
                         
 	                    <div class="form-group row">
@@ -74,7 +75,7 @@
                     <ul>
                         <li>For better results, it's recommended to use the domain name instead of the URL.</li>
                         <li>You can't query rows more than your total credits. Additional rows in the file will be skipped.</li>
-                        <li>Some special or unexpected characters may be deleted in the file.</li>
+                        <li>Some special or unexpected characters may be replaced/deleted in the file.</li>
                         <li>Rows that fail Validations will be skipped</li>
                     </ul>
                 </div>

@@ -444,12 +444,17 @@
                         domain=select_options[i].id;
                     }
                 }
+                var exclude_header="0";
+                if (document.getElementById('skip_header_map_find').checked) 
+                {
+                    exclude_header="1";
+                }
                 var file_id=$('#bulk_import_file_id').val();
                  $.ajax({
                         method: 'POST',
                         dataType: 'json', 
                         url: 'process_import', 
-                        data: {'first_name' : first_name,'last_name':last_name,'domain':domain,'file_id':file_id,"_token": "{{ csrf_token() }}"}, 
+                        data: {'first_name' : first_name,'last_name':last_name,'domain':domain,'exclude_header':exclude_header,'file_id':file_id,"_token": "{{ csrf_token() }}"}, 
                         success: function(response)
                         { 
                             
@@ -547,11 +552,16 @@
                     }
                 }
                 var file_id=$('#bulk_import_verify_file_id').val();
+                var exclude_header="0";
+                if (document.getElementById('skip_header_map_verify').checked) 
+                {
+                    exclude_header="1";
+                } 
                  $.ajax({
                         method: 'POST',
                         dataType: 'json', 
                         url: 'process_import', 
-                        data: {'email' : email,'file_id':file_id,"_token": "{{ csrf_token() }}"}, 
+                        data: {'email' : email,'file_id':file_id,'exclude_header':exclude_header,"_token": "{{ csrf_token() }}"}, 
                         success: function(response)
                         { 
                             
