@@ -22,7 +22,8 @@ use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Validators\Failure;
 use App\File_Failure;
-class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithStartRow, WithLimit, WithValidation, SkipsOnFailure
+use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
+class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithStartRow, WithLimit, WithValidation, SkipsOnFailure,  WithCustomCsvSettings
 {
     use Importable;
     protected $user = null;
@@ -141,5 +142,11 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
             $failure_db->values=json_encode($failure->values());
             $failure_db->save();
         }
+    }
+    public function getCsvSettings(): array
+    {
+        return [
+            'input_encoding' => 'ISO-8859-1'
+        ];
     }
 }
