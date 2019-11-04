@@ -332,7 +332,7 @@ class EmailController extends Controller
           $file=UserFiles::where('id',$id)->first();
           $email_export=new FoundFileEmailsExport();
           $email_export->set_details($id,$records);
-          return Excel::download($email_export, 'emails.'.$type);
+          return Excel::download($email_export, $file->title.'-processed.'.$type);
        }
 
        public function downloadVerifiedRecords(Request $request,$type,$records)
