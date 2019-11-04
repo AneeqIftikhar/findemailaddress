@@ -225,12 +225,12 @@ class EmailApiController extends Controller
     	$server_output=json_decode($data);
     	$failed_logs=new Failed_Logs;
     	$failed_logs->server_json_dump=$data;
-    	if(isset($server_output[0]->proxy))
+    	if(isset($server_output->proxy))
     	{
-    		$failed_logs->proxy=json_encode($server_output[0]->proxy);
+    		$failed_logs->proxy=json_encode($server_output->proxy);
     	}
     	$failed_logs->save();
-    	if($request->send)
+    	if($request->send=="true")
     	{
     		$email_address=env('FAILED_RESPONSE_EMAIL','notifications@findemailaddress.co');
         	Mail::send('emails.failed_response', ['json_response' => $data], function ($m) use ($data,$email_address) {
