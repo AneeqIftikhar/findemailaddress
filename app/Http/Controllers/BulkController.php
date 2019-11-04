@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Jobs\NotifyServer;
 use App\Imports\FindEmailsImport;
+use App\Imports\EmailsImportArray;
 use App\Imports\VerifyEmailsImport;
 use App\UserFiles;
 use Excel;
@@ -22,8 +23,7 @@ class BulkController extends Controller
 		{
 			$path = $file->getRealPath();
 			$data = array_map('str_getcsv', file($path));
-	    	$csv_data = array_slice($data, 0, 3);
-	    	$csv_data[0] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $csv_data[0]);
+			$csv_data = Excel::toArray(new EmailsImportArray, $file);
 			$excel_name=$filename.'.'.$file->getClientOriginalExtension();
 			if(!$file->move(public_path('excel'),$excel_name))
 			{
@@ -57,7 +57,7 @@ class BulkController extends Controller
 				$will_process=count($data);
 	        }
 
-			return json_encode(array('status'=>"success",'data'=>$csv_data,'file_id'=>$user_file->id,'limit'=>$will_process));
+			return json_encode(array('status'=>"success",'data'=>$csv_data[0],'file_id'=>$user_file->id,'limit'=>$will_process));
 		}
 		else
 		{
@@ -224,8 +224,9 @@ class BulkController extends Controller
 		{
 			$path = $file->getRealPath();
 			$data = array_map('str_getcsv', file($path));
-	    	$csv_data = array_slice($data, 0, 3);
-	    	$csv_data[0] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $csv_data[0]);
+	    	// $csv_data = array_slice($data, 0, 3);
+	    	// $csv_data[0] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $csv_data[0]);
+	    	$csv_data = Excel::toArray(new EmailsImportArray, $file);
 			$excel_name=$filename.'.'.$file->getClientOriginalExtension();
 			if(!$file->move(public_path('excel'),$excel_name))
 			{
