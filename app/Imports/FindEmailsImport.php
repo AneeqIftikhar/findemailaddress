@@ -20,9 +20,11 @@ use App\Helpers\Functions;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Validators\Failure;
+use App\File_Failure;
 class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithStartRow, WithLimit, WithValidation, SkipsOnFailure
 {
-    use Importable, SkipsFailures;
+    use Importable;
     protected $user = null;
     protected $file = null;
     protected $first_name = 0;
@@ -112,5 +114,32 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
     {
         return $this->limit;
     }
-    
+    /**
+     * @param Failure[] $failures
+     */
+    public function onFailure(Failure ...$failures)
+    {
+
+        foreach ($failures as $failure) {
+            $failure_db=new File_Failure();
+            $failure_db->user_file_id=$this->file->id;
+            $failure_db->row=$failure->row(); 
+            if($failure->attribute()==$this->first_name)
+            {
+                $attribute="Firstname";
+            }
+            else if($failure->attribute()==$this->last_name)
+            {
+                $attribute="Lastname";
+            }
+            else
+            {
+                $attribute="Domain";
+            }
+            $failure_db->attribute=$attribute;
+            $failure_db->errors=json_encode($failure->errors());
+            $failure_db->values=json_encode($failure->values());
+            $failure_db->save();
+        }
+    }
 }

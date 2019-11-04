@@ -72,10 +72,10 @@
             	</div>
                 <div class="card-footer">
                     <ul>
-                        <li>For better results, it's recommended to use the domain name instead of URL.</li>
-                        <li>Number of credits limit the amount of rows that can be queried for. Additional rows in the file will be skipped.</li>
+                        <li>For better results, it's recommended to use the domain name instead of the URL.</li>
+                        <li>You can't query rows more than your total credits. Additional rows in the file will be skipped.</li>
                         <li>Some special or unexpected characters may be deleted in the file.</li>
-                        <li>Rows that fail validations will be skipped</li>
+                        <li>Rows that fail Validations will be skipped</li>
                     </ul>
                 </div>
             </div>
