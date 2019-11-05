@@ -11,12 +11,20 @@ use App\Imports\VerifyEmailsImport;
 use App\UserFiles;
 use Excel;
 use App\Package;
+use Validator;
 //use PhpOffice\PhpSpreadsheet\IOFactory;
 class BulkController extends Controller
 {
 	public function import_find(Request $request)
 	{
+		$validator = Validator::make($request->all(), [
+		    'excel_file' => ['required', 'mimes:csv,txt'],
+		]);
 
+		if ($validator->fails()) {
+		  $errors = $validator->errors();
+		    return response()->json(["errors"=>$errors],422);
+		}
 		$user=Auth::user();
 		$filename=''.time() . uniqid(rand());
 		$file=request()->file('excel_file');
