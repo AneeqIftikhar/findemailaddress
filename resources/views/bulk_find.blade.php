@@ -64,7 +64,7 @@
                         </div>
                         <div class="form-group row">
                         	<div class="col-md-6">
-                        		<button type="submit" class="btn btn-primary">Submit</button>
+                        		<button type="submit" id="submit_file_upload" class="btn btn-primary">Upload</button>
                         	</div>
                         	
                         </div>
@@ -105,9 +105,11 @@ $(document).ready(function (e) {
             {
                 $("#bulk_find_form")[0].reset(); 
                 $("#bulk_find_error").fadeOut();
+                $('#submit_file_upload').html('<i class="fa fa-spinner fa-spin"></i>');
             },
             success: function(data)
             {
+                $('#submit_file_upload').html('Upload');
                 bulk_find_popup_populate_emails(data['data']);
                 $('#bulk_import_file_id').val(data['file_id']);
                 $('#bulk_find_modal_button').html('Import '+data['limit']+' Rows');
