@@ -92,8 +92,33 @@ function populate_files(data)
               url = url.replace(':id', data[i]['id']);
               newRow.setAttribute('data-href',url);
               newRow.setAttribute('value',data[i]['id']);
+
+              // newText  = document.createTextNode(data[i]['processed_emails_count']+'/'+data[i]['total_rows']+" Processed");
+              // newCell.appendChild(newText);
+
+              newDiv = document.createElement("div"); 
+              newDiv.className="progress md-progress";
+
+              newDiv2 = document.createElement("div"); 
+              newDiv2.className="progress-bar progress-bar-striped progress-bar-animated";
+              newDiv2.setAttribute('role',"progressbar");
+              percent=(data[i]['processed_emails_count']*100)/data[i]['total_rows'];
+              if(percent<10)
+              {
+                percent=10;
+              }
+              var style='"width: 50%" aria-valuenow="0" aria-valuemin="10" aria-valuemax="100"';
+              newDiv2.setAttribute('style',style);
+              newDiv2.id=data[i]['id']+"_progress_bar";
+
               newText  = document.createTextNode(data[i]['processed_emails_count']+'/'+data[i]['total_rows']+" Processed");
-              newCell.appendChild(newText);
+              
+              newDiv2.appendChild(newText);
+              newDiv.appendChild(newDiv2);
+              
+              newCell.appendChild(newDiv);
+
+              $("#"+data[i]['id']+"_progress_bar").css("width", percent + "%")
               total_pending++;
             }
             else
@@ -117,7 +142,7 @@ function populate_files(data)
         }
         if(!interval && total_pending>0)
         {
-          interval=setInterval(get_user_files_interval_set,2000);
+          interval=setInterval(get_user_files_interval_set,5000);
         }
         else if(interval && total_pending==0)
         {

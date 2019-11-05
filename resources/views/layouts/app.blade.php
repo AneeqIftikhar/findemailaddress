@@ -450,6 +450,7 @@
                     exclude_header="1";
                 }
                 var file_id=$('#bulk_import_file_id').val();
+                $('#bulk_find_modal_button').html('<i class="fa fa-spinner fa-spin"></i>');
                  $.ajax({
                         method: 'POST',
                         dataType: 'json', 
@@ -459,6 +460,7 @@
                         { 
                             
                             console.log(response);
+                            // $('#bulk_find_modal_button').html('Import');
                             window.location.href = "{{ route('list') }}";
                             
 

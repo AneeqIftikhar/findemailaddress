@@ -129,6 +129,7 @@ function populate_emails_find(filter)
       {
         tableRef.deleteRow(i);
       }
+      var table_index=1;
       for(var i =0;i<data['emails'].length;i++)
       {
         
@@ -137,7 +138,7 @@ function populate_emails_find(filter)
           var newRow   = tableRef.insertRow();
 
           newCell  = newRow.insertCell(0);
-          newText  = document.createTextNode(i+1);
+          newText  = document.createTextNode(table_index+1);
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(1);
@@ -151,13 +152,14 @@ function populate_emails_find(filter)
           newCell  = newRow.insertCell(3);
           newText  = document.createTextNode(data['emails'][i]['status']);
           newCell.appendChild(newText);
+          table_index++;
         }
         else if(filter=="all")
         {
           var newRow   = tableRef.insertRow();
 
           newCell  = newRow.insertCell(0);
-          newText  = document.createTextNode(i+1);
+          newText  = document.createTextNode(table_index+1);
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(1);
@@ -171,6 +173,7 @@ function populate_emails_find(filter)
           newCell  = newRow.insertCell(3);
           newText  = document.createTextNode(data['emails'][i]['status']);
           newCell.appendChild(newText);
+          table_index++;
         }
         
 
