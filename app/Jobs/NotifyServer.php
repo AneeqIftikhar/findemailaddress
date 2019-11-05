@@ -39,8 +39,10 @@ class NotifyServer implements ShouldQueue
     public function handle()
     {
 
+        $total_rows=Emails::where('user_file_id',$this->file->id)->count();
 
         $this->file->status="Import Completed";
+        $this->file->total_rows=$total_rows;
         $this->file->save();
         $endpoint = env('PYTHON_SERVER_IP','http://3.17.231.9:5000/');
         if($this->file->type=='find')

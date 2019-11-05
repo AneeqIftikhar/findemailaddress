@@ -84,6 +84,18 @@ function populate_files(data)
               newText  = document.createTextNode(data[i]['status']);
               newCell.appendChild(newText);
             }
+            else if(data[i]['status']=="Import Completed")
+            {
+
+              newRow.className="table-row";
+              var url = '{{ route("emails", ":id") }}';
+              url = url.replace(':id', data[i]['id']);
+              newRow.setAttribute('data-href',url);
+              newRow.setAttribute('value',data[i]['id']);
+              newText  = document.createTextNode(data[i]['processed_emails_count']+'/'+data[i]['total_rows']+" Processed");
+              newCell.appendChild(newText);
+              total_pending++;
+            }
             else
             {
 
