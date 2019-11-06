@@ -129,7 +129,7 @@ function populate_emails_find(filter)
       {
         tableRef.deleteRow(i);
       }
-      var table_index=1;
+      var table_index=0;
       for(var i =0;i<data['emails'].length;i++)
       {
         

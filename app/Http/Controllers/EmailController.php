@@ -182,7 +182,7 @@ class EmailController extends Controller
       }
       else
       {
-        return response()->json(['errors'=>['message'=>['Insufficient Credits to Perform This Request']]], 422 );
+        return response()->json(['errors'=>['message'=>['Insufficient credits to perform this request']]], 422 );
       }
 
   			
@@ -255,7 +255,7 @@ class EmailController extends Controller
           }
           else
           {
-            return response()->json(['errors'=>['message'=>['Insufficient Credits to Perform This Request']]], 422 );
+            return response()->json(['errors'=>['message'=>['Insufficient credits to perform this request']]], 422 );
           }
             
          }
