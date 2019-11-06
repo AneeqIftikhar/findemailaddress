@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <div class="row" style="margin-bottom: 4px">
                         <div class="col-md-6">
-                            
+                            <h3>{{$data['file']['title']}}</h3>
                         </div>
                         <div class="col-md-6" align="right">
                          
