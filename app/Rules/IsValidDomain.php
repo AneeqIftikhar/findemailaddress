@@ -36,6 +36,6 @@ class IsValidDomain implements Rule
      */
     public function message()
     {
-        return 'Please Enter a Valid Domain/URL';
+        return 'Please enter a valid domain/url';
     }
 }
