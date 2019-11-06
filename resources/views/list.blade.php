@@ -103,9 +103,9 @@ function populate_files(data)
               newDiv2.className="progress-bar progress-bar-striped progress-bar-animated";
               newDiv2.setAttribute('role',"progressbar");
               percent=(data[i]['processed_emails_count']*100)/data[i]['total_rows'];
-              if(percent<10)
+              if(percent<1)
               {
-                percent=10;
+                percent=1;
               }
               var style='"width: 50%" aria-valuenow="0" aria-valuemin="10" aria-valuemax="100"';
               newDiv2.setAttribute('style',style);
@@ -175,7 +175,8 @@ function get_user_files_interval_set()
           timeout: 1000 
       });
 }
-function get_user_files_interval_stop() {
+function get_user_files_interval_stop() 
+{
   clearInterval(interval);
 }
 function bulk_import_find_with_file_id(id)

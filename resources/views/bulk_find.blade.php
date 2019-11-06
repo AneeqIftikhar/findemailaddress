@@ -76,7 +76,7 @@
                         <li>For better results, it's recommended to use the domain name instead of the URL.</li>
                         <li>You can't query rows more than your total credits. Additional rows in the file will be skipped.</li>
                         <li>Some special or unexpected characters may be replaced/deleted in the file.</li>
-                        <li>Rows that fail Validations will be skipped</li>
+                        <li>Rows that fail validations will be skipped</li>
                     </ul>
                 </div>
             </div>
