@@ -94,9 +94,11 @@ class BulkController extends Controller
 		{
 			$path = public_path('excel')."/".$user_file->name;
 			$data = array_map('str_getcsv', file($path));
-	    	$csv_data = array_slice($data, 0, 3);
-	    	$csv_data[0] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $csv_data[0]);
+	    	// $csv_data = array_slice($data, 0, 3);
+	    	// $csv_data[0] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $csv_data[0]);
 
+	    	$csv_data = Excel::toArray(new EmailsImportArray, $path);
+			$total_rows=count($data);
 	    	$package=Package::where('id',$user->package_id)->first();
 	        if($user->credits >= ($package->credits))
 	        {
@@ -113,10 +115,10 @@ class BulkController extends Controller
 	        }
 	        else
 	        {
-				$will_process=count($data);
+				$will_process=$total_rows;
 	        }
 			
-			return json_encode(array('status'=>"success",'data'=>$csv_data,'file_id'=>$user_file->id,'file_type'=>$user_file->type,'limit'=>$will_process));
+			return json_encode(array('status'=>"success",'data'=>$csv_data[0],'file_id'=>$user_file->id,'file_type'=>$user_file->type,'limit'=>$will_process));
 		}
 		else
 		{
@@ -148,15 +150,15 @@ class BulkController extends Controller
 	        	$exclude_header=true;
 	        }
 	        $total_rows=$user_file->total_rows;
-	        if($limit>$total_rows)
-	        {
-	        	$limit=$total_rows;
-	        }
-	        $chunk_size=1;
 	        if($exclude_header)
 	        {
 	            $total_rows=$total_rows-1;
 	        }
+	        if($limit>$total_rows)
+	        {
+	        	$limit=$total_rows;
+	        }
+	        $chunk_size=1;	        
 	        if($total_rows>=$limit)
 	        {
 	            if($limit>1000)
@@ -243,6 +245,15 @@ class BulkController extends Controller
     
 	public function import_verify(Request $request) 
 	{
+		$validator = Validator::make($request->all(), [
+		    'excel_file' => ['required', 'mimes:csv,txt'],
+		]);
+
+		if ($validator->fails()) {
+		  $errors = $validator->errors();
+		    return response()->json(["errors"=>$errors],422);
+		}
+
 		$user=Auth::user();
 		$filename=''.time() . uniqid(rand());
 		$file=request()->file('excel_file');
@@ -286,7 +297,7 @@ class BulkController extends Controller
 				$will_process=count($data);
 	        }
 
-			return json_encode(array('status'=>"success",'data'=>$csv_data,'file_id'=>$user_file->id,'limit'=>$will_process));
+			return json_encode(array('status'=>"success",'data'=>$csv_data[0],'file_id'=>$user_file->id,'limit'=>$will_process));
 		}
 		else
 		{

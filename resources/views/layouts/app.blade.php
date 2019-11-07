@@ -371,6 +371,11 @@
    
     @yield('footer')
      <script>
+        $(document).ready(function(e) {
+          $('#bulk_verify_modal').on('hidden.bs.modal', function(e) {
+            window.location.href = "{{ route('list') }}";
+          });
+        });
         $(function () {
           $('[data-toggle="tooltip"]').tooltip()
         })
@@ -558,7 +563,8 @@
                 if (document.getElementById('skip_header_map_verify').checked) 
                 {
                     exclude_header="1";
-                } 
+                }
+                $('#bulk_verify_modal_button').html('<i class="fa fa-spinner fa-spin"></i>'); 
                  $.ajax({
                         method: 'POST',
                         dataType: 'json', 
