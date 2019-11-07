@@ -75,7 +75,7 @@
                         </div>
                         <div class="form-group row">
                         	<div class="col-md-12">
-                        		<button type="submit" class="btn btn-primary">Upload</button>
+                        		<button id="submit_file_upload_verify" type="submit" class="btn btn-primary">Upload</button>
                         	</div>
                         	
                         </div>
@@ -116,6 +116,7 @@ $(document).ready(function (e) {
             {
                 $("#bulk_verify_form")[0].reset(); 
                 $("#bulk_verify_error").fadeOut();
+                $('#submit_file_upload_verify').html('<i class="fa fa-spinner fa-spin"></i>');
             },
             success: function(data)
             {

@@ -13,8 +13,19 @@ use App\User;
 use App\UserFiles;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithLimit;
-class VerifyEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithStartRow, WithLimit
+use Maatwebsite\Excel\Concerns\WithValidation;
+use App\Rules\BlackListDomains;
+use App\Rules\IsValidDomain;
+use App\Helpers\Functions;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Validators\Failure;
+use App\File_Failure;
+use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
+class VerifyEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithStartRow, WithLimit, WithValidation, SkipsOnFailure,  WithCustomCsvSettings
 {
+    use Importable;
     protected $user = null;
     protected $file = null;
     protected $email = 0;
@@ -41,6 +52,19 @@ class VerifyEmailsImport implements ToModel, WithChunkReading, ShouldQueue, With
     public function setHeaderMappings($email) 
     {     
         $this->email = $email;
+    }
+    public function setExcludeHeader($exclude_header) 
+    {     
+        $this->exclude_header = $exclude_header;
+    }
+    public function rules(): array
+    {
+        $email = strval($this->email);
+        
+        return [
+            $email => ['required', 'string', 'email', 'max:255',new BlackListDomains],
+        ];
+
     }
     public function model(array $row)
     {
@@ -72,5 +96,30 @@ class VerifyEmailsImport implements ToModel, WithChunkReading, ShouldQueue, With
     {
         return $this->limit;
     }
-    
+    /**
+     * @param Failure[] $failures
+     */
+    public function onFailure(Failure ...$failures)
+    {
+
+        foreach ($failures as $failure) {
+            $failure_db=new File_Failure();
+            $failure_db->user_file_id=$this->file->id;
+            $failure_db->row=$failure->row(); 
+            if($failure->attribute()==$this->email)
+            {
+                $attribute="Email";
+            }
+            $failure_db->attribute=$attribute;
+            $failure_db->errors=json_encode($failure->errors());
+            $failure_db->values=json_encode($failure->values());
+            $failure_db->save();
+        }
+    }
+    public function getCsvSettings(): array
+    {
+        return [
+            'input_encoding' => 'ISO-8859-1'
+        ];
+    }
 }
