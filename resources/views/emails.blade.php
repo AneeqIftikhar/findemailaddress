@@ -53,6 +53,7 @@
                             @if($data['file']['type']=='find')
                               <th scope="col">#</th>
                               <th scope="col">Name</th>
+                              <th scope="col">Domain</th>
                               <th scope="col">Email</th>
                               <th scope="col">Status</th>
                             @else
@@ -146,10 +147,14 @@ function populate_emails_find(filter)
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(2);
-          newText  = document.createTextNode(data['emails'][i]['email']);
+          newText  = document.createTextNode(data['emails'][i]['domain']);
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(3);
+          newText  = document.createTextNode(data['emails'][i]['email']);
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(4);
           newText  = document.createTextNode(data['emails'][i]['status']);
           newCell.appendChild(newText);
           table_index++;
@@ -167,11 +172,23 @@ function populate_emails_find(filter)
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(2);
-          newText  = document.createTextNode(data['emails'][i]['email']);
+          newText  = document.createTextNode(data['emails'][i]['domain']);
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(3);
-          newText  = document.createTextNode(data['emails'][i]['status']);
+          newText  = document.createTextNode(data['emails'][i]['email']);
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(4);
+          if(data['emails'][i]['status']=='Unverified')
+          {
+            newText  = document.createTextNode('Processing');
+          }
+          else
+          {
+            newText  = document.createTextNode(data['emails'][i]['status']);
+          }
+          
           newCell.appendChild(newText);
           table_index++;
         }
@@ -219,7 +236,14 @@ function populate_emails_verify(filter)
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(2);
-          newText  = document.createTextNode(data['emails'][i]['status']);
+          if(data['emails'][i]['status']=='Unverified')
+          {
+            newText  = document.createTextNode('Processing');
+          }
+          else
+          {
+            newText  = document.createTextNode(data['emails'][i]['status']);
+          }
           newCell.appendChild(newText);
         }
         
