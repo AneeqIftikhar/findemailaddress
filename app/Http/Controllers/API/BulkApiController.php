@@ -105,9 +105,18 @@ class BulkApiController extends Controller
 					         $status="No Mailbox";
 					         $server_status="No Mailbox";
 					      }
-					      if($json_output->status==null || $json_output->status=='')
+					      if($json_output->status==null || $json_output->status=='' || $json_output->status=='Not Found')
 			              {
-			                $status="Not Found";
+			              	if($email_db->type=="find")
+			              	{
+			              		$status="Not Found";
+			              	}
+			              	else
+			              	{
+			              		$email=$email_db->email;
+			              		$status=="Invalid";
+			              	}
+			                
 			              }
 					      else if($json_output->status=='Catch All')
 					      {
