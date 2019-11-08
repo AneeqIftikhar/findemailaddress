@@ -23,6 +23,7 @@ use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Validators\Failure;
 use App\File_Failure;
 use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
+use Carbon\Carbon;
 class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithStartRow, WithLimit, WithValidation, SkipsOnFailure,  WithCustomCsvSettings
 {
     use Importable;
@@ -88,15 +89,99 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
         $first_name_field=strtolower(Functions::removeAccents($row[$first_name]));
         $last_name_field=strtolower(Functions::removeAccents($row[$last_name]));
         $domain_field=Functions::get_domain(strtolower(Functions::removeAccentsDomain($row[$domain])));
-        return new Emails([
-            'first_name' => $first_name_field,
-            'last_name' => $last_name_field,
-            'domain' => $domain_field,
-            'status' => 'Unverified',
-            'user_id'=>$user_id,
-            'user_file_id'=>$file_id,
-            'type'=>'find',
-        ]);
+
+        $exists_email=Emails::where('first_name',$first_name_field)->where('last_name',$last_name_field)->where('domain',$domain_field)->latest()->first();
+        if($exists_email)
+        {
+          $server_output=$exists_email->server_json_dump;
+          $json_output=json_decode($server_output);
+          if($json_output && array_key_exists('OVERRIDE',$json_output))
+          {
+
+            $this->user->decrement('credits');
+            return new Emails([
+                'first_name' => $exists_email->first_name,
+                'last_name' => $exists_email->last_name,
+                'domain' => $exists_email->domain,
+                'status' => $exists_email->status,
+                'server_status' => $exists_email->server_status,
+                'email' => $exists_email->email,
+                'user_id'=>$user_id,
+                'user_file_id'=>$file_id,
+                'type'=>'find',
+                'server_json_dump'=>$server_output,
+            ]);
+
+            
+
+          }
+          else
+          {
+            if($exists_email->email != null && $exists_email->status != "Catch All" && $exists_email->status != "Risky")
+            {
+              $email_created_at = new Carbon($exists_email->created_at);
+              $now = Carbon::now();
+              if($email_created_at->diffInDays($now)>300)
+              {
+                return new Emails([
+                    'first_name' => $first_name_field,
+                    'last_name' => $last_name_field,
+                    'domain' => $domain_field,
+                    'status' => 'Unverified',
+                    'user_id'=>$user_id,
+                    'user_file_id'=>$file_id,
+                    'type'=>'find',
+                ]);
+              }
+              else
+              {
+                if($exists_email->status=="Valid")
+                {
+                    $this->user->decrement('credits');
+                }
+                return new Emails([
+                    'first_name' => $exists_email->first_name,
+                    'last_name' => $exists_email->last_name,
+                    'domain' => $exists_email->domain,
+                    'status' => $exists_email->status,
+                    'server_status' => $exists_email->server_status,
+                    'email' => $exists_email->email,
+                    'user_id'=>$user_id,
+                    'user_file_id'=>$file_id,
+                    'type'=>'find',
+                    'server_json_dump'=>$server_output,
+                ]);
+              }
+              
+            }
+            else
+            {
+                return new Emails([
+                    'first_name' => $first_name_field,
+                    'last_name' => $last_name_field,
+                    'domain' => $domain_field,
+                    'status' => 'Unverified',
+                    'user_id'=>$user_id,
+                    'user_file_id'=>$file_id,
+                    'type'=>'find',
+                ]);      
+            }
+          }
+        }
+        else
+        {
+            return new Emails([
+                'first_name' => $first_name_field,
+                'last_name' => $last_name_field,
+                'domain' => $domain_field,
+                'status' => 'Unverified',
+                'user_id'=>$user_id,
+                'user_file_id'=>$file_id,
+                'type'=>'find',
+            ]);      
+        }
+
+        
     }
     
     public function chunkSize(): int
