@@ -121,7 +121,7 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
             {
               $email_created_at = new Carbon($exists_email->created_at);
               $now = Carbon::now();
-              if($email_created_at->diffInDays($now)>300)
+              if($email_created_at->diffInDays($now)>1)
               {
                 return new Emails([
                     'first_name' => $first_name_field,
