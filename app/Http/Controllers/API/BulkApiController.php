@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\UserFiles;
 use App\Emails;
+use App\User;
 use Validator;
 class BulkApiController extends Controller
 {
@@ -100,46 +101,53 @@ class BulkApiController extends Controller
 					    if($json_output->status != 'Valid')
 					    {
 					      
-					      if($json_output->mx==null || $json_output->mx=='')
-					      {
-					         $status="No Mailbox";
-					         $server_status="No Mailbox";
-					      }
-					      if($json_output->status==null || $json_output->status=='' || $json_output->status=='Not Found')
-			              {
-			              	if($email_db->type=="find")
+					      	if($json_output->mx==null || $json_output->mx=='')
+					      	{
+					        	$status="No Mailbox";
+					         	$server_status="No Mailbox";
+					      	}
+					      	if($json_output->status==null || $json_output->status=='' || $json_output->status=='Not Found')
 			              	{
-			              		$status="Not Found";
-			              	}
-			              	else
-			              	{
-			              		$email=$email_db->email;
-			              		$status=="Invalid";
-			              	}
+			              		if($email_db->type=="find")
+			              		{
+			              			$status="Not Found";
+			              		}
+			              		else
+			              		{
+			              			$email=$email_db->email;
+			              			$status=="Invalid";
+			              		}
 			                
-			              }
-					      else if($json_output->status=='Catch All')
-					      {
+			              	}
+					      	else if($json_output->status=='Catch All')
+					      	{
 
-					      	if($email_db->email)
-					      	{
-					      		$email=$email_db->email;
-					      	}
-					      	else
-					      	{
-					      		$email=strtolower($email_db->first_name).'@'.strtolower($email_db->domain);
-					      	}
+					      		if($email_db->email)
+					      		{
+					      			$email=$email_db->email;
+					      		}
+					      		else
+					      		{
+					      			$email=strtolower($email_db->first_name).'@'.strtolower($email_db->domain);
+					      		}
 					        
-					      }
-					      else if($json_output->status=='Risky')
-			              {
-			                $email=$json_output->email;
-			              }
+					      	}
+					      	else if($json_output->status=='Risky')
+			              	{
+			                	$email=$json_output->email;
+			              	}
 
+			             	if($email_db->type=="verify")
+			              	{
+			              		$user=User::where('id',$email_db->user_id)->first();
+					      		$user->decrement('credits');
+			              	}
 					    }
 					    else
 					    {
-					      $email=$json_output->email;
+					      	$email=$json_output->email;
+					      	$user=User::where('id',$email_db->user_id)->first();
+					      	$user->decrement('credits');
 					    }
 					    if($email_db)
 					    {
