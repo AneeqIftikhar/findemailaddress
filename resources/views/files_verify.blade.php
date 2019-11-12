@@ -19,6 +19,7 @@
                             <th scope="col">Title</th>
                             <th scope="col">Status</th>
                             <th scope="col">Date/Time Uploaded</th>
+                            <th scope="col">Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -72,22 +73,29 @@ function populate_files(data)
             }
             else if(data[i]['status']=="Mapping Required")
             {
-              newRow.className="mapping-row";
-              var url = '{{ route("emails", ":id") }}';
-              url = url.replace(':id', data[i]['id']);
-              newRow.setAttribute('data-href',url);
-              newRow.setAttribute('value',data[i]['id']);
-              newText  = document.createTextNode(data[i]['status']);
-              newCell.appendChild(newText);
+              // newRow.className="mapping-row";
+              // var url = '{{ route("emails", ":id") }}';
+              // url = url.replace(':id', data[i]['id']);
+              // newRow.setAttribute('data-href',url);
+              // newRow.setAttribute('value',data[i]['id']);
+              // newText  = document.createTextNode(data[i]['status']);
+              // newCell.appendChild(newText);
+
+              newButton = document.createElement("a"); 
+              newButton.className="btn btn-warning";
+              newButton.innerHTML = "Mapping Required";
+              newButton.setAttribute('id',data[i]['id']);
+              newButton.setAttribute('onClick','bulk_import_find_with_file_id(event)');
+              newCell.appendChild(newButton);
             }
             else if(data[i]['status']=="Import Completed")
             {
 
-              newRow.className="table-row";
-              var url = '{{ route("emails", ":id") }}';
-              url = url.replace(':id', data[i]['id']);
-              newRow.setAttribute('data-href',url);
-              newRow.setAttribute('value',data[i]['id']);
+              // newRow.className="table-row";
+              // var url = '{{ route("emails", ":id") }}';
+              // url = url.replace(':id', data[i]['id']);
+              // newRow.setAttribute('data-href',url);
+              // newRow.setAttribute('value',data[i]['id']);
 
               // newText  = document.createTextNode(data[i]['processed_emails_count']+'/'+data[i]['total_rows']+" Processed");
               // newCell.appendChild(newText);
@@ -120,11 +128,11 @@ function populate_files(data)
             else
             {
 
-              newRow.className="table-row";
-              var url = '{{ route("emails", ":id") }}';
-              url = url.replace(':id', data[i]['id']);
-              newRow.setAttribute('data-href',url);
-              newRow.setAttribute('value',data[i]['id']);
+              // newRow.className="table-row";
+              // var url = '{{ route("emails", ":id") }}';
+              // url = url.replace(':id', data[i]['id']);
+              // newRow.setAttribute('data-href',url);
+              // newRow.setAttribute('value',data[i]['id']);
               newText  = document.createTextNode(data[i]['status']);
               newCell.appendChild(newText);
             }
@@ -134,6 +142,14 @@ function populate_files(data)
             newText  = document.createTextNode(data[i]['created_at']);
             newCell.appendChild(newText);
 
+            newCell  = newRow.insertCell(3);
+            newButton = document.createElement("a"); 
+            newButton.className="btn btn-primary";
+            newButton.innerHTML = "Details"; 
+            var url = '{{ route("emails", ":id") }}';
+            url = url.replace(':id', data[i]['id']);
+            newButton.setAttribute('href',url);
+            newCell.appendChild(newButton);
                
         }
         if(!interval && total_pending>0)
@@ -175,9 +191,9 @@ function get_user_files_interval_stop()
 {
   clearInterval(interval);
 }
-function bulk_import_find_with_file_id(id)
+function bulk_import_find_with_file_id(event)
 {
-  console.log(id);
+  id=event.target.id;
   $.ajax({
           method: 'POST',
           dataType: 'json', 
