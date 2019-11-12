@@ -101,7 +101,13 @@ Route::get('bulk_verify', function()
     return view('bulk_verify');
 })->name('bulk_verify')->middleware('verified');
 Route::get('list','EmailController@getUserFiles')->name('list')->middleware('verified');
+Route::get('files_find','EmailController@getUserFilesFind')->name('files_find')->middleware('verified');
+Route::get('files_verify','EmailController@getUserFilesVerify')->name('files_verify')->middleware('verified');
+
 Route::get('get_user_files_ajax','EmailController@getUserFilesAjax')->name('get_user_files')->middleware('verified');
+Route::get('get_user_files_find_ajax','EmailController@getUserFilesFindAjax')->name('get_user_files_find_ajax')->middleware('verified');
+Route::get('get_user_files_verify_ajax','EmailController@getUserFilesVerifyAjax')->name('get_user_files_verify_ajax')->middleware('verified');
+
 Route::get('emails/{id}','EmailController@getEmailsFromFile')->name('emails')->middleware('verified');
 
 Route::post('bulk_import_find','BulkController@import_find')->name('bulk_import_find')->middleware('verified');

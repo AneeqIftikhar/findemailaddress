@@ -32,9 +32,9 @@ class EmailApiController extends Controller
 			  $errors = $validator->errors();
 			    return response()->json(["errors"=>$errors],422);
 			}
-			$first_name=strtolower(Functions::removeAccents($request->first_name));
-        	$last_name=strtolower(Functions::removeAccents($request->last_name));
-        	$domain=Functions::get_domain(strtolower(Functions::removeAccentsDomain($request->domain)));
+			$first_name=Functions::removeAccents($request->first_name);
+        	$last_name=Functions::removeAccents($request->last_name);
+        	$domain=Functions::get_domain(Functions::removeAccentsDomain($request->domain));
 
 			$server_output = $server_output=CurlRequest::find_email($first_name,$last_name,$domain);
 
@@ -106,7 +106,7 @@ class EmailApiController extends Controller
 				$errors = $validator->errors();
 			    return response()->json(["errors"=>$errors],422);
 			}
-			$email=strtolower(Functions::removeAccentsEmail($request->email));
+			$email=Functions::removeAccentsEmail($request->email);
 			$server_output=CurlRequest::verify_email($email);
 			$json_output=json_decode($server_output);
 

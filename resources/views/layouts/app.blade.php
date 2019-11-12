@@ -248,10 +248,10 @@
                                 
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{URL::route('find_history')}}">Find
-                                        <small id="fileHelp" class="form-text text-muted">History of Found Emails</small>
+                                        <small id="fileHelp" class="form-text text-muted">History of found emails</small>
                                     </a>
                                     <a class="dropdown-item" href="{{URL::route('verify_history')}}">Verify
-                                        <small id="fileHelp" class="form-text text-muted">History of Verified Emails</small></a>
+                                        <small id="fileHelp" class="form-text text-muted">History of verified emails</small></a>
                                     
                                 </div>
                             </li>
@@ -270,8 +270,20 @@
                                     
                                 </div>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{URL::route('list')}}"><span class="padding_right"><i class="fas fa-folder-open fa-sm"></i></span>Files</a>
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <span class="padding_right"><i class="fas fa-file-import fa-sm"></i></span>Files  <span class="caret"></span>
+                                   
+                                </a>
+                                
+                                <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{URL::route('files_find')}}">Find
+                                        <small id="fileHelp" class="form-text text-muted">List of find files</small>
+                                    </a>
+                                    <a class="dropdown-item" href="{{URL::route('files_verify')}}">Verify
+                                        <small id="fileHelp" class="form-text text-muted">Liist of verify files</small></a>
+                                    
+                                </div>
                             </li>
                         @endguest
                     </ul>
@@ -385,7 +397,17 @@
      <script>
         $(document).ready(function(e) {
           $('#bulk_verify_modal').on('hidden.bs.modal', function(e) {
-            window.location.href = "{{ route('list') }}";
+            if(window.location.href!="{{ route('files_verify') }}")
+            {
+                window.location.href = "{{ route('files_verify') }}";
+            }
+            
+          });
+          $('#bulk_find_modal').on('hidden.bs.modal', function(e) {
+            if(window.location.href!="{{ route('files_find') }}")
+            {
+                window.location.href = "{{ route('files_find') }}";
+            }
           });
         });
         $(function () {
@@ -478,7 +500,7 @@
                             
                             console.log(response);
                             // $('#bulk_find_modal_button').html('Import');
-                            window.location.href = "{{ route('list') }}";
+                            window.location.href = "{{ route('files_find') }}";
                             
 
                         },
@@ -586,7 +608,7 @@
                         { 
                             
                             console.log(response);
-                            window.location.href = "{{ route('list') }}";
+                            window.location.href = "{{ route('files_verify') }}";
                             
 
                         },
