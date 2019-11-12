@@ -81,9 +81,9 @@ class EmailController extends Controller
 			$user=Auth::user();
       if($user->credits>0)
       {
-        $first_name=strtolower(Functions::removeAccents($request->first_name));
-        $last_name=strtolower(Functions::removeAccents($request->last_name));
-        $domain=Functions::get_domain(strtolower(Functions::removeAccentsDomain($request->domain)));
+        $first_name=Functions::removeAccents($request->first_name);
+        $last_name=Functions::removeAccents($request->last_name);
+        $domain=Functions::get_domain(Functions::removeAccentsDomain($request->domain));
         $status="";
         $type="find";
         $email="";
@@ -187,7 +187,7 @@ class EmailController extends Controller
           $user=Auth::user();
           if($user->credits>0)
           {
-            $email=strtolower(Functions::removeAccentsEmail($request->email));
+            $email=Functions::removeAccentsEmail($request->email);
       			$server_output=CurlRequest::verify_email($email);
       			$json_output=json_decode($server_output);
 
@@ -251,9 +251,29 @@ class EmailController extends Controller
          $files=Auth::user()->userFiles()->orderBy('id', 'DESC')->get();
          return view('list',compact('files'));
       }
+      public function getUserFilesFind(Request $request)
+      {
+         $files=Auth::user()->userFiles()->where('type', 'find')->orderBy('id', 'DESC')->get();
+         return view('files_find',compact('files'));
+      }
+      public function getUserFilesVerify(Request $request)
+      {
+         $files=Auth::user()->userFiles()->where('type', 'verify')->orderBy('id', 'DESC')->get();
+         return view('files_verify',compact('files'));
+      }
       public function getUserFilesAjax(Request $request)
       {
          $files=Auth::user()->userFiles()->orderBy('id', 'DESC')->get();
+         return json_encode(array('files'=>$files));
+      }
+      public function getUserFilesFindAjax(Request $request)
+      {
+         $files=Auth::user()->userFiles()->where('type', 'find')->orderBy('id', 'DESC')->get();
+         return json_encode(array('files'=>$files));
+      }
+      public function getUserFilesVerifyAjax(Request $request)
+      {
+         $files=Auth::user()->userFiles()->where('type', 'verify')->orderBy('id', 'DESC')->get();
          return json_encode(array('files'=>$files));
       }
       public function getUserFoundEmails(Request $request)

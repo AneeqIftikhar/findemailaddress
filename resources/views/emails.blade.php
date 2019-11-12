@@ -15,11 +15,11 @@
                         <div class="col-md-6" align="right">
                          
       
-                              <a href="{{URL::route('list')}}">
+                              {{-- <a href="{{URL::route('list')}}">
                                 <button class="btn btn-primary">
                                   <i class="fas fa-undo fa-lg"></i>
                                 </button>
-                              </a>
+                              </a> --}}
                              
                               <button class="btn btn-primary nav-item dropdown">
                                  <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="padding: 0px; color: white">
