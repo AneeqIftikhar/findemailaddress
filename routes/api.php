@@ -34,6 +34,11 @@ Route::middleware('LimitRequestAPI')->group(function () {
 });
 
 
+Route::post('update_emails','API\BulkApiController@update_emails');
+Route::post('fetch_file_emails','API\BulkApiController@fetch_file_emails');
+Route::post('fetch_unprocessed_files','API\BulkApiController@fetch_unprocessed_files');
+
+
 
 Route::middleware('cors')->group(function () {
 	
@@ -41,5 +46,3 @@ Route::middleware('cors')->group(function () {
 	Route::post('add_emails_api','API\EmailApiController@add_emails_api');
 	Route::post('failed_response_notification','API\EmailApiController@failed_response_notification');
 });
-
-

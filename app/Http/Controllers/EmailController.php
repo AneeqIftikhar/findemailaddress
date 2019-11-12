@@ -5,16 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
-use App\Jobs\ParseExcelFile;
 use Excel;
 use App\EmailsImport;
-use App\Jobs\EmailsLookup;
 use App\User;
 use App\UserFiles;
 use Auth;
 use App\Emails;
 use App\Exports\VerifyEmailsExport;
 use App\Exports\FoundEmailsExport;
+use App\Exports\FoundFileEmailsExport;
 use App\Rules\BlackListDomains;
 use App\Rules\IsValidDomain;
 use Validator;
@@ -50,7 +49,7 @@ class EmailController extends Controller
 	function find_email_page(Request $request)
 	{
 		$user=Auth::user();
-		$emails=Auth::user()->emails()->where('type','find')->orderBy('id', 'DESC')->take(10)->get();
+		$emails=Auth::user()->emails()->where('type','find')->where('status','!=','Unverified')->orderBy('id', 'DESC')->take(10)->get();
 		return view('find',compact('emails'));
 	}
 	/*
@@ -60,7 +59,7 @@ class EmailController extends Controller
 	function verify_email_page(Request $request)
 	{
 		$user=Auth::user();
-		$emails=Auth::user()->emails()->where('type','verify')->orderBy('id', 'DESC')->take(10)->get();
+		$emails=Auth::user()->emails()->where('type','verify')->where('status','!=','Unverified')->orderBy('id', 'DESC')->take(10)->get();
 		return view('verify',compact('emails'));
 	}
 	/*
@@ -82,9 +81,9 @@ class EmailController extends Controller
 			$user=Auth::user();
       if($user->credits>0)
       {
-        $first_name=strtolower(Functions::removeAccents($request->first_name));
-        $last_name=strtolower(Functions::removeAccents($request->last_name));
-        $domain=Functions::get_domain(strtolower(Functions::removeAccentsDomain($request->domain)));
+        $first_name=Functions::removeAccents($request->first_name);
+        $last_name=Functions::removeAccents($request->last_name);
+        $domain=Functions::get_domain(Functions::removeAccentsDomain($request->domain));
         $status="";
         $type="find";
         $email="";
@@ -183,7 +182,7 @@ class EmailController extends Controller
       }
       else
       {
-        return response()->json(['errors'=>['message'=>['Insufficient Credits to Perform This Request']]], 422 );
+        return response()->json(['errors'=>['message'=>['Insufficient credits to perform this request']]], 422 );
       }
 
   			
@@ -209,7 +208,7 @@ class EmailController extends Controller
           $user=Auth::user();
           if($user->credits>0)
           {
-            $email=strtolower(Functions::removeAccentsEmail($request->email));
+            $email=Functions::removeAccentsEmail($request->email);
       			$server_output=CurlRequest::verify_email($email);
       			$json_output=json_decode($server_output);
 
@@ -256,7 +255,7 @@ class EmailController extends Controller
           }
           else
           {
-            return response()->json(['errors'=>['message'=>['Insufficient Credits to Perform This Request']]], 422 );
+            return response()->json(['errors'=>['message'=>['Insufficient credits to perform this request']]], 422 );
           }
             
          }
@@ -267,63 +266,45 @@ class EmailController extends Controller
    	}
 
 
-      public function import(Request $request) 
-      {
-         $user=Auth::user();
-         $filename=''.time() . uniqid(rand());
-         $file=request()->file('excel_file');
-         if($file)
-         {
-            $excel_name=$filename.'.'.$file->getClientOriginalExtension();
-            
-            $user_file = new UserFiles;
-            $user_file->name = $excel_name;
-            $user_file->user_id=$user->id;
-            $user_file->title=$request->title;
-            $user_file->save();
-            if(!$file->move(public_path('excel'),$excel_name))
-            {
-               return false;
-            }
-           else
-           {
-               $emailJob = (new ParseExcelFile($user,$user_file))->onQueue('high');
-               dispatch($emailJob);
-           }
-           return view('batch_find');
-         }
-         else
-         {
-            return back()->withInput()
-                                  ->with('error_message','Unexpected error occurred while trying to process your request');
-         }
-         
-         
-         //$email_import=new EmailsImport;
-         //$email_import->setUserId($user->id);
-
-         // $emailJob = new EmailsLookup($user);
-         // Excel::import($email_import , request()->file('excel_file'))->chain([
-         //    dispatch($emailJob),
-         // ]);
-         //Excel::import($email_import , request()->file('excel_file'));
-
-
-
-      }
+      
       public function getUserFiles(Request $request)
       {
-         $files=Auth::user()->userFiles()->get();
+         $files=Auth::user()->userFiles()->orderBy('id', 'DESC')->get();
          return view('list',compact('files'));
+      }
+      public function getUserFilesFind(Request $request)
+      {
+         $files=Auth::user()->userFiles()->where('type', 'find')->orderBy('id', 'DESC')->get();
+         return view('files_find',compact('files'));
+      }
+      public function getUserFilesVerify(Request $request)
+      {
+         $files=Auth::user()->userFiles()->where('type', 'verify')->orderBy('id', 'DESC')->get();
+         return view('files_verify',compact('files'));
+      }
+      public function getUserFilesAjax(Request $request)
+      {
+         $files=Auth::user()->userFiles()->orderBy('id', 'DESC')->get();
+         return json_encode(array('files'=>$files));
+      }
+      public function getUserFilesFindAjax(Request $request)
+      {
+         $files=Auth::user()->userFiles()->where('type', 'find')->orderBy('id', 'DESC')->get();
+         return json_encode(array('files'=>$files));
+      }
+      public function getUserFilesVerifyAjax(Request $request)
+      {
+         $files=Auth::user()->userFiles()->where('type', 'verify')->orderBy('id', 'DESC')->get();
+         return json_encode(array('files'=>$files));
       }
       public function getUserFoundEmails(Request $request)
       {
-         $emails=Auth::user()->emails()->where('type','find')->orderBy('id', 'DESC')->with('bounce')->get();
+         $emails=Auth::user()->emails()->where('type','find')->where('status','!=','Unverified')->whereNull('user_file_id')->orderBy('id', 'DESC')->with('bounce')->get();
          return view('find_history',compact('emails'));
       }
       public function getUserVerifiedEmails(Request $request)
       {
-         $emails=Auth::user()->emails()->where('type','verify')->orderBy('id', 'DESC')->with('bounce')->get();
+         $emails=Auth::user()->emails()->where('type','verify')->where('status','!=','Unverified')->whereNull('user_file_id')->orderBy('id', 'DESC')->with('bounce')->get();
          return view('verify_history',compact('emails'));
       }
 
@@ -334,7 +315,8 @@ class EmailController extends Controller
          if($user_file)
          {
             $emails=Emails::where('user_file_id',$id)->get();
-            return view('emails',compact('emails','id'));
+            $data=['emails'=>$emails,'file'=>$user_file];
+            return view('emails',compact('data',$data));
          }
          else
          {
@@ -364,6 +346,15 @@ class EmailController extends Controller
          $email_export->set_details($records);
          return Excel::download($email_export, 'emails.'.$type);
        }
+
+       public function downloadFoundRecordsFile(Request $request,$id,$type,$records)
+       {
+          $file=UserFiles::where('id',$id)->first();
+          $email_export=new FoundFileEmailsExport();
+          $email_export->set_details($id,$records);
+          return Excel::download($email_export, $file->title.'-processed.'.$type);
+       }
+
        public function downloadVerifiedRecords(Request $request,$type,$records)
        {
          $email_export=new VerifyEmailsExport();

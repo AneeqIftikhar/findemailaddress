@@ -25,7 +25,9 @@ class UserFiles extends Model
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'name', 'created_at', 'updated_at'];
+    protected $fillable = ['user_id', 'name','total_rows','title','type','status', 'created_at', 'updated_at'];
+
+    protected $appends = ['processed_emails_count'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -42,4 +44,24 @@ class UserFiles extends Model
     {
         return $this->hasMany('App\Email');
     }
+
+    public function processedEmailsCountRelation()
+    {
+        return $this->hasOne('App\Emails','user_file_id')->selectRaw('user_file_id, count(*) as count')->where('status','!=','Unverified')->groupBy('user_file_id');
+    }
+
+    public function getProcessedEmailsCountAttribute()
+    {
+        if($this->processedEmailsCountRelation)
+        {
+            $count=$this->processedEmailsCountRelation->count;
+            return $count;
+        }
+        else
+        {
+            return 0;
+        }
+        
+    }
+
 }

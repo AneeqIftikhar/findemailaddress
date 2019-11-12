@@ -3,39 +3,39 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Lists</div>
+                <div class="card-header"><h3>Emails</h3></div>
 
                 <div class="card-body">
                     <div class="row" style="margin-bottom: 4px">
                         <div class="col-md-6">
-                            <h3>File Title</h3>
+                            <h3>{{$data['file']['title']}}</h3>
                         </div>
                         <div class="col-md-6" align="right">
                          
       
-                              <a href="{{URL::route('list')}}">
+                              {{-- <a href="{{URL::route('list')}}">
                                 <button class="btn btn-primary">
                                   <i class="fas fa-undo fa-lg"></i>
                                 </button>
-                              </a>
+                              </a> --}}
                              
                               <button class="btn btn-primary nav-item dropdown">
                                  <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="padding: 0px; color: white">
                                     <span><i class="fas fa-download fa-lg"></i></span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-left">
-                                <a class="dropdown-item" href="{{URL::route('downloadcsv',['id' => $id,'type'=>'csv','records'=>'all'])}}">
+                                <a class="dropdown-item" href="{{URL::route('downloadfoundrecordsfile',['id' => $data['file']['id'],'type'=>'csv','records'=>'all'])}}">
                                   Download ALL (CSV)
                                 </a>
-                                <a class="dropdown-item" href="{{URL::route('downloadcsv',['id' => $id,'type'=>'xls','records'=>'all'])}}">
+                                <a class="dropdown-item" href="{{URL::route('downloadfoundrecordsfile',['id' => $data['file']['id'],'type'=>'xls','records'=>'all'])}}">
                                   Download ALL (XLS)
                                 </a>
-                                <a class="dropdown-item" href="{{URL::route('downloadcsv',['id' => $id,'type'=>'csv','records'=>'valid'])}}">
+                                <a class="dropdown-item" href="{{URL::route('downloadfoundrecordsfile',['id' => $data['file']['id'],'type'=>'csv','records'=>'valid'])}}">
                                   Download Valid (CSV)
                                 </a>
-                                <a class="dropdown-item" href="{{URL::route('downloadcsv',['id' => $id,'type'=>'xls','records'=>'valid'])}}">
+                                <a class="dropdown-item" href="{{URL::route('downloadfoundrecordsfile',['id' => $data['file']['id'],'type'=>'xls','records'=>'valid'])}}">
                                   Download Valid (XLS)
                                 </a>
                               </div>
@@ -50,19 +50,21 @@
                    <table class="table" id="emails_table">
                       <thead class="black white-text">
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Status</th>
+                            @if($data['file']['type']=='find')
+                              <th scope="col">#</th>
+                              <th scope="col">Name</th>
+                              <th scope="col">Domain</th>
+                              <th scope="col">Email</th>
+                              <th scope="col">Status</th>
+                            @else
+                              <th scope="col">#</th>
+                              <th scope="col">Email</th>
+                              <th scope="col">Status</th>
+                            @endif
                         </tr>
                       </thead>
                       <tbody>
-                        <!--  @foreach($emails as $email)
-                          <tr class="table-row">    
-                              <td> {{$email->first_name }} {{$email->last_name}} </td>
-                              <td> {{$email->email}} </td>
-                              <td> {{$email->status}} </td>
-                          </tr>
-                         @endforeach -->
+
                       </tbody>
                     </table>
 
@@ -77,68 +79,171 @@
 <script type="text/javascript">
   var data = null;
 $(document).ready(function() {
-   data = {!! json_encode($emails->toArray(), JSON_HEX_TAG) !!};
-   populate_emails('less');
-   $( "#show_emails" ).click(function() {
-      if($( "#show_emails" ).val()=="all")
-      {
-        populate_emails('all');
-        $("#show_emails").html('Show Valid');
-        $("#show_emails").prop('value', 'less');
-      }
-      else
-      {
-        populate_emails('less');
-        $("#show_emails").html('Show All');
-        $("#show_emails").prop('value', 'all');
-      }
+   data = {!! json_encode($data, JSON_HEX_TAG) !!};
+   console.log(data);
+   if(data['file']['type']=="find")
+   {
+      populate_emails_find('less');
+      $( "#show_emails" ).click(function() {
+        if($( "#show_emails" ).val()=="all")
+        {
+          populate_emails_find('all');
+          $("#show_emails").html('Show Valid');
+          $("#show_emails").prop('value', 'less');
+        }
+        else
+        {
+          populate_emails_find('less');
+          $("#show_emails").html('Show All');
+          $("#show_emails").prop('value', 'all');
+        }
       
     });
+   }
+   else
+   {
+      populate_emails_verify('less');
+      $( "#show_emails" ).click(function() {
+        if($( "#show_emails" ).val()=="all")
+        {
+          populate_emails_verify('all');
+          $("#show_emails").html('Show Valid');
+          $("#show_emails").prop('value', 'less');
+        }
+        else
+        {
+          populate_emails_verify('less');
+          $("#show_emails").html('Show All');
+          $("#show_emails").prop('value', 'all');
+        }
+      
+    });
+   }
+   
     
 });
   
-function populate_emails(filter)
+function populate_emails_find(filter)
 {
    var tableRef = document.getElementById('emails_table').getElementsByTagName('tbody')[0];
       for(var i = tableRef.rows.length - 1; i >= 0; i--)
       {
         tableRef.deleteRow(i);
       }
-      for(var i =0;i<data.length;i++)
+      var table_index=0;
+      for(var i =0;i<data['emails'].length;i++)
       {
         
-        if(filter=="less" && data[i]['status']=='valid')
+        if(filter=="less" && data['emails'][i]['status']=='Valid')
         {
           var newRow   = tableRef.insertRow();
 
-
           newCell  = newRow.insertCell(0);
-          newText  = document.createTextNode(data[i]['first_name']+" "+data[i]['last_name']);
+          newText  = document.createTextNode(table_index+1);
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(1);
-          newText  = document.createTextNode(data[i]['email']);
+          newText  = document.createTextNode(data['emails'][i]['first_name']+" "+data['emails'][i]['last_name']);
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(2);
-          newText  = document.createTextNode(data[i]['status']);
+          newText  = document.createTextNode(data['emails'][i]['domain']);
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(3);
+          newText  = document.createTextNode(data['emails'][i]['email']);
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(4);
+          newText  = document.createTextNode(data['emails'][i]['status']);
+          newCell.appendChild(newText);
+          table_index++;
+        }
+        else if(filter=="all")
+        {
+          var newRow   = tableRef.insertRow();
+
+          newCell  = newRow.insertCell(0);
+          newText  = document.createTextNode(table_index+1);
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(1);
+          newText  = document.createTextNode(data['emails'][i]['first_name']+" "+data['emails'][i]['last_name']);
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(2);
+          newText  = document.createTextNode(data['emails'][i]['domain']);
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(3);
+          newText  = document.createTextNode(data['emails'][i]['email']);
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(4);
+          if(data['emails'][i]['status']=='Unverified')
+          {
+            newText  = document.createTextNode('Processing');
+          }
+          else
+          {
+            newText  = document.createTextNode(data['emails'][i]['status']);
+          }
+          
+          newCell.appendChild(newText);
+          table_index++;
+        }
+        
+
+       
+      }
+}
+function populate_emails_verify(filter)
+{
+   var tableRef = document.getElementById('emails_table').getElementsByTagName('tbody')[0];
+      for(var i = tableRef.rows.length - 1; i >= 0; i--)
+      {
+        tableRef.deleteRow(i);
+      }
+      for(var i =0;i<data['emails'].length;i++)
+      {
+        
+        if(filter=="less" && data['emails'][i]['status']=='Valid')
+        {
+          var newRow   = tableRef.insertRow();
+
+          newCell  = newRow.insertCell(0);
+          newText  = document.createTextNode(i+1);
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(1);
+          newText  = document.createTextNode(data['emails'][i]['email']);
+          newCell.appendChild(newText);
+
+          newCell  = newRow.insertCell(2);
+          newText  = document.createTextNode(data['emails'][i]['status']);
           newCell.appendChild(newText);
         }
         else if(filter=="all")
         {
           var newRow   = tableRef.insertRow();
 
-
           newCell  = newRow.insertCell(0);
-          newText  = document.createTextNode(data[i]['first_name']+" "+data[i]['last_name']);
+          newText  = document.createTextNode(i+1);
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(1);
-          newText  = document.createTextNode(data[i]['email']);
+          newText  = document.createTextNode(data['emails'][i]['email']);
           newCell.appendChild(newText);
 
           newCell  = newRow.insertCell(2);
-          newText  = document.createTextNode(data[i]['status']);
+          if(data['emails'][i]['status']=='Unverified')
+          {
+            newText  = document.createTextNode('Processing');
+          }
+          else
+          {
+            newText  = document.createTextNode(data['emails'][i]['status']);
+          }
           newCell.appendChild(newText);
         }
         

@@ -141,6 +141,83 @@
             </div>
           </div>
         </div>
+        <div class="modal" tabindex="-1" role="dialog" id="bulk_find_modal">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  
+                  <div class="modal-body">
+                    <input type="hidden" name="bulk_import_file_id" id="bulk_import_file_id">
+                    <div class="card activity_log" style="height: 100%">
+                        <div class="card-header"><h4>Mapping CSV Results</h4></div>
+                        <div class="card-body p-0 py-4" style="overflow-y: auto; max-height: 68vh;">
+                            <div class="row m-0 mb-4">
+                                <div class="col-12" style="padding-left: 1.4rem!important;">
+                                    <table id="bulk_find_popup_table" class="table">
+                                      <tbody>
+
+
+                                      </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                  </div>
+                    <div class="modal-footer">
+                                <div class="custom-control custom-checkbox" style="min-width: 200px!important;">
+                                    <input type="checkbox" class="custom-control-input" id="skip_header_map_find" name="skip_header_map_find">
+                                    <label class="custom-control-label" for="skip_header_map_find">Skip First Row?</label>
+                                </div>
+                                <span class="invalid-feedback-custom">
+                                    <strong id="bulk_map_find_error"></strong>
+                                </span>
+                            
+                                <button id="bulk_find_modal_button" class="btn btn-success" onClick="map_find()">Import</button>
+                         
+                        
+                        
+                        
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal" tabindex="-1" role="dialog" id="bulk_verify_modal">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  
+                  <div class="modal-body">
+                    <input type="hidden" name="bulk_import_file_id" id="bulk_import_verify_file_id">
+                    <div class="card activity_log" style="height: 100%">
+                        <div class="card-header"><h4>Mapping CSV Results</h4></div>
+                        <div class="card-body p-0 py-4" style="overflow-y: auto; max-height: 68vh;">
+                            <div class="row m-0 mb-4">
+                                <div class="col-12" style="padding-left: 1.4rem !important;">
+                                    <table id="bulk_verify_popup_table" class="table">
+                                      <tbody>
+
+
+                                      </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                  </div>
+                  <div class="modal-footer">
+                    <div class="custom-control custom-checkbox" style="min-width: 200px!important;">
+                        <input type="checkbox" class="custom-control-input" id="skip_header_map_verify" name="skip_header_map_verify">
+                        <label class="custom-control-label" for="skip_header_map_verify">Skip First Row?</label>
+                    </div>
+                    <span class="invalid-feedback-custom">
+                        <strong id="bulk_map_verify_error"></strong>
+                    </span>
+                    <button id="bulk_verify_modal_button" class="btn btn-success" onClick="map_verify()">Import</button>
+                    </div>
+                </div>
+              </div>
+            </div>
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm" style="flex:0 1 auto">
 
             <div class="container">
@@ -171,10 +248,10 @@
                                 
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{URL::route('find_history')}}">Find
-                                        <small id="fileHelp" class="form-text text-muted">History of Found Emails</small>
+                                        <small id="fileHelp" class="form-text text-muted">History of found emails</small>
                                     </a>
                                     <a class="dropdown-item" href="{{URL::route('verify_history')}}">Verify
-                                        <small id="fileHelp" class="form-text text-muted">History of Verified Emails</small></a>
+                                        <small id="fileHelp" class="form-text text-muted">History of verified emails</small></a>
                                     
                                 </div>
                             </li>
@@ -185,29 +262,32 @@
                                 </a>
                                 
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">Find and Verify Emails (coming soon)
-                                        <small id="fileHelp" class="form-text text-muted">Find and verify emails from list of names and domains</small>
+                                    <a class="dropdown-item" href="{{URL::route('bulk_find')}}">Find Emails
+                                        <small id="fileHelp" class="form-text text-muted">Find list of names and domains</small>
                                     </a>
-                                    <a class="dropdown-item" href="#">Verify Emails (coming soon)
+                                    <a class="dropdown-item" href="{{URL::route('bulk_verify')}}">Verify Emails
                                         <small id="fileHelp" class="form-text text-muted">Verify a list of Emails</small></a>
                                     
                                 </div>
                             </li>
-                            <!-- <li class="nav-item">
-                                <a class="nav-link" href="#"><span class="padding_right"><i class="fas fa-folder-open fa-sm"></i></span>Files (coming soon)</a>
-                            </li> -->
-                           <!--  <li class="nav-item">
-                                <a class="nav-link" href="#">Advanced Search (coming soon)</a>
-                            </li> -->
-                           <!--  <li class="nav-item">
-                                <a class="nav-link" href="leads">Get Leads</a>
-                            </li> -->
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <span class="padding_right"><i class="fas fa-file-import fa-sm"></i></span>Files  <span class="caret"></span>
+                                   
+                                </a>
+                                
+                                <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{URL::route('files_find')}}">Find
+                                        <small id="fileHelp" class="form-text text-muted">List of find files</small>
+                                    </a>
+                                    <a class="dropdown-item" href="{{URL::route('files_verify')}}">Verify
+                                        <small id="fileHelp" class="form-text text-muted">Liist of verify files</small></a>
+                                    
+                                </div>
+                            </li>
                         @endguest
                     </ul>
-
-                    <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -315,6 +395,21 @@
    
     @yield('footer')
      <script>
+        $(document).ready(function(e) {
+          $('#bulk_verify_modal').on('hidden.bs.modal', function(e) {
+            if(window.location.href!="{{ route('files_verify') }}")
+            {
+                window.location.href = "{{ route('files_verify') }}";
+            }
+            
+          });
+          $('#bulk_find_modal').on('hidden.bs.modal', function(e) {
+            if(window.location.href!="{{ route('files_find') }}")
+            {
+                window.location.href = "{{ route('files_find') }}";
+            }
+          });
+        });
         $(function () {
           $('[data-toggle="tooltip"]').tooltip()
         })
@@ -333,6 +428,248 @@
           $('#bounce_email_type').val(type);
           $("#bounce_message").val('');
           $("#report_bounce").modal();        
+        }
+        function map_find()
+        {
+            document.getElementById('bulk_map_find_error').innerHTML="";
+            select_options=document.getElementsByClassName('map_find_select');
+            var first_name=-1;
+            var last_name=-1;
+            var domain=-1;
+            var first_name_count=0;
+            var last_name_count=0;
+            var domain_count=0;
+            for(var i=0;i<select_options.length;i++)
+            {
+                if(select_options[i].value=="first_name")
+                {
+                    first_name_count++;
+                }
+                else if(select_options[i].value=="last_name")
+                {
+                    last_name_count++;
+                }
+                else if(select_options[i].value=="domain")
+                {
+                    domain_count++;
+                }
+            }
+            if(first_name_count==0 || first_name_count>1)
+            {
+                document.getElementById('bulk_map_find_error').innerHTML="Please Select First Name Field For One Column";
+            }
+            else if(last_name_count==0 || last_name_count>1)
+            {
+                document.getElementById('bulk_map_find_error').innerHTML="Please Select Last Name Field For One Column";
+            }
+            else if(domain_count==0 || domain_count>1)
+            {
+                document.getElementById('bulk_map_find_error').innerHTML="Please Select Domain Name Field For One Column";
+            }
+            else
+            {
+                for(var i=0;i<select_options.length;i++)
+                {
+                    if(select_options[i].value=="first_name")
+                    {
+                        first_name=select_options[i].id;
+                    }
+                    else if(select_options[i].value=="last_name")
+                    {
+                        last_name=select_options[i].id;
+                    }
+                    else if(select_options[i].value=="domain")
+                    {
+                        domain=select_options[i].id;
+                    }
+                }
+                var exclude_header="0";
+                if (document.getElementById('skip_header_map_find').checked) 
+                {
+                    exclude_header="1";
+                }
+                var file_id=$('#bulk_import_file_id').val();
+                $('#bulk_find_modal_button').html('<i class="fa fa-spinner fa-spin"></i>');
+                 $.ajax({
+                        method: 'POST',
+                        dataType: 'json', 
+                        url: 'process_import', 
+                        data: {'first_name' : first_name,'last_name':last_name,'domain':domain,'exclude_header':exclude_header,'file_id':file_id,"_token": "{{ csrf_token() }}"}, 
+                        success: function(response)
+                        { 
+                            
+                            console.log(response);
+                            // $('#bulk_find_modal_button').html('Import');
+                            window.location.href = "{{ route('files_find') }}";
+                            
+
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            
+                            if( jqXHR.status === 422 )
+                            {
+                                
+                            }
+                            else if( jqXHR.status === 419 )
+                            {
+
+                                $("#login_again").modal();
+                                
+                            }
+                            else if(jqXHR.status === 403)
+                            {
+                                $("#login_again").modal()
+                                
+                            }
+                            else
+                            {
+                                 console.log(jqXHR);
+                               
+                            }
+                        },
+                        timeout: 60000 // sets timeout to 60 seconds
+                    });
+            }
+
+            
+        }
+        function bulk_find_popup_populate_emails(data)
+        {       
+                var tableRef = document.getElementById('bulk_find_popup_table').getElementsByTagName('tbody')[0];
+                for(var i = tableRef.rows.length - 1; i >= 0; i--)
+                {
+                    tableRef.deleteRow(i);
+                }
+                for(var i = 0;i<data.length;i++)
+                {
+                    newRow   = tableRef.insertRow();
+                    for(var j = 0;j<data[i].length;j++)
+                    {
+                          newCell  = newRow.insertCell(j);
+                          newText  = document.createTextNode(data[i][j]);
+                          newCell.appendChild(newText);
+                    }
+                       
+                }
+                newRow   = tableRef.insertRow();
+                for(var j = 0;j<data[1].length;j++)
+                {
+                    newCell  = newRow.insertCell(j);
+                    select = document.createElement("select");
+                    select.id=j;
+                    select.className="map_find_select browser-default";
+                    select.options.add( new Option("Select","", true, true) );
+                    select.options.add( new Option("First Name","first_name") );
+                    select.options.add( new Option("Last Name","last_name") );
+                    select.options.add( new Option("Domain Name","domain") );
+                    newCell.appendChild(select);
+                }
+                
+        }
+        function map_verify()
+        {
+            document.getElementById('bulk_map_verify_error').innerHTML="";
+            select_options=document.getElementsByClassName('map_verify_select');
+            var email=-1;
+            var email_count=0;
+            for(var i=0;i<select_options.length;i++)
+            {
+                if(select_options[i].value=="email")
+                {
+                    email_count++;
+                }
+            }
+            if(email_count==0 || email_count>1)
+            {
+                document.getElementById('bulk_map_verify_error').innerHTML="Please Select Email Field For One Column";
+            }
+            else
+            {
+                for(var i=0;i<select_options.length;i++)
+                {
+                    if(select_options[i].value=="email")
+                    {
+                        email=select_options[i].id;
+                    }
+                }
+                var file_id=$('#bulk_import_verify_file_id').val();
+                var exclude_header="0";
+                if (document.getElementById('skip_header_map_verify').checked) 
+                {
+                    exclude_header="1";
+                }
+                $('#bulk_verify_modal_button').html('<i class="fa fa-spinner fa-spin"></i>'); 
+                 $.ajax({
+                        method: 'POST',
+                        dataType: 'json', 
+                        url: 'process_import', 
+                        data: {'email' : email,'file_id':file_id,'exclude_header':exclude_header,"_token": "{{ csrf_token() }}"}, 
+                        success: function(response)
+                        { 
+                            
+                            console.log(response);
+                            window.location.href = "{{ route('files_verify') }}";
+                            
+
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            
+                            if( jqXHR.status === 422 )
+                            {
+                                
+                            }
+                            else if( jqXHR.status === 419 )
+                            {
+
+                                $("#login_again").modal();
+                                
+                            }
+                            else if(jqXHR.status === 403)
+                            {
+                                $("#login_again").modal()
+                                
+                            }
+                            else
+                            {
+                                 console.log(jqXHR);
+                               
+                            }
+                        },
+                        timeout: 60000 // sets timeout to 60 seconds
+                    });
+            }
+
+            
+        }
+        function bulk_verify_popup_populate_emails(data)
+        {
+            var tableRef = document.getElementById('bulk_verify_popup_table').getElementsByTagName('tbody')[0];
+                for(var i = tableRef.rows.length - 1; i >= 0; i--)
+                {
+                    tableRef.deleteRow(i);
+                }
+                for(var i = 0;i<data.length;i++)
+                {
+                    newRow   = tableRef.insertRow();
+                    for(var j = 0;j<data[i].length;j++)
+                    {
+                          newCell  = newRow.insertCell(j);
+                          newText  = document.createTextNode(data[i][j]);
+                          newCell.appendChild(newText);
+                    }
+                       
+                }
+                newRow   = tableRef.insertRow();
+                for(var j = 0;j<data[1].length;j++)
+                {
+                    newCell  = newRow.insertCell(j);
+                    select = document.createElement("select");
+                    select.id=j;
+                    select.className="map_verify_select browser-default";
+                    select.options.add( new Option("Select","", true, true) );
+                    select.options.add( new Option("Email","email") );
+                    newCell.appendChild(select);
+                }
         }
     </script>
 </body>
