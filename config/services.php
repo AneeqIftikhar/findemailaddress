@@ -43,5 +43,9 @@ return [
             'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
         ],
     ],
+    'linkedin' => [
+        'client_id' => '8104k1ca34ct3r',
+        'client_secret' => 'sRZad8e1qodqAVBu',
+        'redirect' => 'http://localhost/emailfinder/public/linkedin_redirect'],
 
 ];
