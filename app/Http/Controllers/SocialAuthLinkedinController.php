@@ -86,6 +86,11 @@ class SocialAuthLinkedinController extends Controller
             
         } 
         catch (Exception $e) {
+            DB::rollback();
+            return $e;
+        }
+        catch (\Exception $e) {
+            DB::rollback();
             return $e;
         }
     }
