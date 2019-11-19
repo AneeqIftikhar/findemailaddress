@@ -11,6 +11,9 @@ use Ramsey\Uuid\Uuid;
 use App\FastSpring\FastSpringApi;
 use App\Package;
 use App\UserPackagesLogs;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 class SocialAuthLinkedinController extends Controller
 {
     public function redirect()
@@ -29,6 +32,7 @@ class SocialAuthLinkedinController extends Controller
             $existUser = User::where('email',$linkdinUser->email)->first();
             if($existUser) {
                 Auth::loginUsingId($existUser->id);
+                return redirect()->to('/find');
             }
             else {
             	$free_package=Package::where('name','free')->first();
@@ -38,7 +42,9 @@ class SocialAuthLinkedinController extends Controller
                 $user->name = $linkdinUser->name;
                 $user->email = $linkdinUser->email;
                 // $user->linkedin_id = $linkdinUser->id;
-                $user->password = md5(rand(1,10000));
+                $user->password = Hash::make((rand(10000000,99999999)));
+                $user->email_verified_at = Carbon::now();
+                $user->first_login = 0;
                 $user->save();
                 $FastSpringApi=new FastSpringApi();
                 $name=explode(" ",$user->name);
@@ -75,11 +81,12 @@ class SocialAuthLinkedinController extends Controller
 	            $user_package_log->save();
             	DB::commit();
                 Auth::loginUsingId($user->id);
+                return redirect()->to('/upgrade_account');
             }
-            return redirect()->to('/find');
+            
         } 
         catch (Exception $e) {
-            return 'error';
+            return $e;
         }
     }
 }

@@ -3,7 +3,7 @@
     {{ "Register" }}
 @endsection
 @section('content')
-<div class="fame-page-title padding-xs" style=" background-color: rgba(61, 89, 250,0.75);"><div class="container"><h3 class="page-title">Register now to claim you 50 free find and verify credits!</h3></div></div>
+<div class="fame-page-title padding-xs" style=" background-color: rgba(61, 89, 250,0.75);"><div class="container"><h3 class="page-title">Register now to claim your 50 free find and verify credits!</h3></div></div>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
