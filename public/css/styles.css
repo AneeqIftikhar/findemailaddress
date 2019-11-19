@@ -276,3 +276,13 @@ display: block;
 }
 
 .tooltip > .tooltip-inner {background-color: var(--main-bg-color) !important;}
+
+
+.fame-page-title {
+    margin-bottom: 20px;
+    padding: 10px 0 10px;
+    background-position: 50% 50%;
+    background-repeat: repeat;
+    color: #fff;
+    text-align: center;
+}
