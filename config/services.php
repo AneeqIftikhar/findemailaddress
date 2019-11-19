@@ -46,6 +46,6 @@ return [
     'linkedin' => [
         'client_id' => '8104k1ca34ct3r',
         'client_secret' => 'sRZad8e1qodqAVBu',
-        'redirect' => env('LINKEDIN_REDIRECT_URL', 'https://localhost/emailfinder/public/linkedin_redirect')],
+        'redirect' => env('LINKEDIN_REDIRECT_URL', 'http://localhost/emailfinder/public/linkedin_callback')],
 
 ];
