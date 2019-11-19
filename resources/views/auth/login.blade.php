@@ -64,23 +64,24 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}
                                 </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                        {{-- <div class="form-group row mt-1 mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <a id="linkedin-button" href="{{ route('linkedin_redirect') }}">
-                                  <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
-                                  
+                                <a id="linkedin-button" class="btn btn-primary" href="{{ route('linkedin_redirect') }}">
+                                  <i class="fab fa-linkedin-in" aria-hidden="true">&nbsp&nbsp|</i>
+                                   Connect with Linkedin
                                 </a>
                                 
                             </div>
-                        </div> --}}
+                        </div>
+                        <div class="form-group row mt-1 mb-0">
+                            <div class="col-md-8 offset-md-4">
+                                 @if (Route::has('password.request'))
+                                    <a class="btn btn-link" style="margin-left: -10px;" href="{{ route('password.request') }}">
+                                        {{ __('Forgot Your Password?') }}
+                                    </a>
+                                @endif
+                                
+                            </div>
+                           
+                        </div>
                     </form>
                 </div>
             </div>
