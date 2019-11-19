@@ -74,7 +74,11 @@
                         </div>
                         <div class="form-group row mt-1 mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <a href="{{ route('linkedin_redirect') }}" class="btn btn-primary">Login With Linkedin</a>
+                                <a id="linkedin-button" href="{{ route('linkedin_redirect') }}">
+                                  <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+                                  
+                                </a>
+                                
                             </div>
                         </div>
                     </form>
