@@ -138,3 +138,10 @@ Route::get('return_url','UserController@return_url');
 
 Route::post('disableRecurringBilling','UserController@disableRecurringBilling')->name('disableRecurringBilling')->middleware('verified');
 Route::post('enableRecurringBilling','UserController@enableRecurringBilling')->name('enableRecurringBilling')->middleware('verified');
+
+
+
+//linkedin login
+
+Route::get('linkedin_redirect', 'SocialAuthLinkedinController@redirect')->name('linkedin_redirect');
+Route::get('linkedin_callback', 'SocialAuthLinkedinController@callback')->name('linkedin_callback');
