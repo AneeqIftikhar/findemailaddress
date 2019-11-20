@@ -109,9 +109,20 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Register') }}
                                 </button>
+                                or
+                                <a id="linkedin-button" class="btn btn-primary" href="{{ route('linkedin_redirect') }}">
+                                  <i class="fab fa-linkedin-in" aria-hidden="true">&nbsp&nbsp|</i>
+                                   Connect with Linkedin
+                                </a>
                             </div>
                         </div>
                     </form>
+                    <div class="form-group row mb-0">
+                            <div class="col-md-6 offset-md-4">
+
+                            </div>
+                        </div>
+                    
                 </div>
             </div>
         </div>
