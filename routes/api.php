@@ -38,6 +38,8 @@ Route::post('update_emails','API\BulkApiController@update_emails');
 Route::post('fetch_file_emails','API\BulkApiController@fetch_file_emails');
 Route::post('fetch_unprocessed_files','API\BulkApiController@fetch_unprocessed_files');
 
+Route::get('invalid_domains','API\EmailApiController@invalid_domains_api');
+
 
 
 Route::middleware('cors')->group(function () {

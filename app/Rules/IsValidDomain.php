@@ -26,7 +26,7 @@ class IsValidDomain implements Rule
      */
     public function passes($attribute, $value)
     {
-        return preg_match('/(http)?(?:s)?:?(\/\/)?(?:[\w-]+\.)*([\w-]{1,63})(?:\.(?:\w{3}|\w{2}))(?:$|\/)/i', $value);
+        return preg_match('/(?!:\/\/)(?=.{1,255}$)((.{1,63}\.){1,127}(?![0-9]*$)[a-z0-9-]+\.?)/i', $value);
     }
 
     /**
@@ -36,6 +36,6 @@ class IsValidDomain implements Rule
      */
     public function message()
     {
-        return 'Please enter a valid domain/url';
+        return 'Please enter a valid domain, e.g: example.com';
     }
 }
