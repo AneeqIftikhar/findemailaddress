@@ -74,6 +74,15 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <div class="col-md-6">
+                                <span class="invalid-feedback-custom">
+                                    <strong id="bulk_verify_file_error"></strong>
+                                </span>
+                                
+                            </div>
+                            
+                        </div>
+                        <div class="form-group row">
                         	<div class="col-md-12">
                         		<button id="submit_file_upload_verify" type="submit" class="btn btn-primary">Upload</button>
                         	</div>
@@ -120,10 +129,19 @@ $(document).ready(function (e) {
             },
             success: function(data)
             {
-                bulk_verify_popup_populate_emails(data['data']);
-                $('#bulk_import_verify_file_id').val(data['file_id']);
-                $('#bulk_verify_modal_button').html('Import '+data['limit']+' Rows');
-                $("#bulk_verify_modal").modal()
+                $('#submit_file_upload_verify').html('Upload');
+                if(data['status']=='fail')
+                {
+                    $('#bulk_verify_file_error').html(data['message']);
+                }
+                else
+                {
+                    bulk_verify_popup_populate_emails(data['data']);
+                    $('#bulk_import_verify_file_id').val(data['file_id']);
+                    $('#bulk_verify_modal_button').html('Import '+data['limit']+' Rows');
+                    $("#bulk_verify_modal").modal()
+                }
+                
             },
             error: function(e) 
             {

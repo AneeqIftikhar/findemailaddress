@@ -41,15 +41,23 @@ class BulkController extends Controller
 
 			// $total_rows = $sheet->getHighestDataRow();
 			
-
-
+			$total_rows=count($data);
+			$unprocessed_files=UserFiles::where('user_id',$user->id)->where('status','=','Import Completed')->get();
+			$blocked_credits=0;
+			foreach ($unprocessed_files as $key => $unprocessed_file) {
+				$blocked_credits=$blocked_credits+$unprocessed_file->total_rows;
+			}
+			if((($user->credits)-$blocked_credits)<=0)
+			{
+				return json_encode(array('status'=>"fail",'message'=>'Please wait for previous files to comeplete'));
+			}
 			$csv_data = Excel::toArray(new EmailsImportArray, $file);
 			$excel_name=$filename.'.'.$file->getClientOriginalExtension();
 			if(!$file->move(public_path('excel'),$excel_name))
 			{
-			   return json_encode(array('status'=>"fail",'message','Unexpected Storage Error'));
+			   return json_encode(array('status'=>"fail",'message'=>'Unexpected Storage Error'));
 			}
-			$total_rows=count($data);
+			
 			$user_file = new UserFiles;
 			$user_file->name = $excel_name;
 			$user_file->user_id=$user->id;
@@ -59,13 +67,13 @@ class BulkController extends Controller
 			$user_file->total_rows=$total_rows;
 			$user_file->save();
 			$package=Package::where('id',$user->package_id)->first();
-	        if($user->credits >= ($package->credits))
+	        if((($user->credits)-$blocked_credits) >= ($package->credits))
 	        {
 	            $limit=(int) ($package->credits);
 	        }
 	        else
 	        {
-	            $limit=(int) ($user->credits);
+	            $limit=(int) (($user->credits)-$blocked_credits);
 	        }
 
 	        if($total_rows>=$limit)
@@ -81,7 +89,7 @@ class BulkController extends Controller
 		}
 		else
 		{
-			return json_encode(array('status'=>"fail",'message','Unexpected error occurred while trying to process your request'));
+			return json_encode(array('status'=>"fail",'message'=>'Unexpected error occurred while trying to process your request'));
 		} 
 
 	}
@@ -122,7 +130,7 @@ class BulkController extends Controller
 		}
 		else
 		{
-			return json_encode(array('status'=>"fail",'message','Unexpected error occurred while trying to process your request'));
+			return json_encode(array('status'=>"fail",'message'=>'Unexpected error occurred while trying to process your request'));
 		} 
 
 	}
@@ -238,7 +246,7 @@ class BulkController extends Controller
 	    }
 	    else
 	    {
-	    	return json_encode(array('status'=>"fail",'message','File Not Found'));
+	    	return json_encode(array('status'=>"fail",'message'=>'File Not Found'));
 	    }
 	    
 	}
@@ -263,11 +271,21 @@ class BulkController extends Controller
 			$data = array_map('str_getcsv', file($path));
 	    	// $csv_data = array_slice($data, 0, 3);
 	    	// $csv_data[0] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $csv_data[0]);
+	    	$unprocessed_files=UserFiles::where('user_id',$user->id)->where('status','=','Import Completed')->get();
+	    	$total_rows=count($data);
+			$blocked_credits=0;
+			foreach ($unprocessed_files as $key => $unprocessed_file) {
+				$blocked_credits=$blocked_credits+$unprocessed_file->total_rows;
+			}
+			if(($user->credits)-$blocked_credits<=0)
+			{
+				return json_encode(array('status'=>"fail",'message'=>'Please wait for previous files to complete'));
+			}
 	    	$csv_data = Excel::toArray(new EmailsImportArray, $file);
 			$excel_name=$filename.'.'.$file->getClientOriginalExtension();
 			if(!$file->move(public_path('excel'),$excel_name))
 			{
-			   return json_encode(array('status'=>"fail",'message','Unexpected Storage Error'));
+			   return json_encode(array('status'=>"fail",'message'=>'Unexpected storage error. Please contact support or generate a ticket.'));
 			}
 			$user_file = new UserFiles;
 			$user_file->name = $excel_name;
@@ -275,17 +293,17 @@ class BulkController extends Controller
 			$user_file->title=$request->title;
 			$user_file->type='verify';
 			$user_file->status='Mapping Required';
-			$user_file->total_rows=count($data);
+			$user_file->total_rows=$total_rows;
 			$user_file->save();
 
 			$package=Package::where('id',$user->package_id)->first();
-	        if($user->credits >= ($package->credits))
+	        if((($user->credits)-$blocked_credits) >= ($package->credits))
 	        {
 	            $limit=(int) ($package->credits);
 	        }
 	        else
 	        {
-	            $limit=(int) ($user->credits);
+	            $limit=(int) (($user->credits)-$blocked_credits);
 	        }
 
 	        if(count($data)>=$limit)
@@ -301,7 +319,7 @@ class BulkController extends Controller
 		}
 		else
 		{
-			return json_encode(array('status'=>"fail",'message','Unexpected error occurred while trying to process your request'));
+			return json_encode(array('status'=>"fail",'message'=>'Unexpected error occurred while trying to process your request'));
 		}
 
 	}
