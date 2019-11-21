@@ -104,7 +104,7 @@ class EmailApiController extends Controller
 		try
 		{
 			$validator = Validator::make($request->all(), [
-			     'email' => ['required', 'string', 'email', 'max:255',new BlackListDomains],
+			     'email' => ['required', 'string', 'email', 'max:255'],
 			]);
 
 			if ($validator->fails()) {
