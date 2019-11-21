@@ -62,7 +62,7 @@ class VerifyEmailsImport implements ToModel, WithChunkReading, ShouldQueue, With
         $email = strval($this->email);
         
         return [
-            $email => ['required', 'string', 'email', 'max:255',new BlackListDomains],
+            $email => ['required', 'string', 'email', 'max:255'],
         ];
 
     }

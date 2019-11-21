@@ -203,7 +203,7 @@ class EmailController extends Controller
    		try
       {
           $this->validate($request, [
-              'email' => ['required', 'string', 'email', 'max:255',new BlackListDomains],
+              'email' => ['required', 'string', 'email', 'max:255'],
           ]);
           $user=Auth::user();
           if($user->credits>0)
