@@ -14,6 +14,7 @@ use App\Emails;
 use App\Exports\VerifyEmailsExport;
 use App\Exports\FoundEmailsExport;
 use App\Exports\FoundFileEmailsExport;
+use App\Exports\VerifyFileEmailsExport;
 use App\Rules\BlackListDomains;
 use App\Rules\IsValidDomain;
 use Validator;
@@ -350,7 +351,14 @@ class EmailController extends Controller
        public function downloadFoundRecordsFile(Request $request,$id,$type,$records)
        {
           $file=UserFiles::where('id',$id)->first();
-          $email_export=new FoundFileEmailsExport();
+          if($file->type=="find")
+          {
+            $email_export=new FoundFileEmailsExport();
+          }
+          else
+          {
+            $email_export=new VerifyFileEmailsExport();
+          }
           $email_export->set_details($id,$records);
           return Excel::download($email_export, $file->title.'-processed.'.$type);
        }
