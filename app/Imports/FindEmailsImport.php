@@ -88,7 +88,7 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
         }
         $first_name_field=Functions::removeAccents($row[$first_name]);
         $last_name_field=Functions::removeAccents($row[$last_name]);
-        $domain_field=Functions::get_domain(Functions::removeAccentsDomain($row[$domain]));
+        $domain_field=strtolower(Functions::get_domain(Functions::removeAccentsDomain($row[$domain])));
 
         $exists_email=Emails::where('first_name',$first_name_field)->where('last_name',$last_name_field)->where('domain',$domain_field)->latest()->first();
         if($exists_email)

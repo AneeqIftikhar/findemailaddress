@@ -115,7 +115,7 @@ class BulkApiController extends Controller
 			              		else
 			              		{
 			              			$email=$email_db->email;
-			              			$status=="Invalid";
+			              			$status="Invalid";
 			              		}
 			                
 			              	}
