@@ -84,7 +84,7 @@ class EmailController extends Controller
       {
         $first_name=Functions::removeAccents($request->first_name);
         $last_name=Functions::removeAccents($request->last_name);
-        $domain=Functions::get_domain(Functions::removeAccentsDomain($request->domain));
+        $domain=strtolower(Functions::get_domain(Functions::removeAccentsDomain($request->domain)));
         $status="";
         $type="find";
         $email="";
@@ -209,7 +209,7 @@ class EmailController extends Controller
           $user=Auth::user();
           if($user->credits>0)
           {
-            $email=Functions::removeAccentsEmail($request->email);
+            $email=strtolower(Functions::removeAccentsEmail($request->email));
       			$server_output=CurlRequest::verify_email($email);
       			$json_output=json_decode($server_output);
 

@@ -72,7 +72,7 @@ class VerifyEmailsImport implements ToModel, WithChunkReading, ShouldQueue, With
         $file_id=$this->file->id;
         $email = $this->email;
         return new Emails([
-            'email' => $row[$email],
+            'email' => strtolower($row[$email]),
             'status' => 'Unverified',
             'user_id'=>$user_id,
             'user_file_id'=>$file_id,
