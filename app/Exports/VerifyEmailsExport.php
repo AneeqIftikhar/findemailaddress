@@ -35,7 +35,7 @@ class VerifyEmailsExport implements FromCollection, WithHeadings, ShouldAutoSize
     public function headings(): array
     {
         return [
-            "Email", "Server Status" ,"Status", "Date/Time"
+            "Email", "Status","Server Status" , "Date/Time"
         ];
     }
     public function registerEvents(): array
