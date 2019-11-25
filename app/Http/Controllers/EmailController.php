@@ -14,6 +14,7 @@ use App\Emails;
 use App\Exports\VerifyEmailsExport;
 use App\Exports\FoundEmailsExport;
 use App\Exports\FoundFileEmailsExport;
+use App\Exports\VerifyFileEmailsExport;
 use App\Rules\BlackListDomains;
 use App\Rules\IsValidDomain;
 use Validator;
@@ -83,7 +84,7 @@ class EmailController extends Controller
       {
         $first_name=Functions::removeAccents($request->first_name);
         $last_name=Functions::removeAccents($request->last_name);
-        $domain=Functions::get_domain(Functions::removeAccentsDomain($request->domain));
+        $domain=strtolower(Functions::get_domain(Functions::removeAccentsDomain($request->domain)));
         $status="";
         $type="find";
         $email="";
@@ -203,12 +204,12 @@ class EmailController extends Controller
    		try
       {
           $this->validate($request, [
-              'email' => ['required', 'string', 'email', 'max:255',new BlackListDomains],
+              'email' => ['required', 'string', 'email', 'max:255'],
           ]);
           $user=Auth::user();
           if($user->credits>0)
           {
-            $email=Functions::removeAccentsEmail($request->email);
+            $email=strtolower(Functions::removeAccentsEmail($request->email));
       			$server_output=CurlRequest::verify_email($email);
       			$json_output=json_decode($server_output);
 
@@ -350,7 +351,14 @@ class EmailController extends Controller
        public function downloadFoundRecordsFile(Request $request,$id,$type,$records)
        {
           $file=UserFiles::where('id',$id)->first();
-          $email_export=new FoundFileEmailsExport();
+          if($file->type=="find")
+          {
+            $email_export=new FoundFileEmailsExport();
+          }
+          else
+          {
+            $email_export=new VerifyFileEmailsExport();
+          }
           $email_export->set_details($id,$records);
           return Excel::download($email_export, $file->title.'-processed.'.$type);
        }

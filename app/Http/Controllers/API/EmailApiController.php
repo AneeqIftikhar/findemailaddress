@@ -13,10 +13,15 @@ use Validator;
 use App\Helpers\CurlRequest;
 use App\Helpers\Functions;
 use Mail;
+use App\Invalid_Domains;
 class EmailApiController extends Controller
 {
 
-
+	function invalid_domains_api(Request $request)
+	{
+		$invalid=Invalid_Domains::all();
+		return json_encode(array('status'=>'success','data'=>$invalid));
+	}
 	function find_email_api(Request $request)
 	{
 		try
@@ -34,7 +39,7 @@ class EmailApiController extends Controller
 			}
 			$first_name=Functions::removeAccents($request->first_name);
         	$last_name=Functions::removeAccents($request->last_name);
-        	$domain=Functions::get_domain(Functions::removeAccentsDomain($request->domain));
+        	$domain=strtolower(Functions::get_domain(Functions::removeAccentsDomain($request->domain)));
 
 			$server_output = $server_output=CurlRequest::find_email($first_name,$last_name,$domain);
 
@@ -99,14 +104,14 @@ class EmailApiController extends Controller
 		try
 		{
 			$validator = Validator::make($request->all(), [
-			     'email' => ['required', 'string', 'email', 'max:255',new BlackListDomains],
+			     'email' => ['required', 'string', 'email', 'max:255'],
 			]);
 
 			if ($validator->fails()) {
 				$errors = $validator->errors();
 			    return response()->json(["errors"=>$errors],422);
 			}
-			$email=Functions::removeAccentsEmail($request->email);
+			$email=strtolower(Functions::removeAccentsEmail($request->email));
 			$server_output=CurlRequest::verify_email($email);
 			$json_output=json_decode($server_output);
 

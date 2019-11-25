@@ -46,6 +46,6 @@ class BlackListDomains implements Rule
      */
     public function message()
     {
-        return 'The :attribute must be of company domain.';
+        return 'Please enter a corporate domain. Personal domains are not allowed.';
     }
 }

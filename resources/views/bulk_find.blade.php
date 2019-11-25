@@ -63,7 +63,17 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <div class="col-md-6">
+                                <span class="invalid-feedback-custom">
+                                    <strong id="bulk_find_file_error"></strong>
+                                </span>
+                                
+                            </div>
+                            
+                        </div>
+                        <div class="form-group row">
                         	<div class="col-md-6">
+                                
                         		<button type="submit" id="submit_file_upload" class="btn btn-primary">Upload</button>
                         	</div>
                         	
@@ -106,14 +116,24 @@ $(document).ready(function (e) {
                 $("#bulk_find_form")[0].reset(); 
                 $("#bulk_find_error").fadeOut();
                 $('#submit_file_upload').html('<i class="fa fa-spinner fa-spin"></i>');
+                $('#bulk_find_file_error').html('');
             },
             success: function(data)
             {
-                $('#submit_file_upload').html('Upload');
-                bulk_find_popup_populate_emails(data['data']);
-                $('#bulk_import_file_id').val(data['file_id']);
-                $('#bulk_find_modal_button').html('Import '+data['limit']+' Rows');
-                $("#bulk_find_modal").modal()
+                if(data['status']=='fail')
+                {
+                    $('#submit_file_upload').html('Upload');
+                    $('#bulk_find_file_error').html(data['message']);
+                }
+                else
+                {
+                    $('#submit_file_upload').html('Upload');
+                    bulk_find_popup_populate_emails(data['data']);
+                    $('#bulk_import_file_id').val(data['file_id']);
+                    $('#bulk_find_modal_button').html('Import '+data['limit']+' Rows');
+                    $("#bulk_find_modal").modal()
+                }
+                
             },
             error: function(e) 
             {
