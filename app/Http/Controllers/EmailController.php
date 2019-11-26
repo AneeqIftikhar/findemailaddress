@@ -23,6 +23,7 @@ use App\Helpers\CurlRequest;
 use App\Helpers\Functions;
 use Carbon\Carbon;
 use App\FastSpring\FastSpringApi;
+use App\PersonalVerificationDomain;
 class EmailController extends Controller
 {
 
@@ -209,50 +210,66 @@ class EmailController extends Controller
           $user=Auth::user();
           if($user->credits>0)
           {
+
             $email=strtolower(Functions::removeAccentsEmail($request->email));
-      			$server_output=CurlRequest::verify_email($email);
-      			$json_output=json_decode($server_output);
+            $domain = explode('@', $email)[1];
+            $first_name="";
+            $last_name="";
+            $email_status="";
+            $server_status="";
+            $type="verify";
+            $error="";
+            if ((strpos($domain, 'yahoo.')!== false) || (strpos($domain, 'aol.com')!== false)) 
+            {
 
-      			$first_name="";
-      			$last_name="";
-      			$domain="";
-      			$email_status="";
-      			$server_status="";
-      			$type="verify";
-      			$error="";
-      			if($json_output && array_key_exists('curl_error',$json_output))
-      			{
-      				$error=$json_output->curl_error;
-      				$email_status="Not Found";
-      				$server_status="-";
-      			}
-      			else
-      			{
-      				$user->decrement('credits');
-      				$email_status="Valid";
-      				$server_status="Valid";
-	            if($json_output[0]->mx==null || $json_output[0]->mx=='')
-	            {
-	               $server_status="No Mailbox";
-	               $email_status="-";
-	            }
-	            else
-	            {
-      					if($json_output[0]->status==null || $json_output[0]->status==''|| $json_output[0]->status=='Not Found')
-      					{
-      						$email_status="Invalid";
-      					}
-      					else
-      					{
-      						$email_status=$json_output[0]->status;
-      					}
-	            }
-      			}
+              $e_status="Unknown";
+              $s_status="Valid";
+              $server_output=array("type"=>"PersonalVerificationDomain",'status'=>"Catch All");
+              $server_output=json_encode($server_output);
+
+               Emails::insert_email($first_name,$last_name,$domain,$email,$e_status,$user->id,$type,$server_output,$s_status);
+
+              return json_encode(array('email_status'=>$e_status,'server_status'=>$s_status,'credits_left'=>$user->credits,'error'=>$error));
+            }
+            else
+            {
+              $server_output=CurlRequest::verify_email($email);
+              $json_output=json_decode($server_output);
+
+              if($json_output && array_key_exists('curl_error',$json_output))
+              {
+                $error=$json_output->curl_error;
+                $email_status="Not Found";
+                $server_status="-";
+              }
+              else
+              {
+                $user->decrement('credits');
+                $email_status="Valid";
+                $server_status="Valid";
+                if($json_output[0]->mx==null || $json_output[0]->mx=='')
+                {
+                   $server_status="No Mailbox";
+                   $email_status="-";
+                }
+                else
+                {
+                  if($json_output[0]->status==null || $json_output[0]->status==''|| $json_output[0]->status=='Not Found')
+                  {
+                    $email_status="Invalid";
+                  }
+                  else
+                  {
+                    $email_status=$json_output[0]->status;
+                  }
+                }
+              }
 
 
-            Emails::insert_email($first_name,$last_name,$domain,$email,$email_status,$user->id,$type,$server_output,$server_status);
+              Emails::insert_email($first_name,$last_name,$domain,$email,$email_status,$user->id,$type,$server_output,$server_status);
 
-      			return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status,'credits_left'=>$user->credits,'error'=>$error));
+              return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status,'credits_left'=>$user->credits,'error'=>$error));
+            }
           }
           else
           {
