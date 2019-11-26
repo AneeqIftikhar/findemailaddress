@@ -14,12 +14,13 @@ use App\Helpers\CurlRequest;
 use App\Helpers\Functions;
 use Mail;
 use App\Invalid_Domains;
+use App\PersonalVerificationDomain;
 class EmailApiController extends Controller
 {
 
 	function invalid_domains_api(Request $request)
 	{
-		$invalid=Invalid_Domains::all();
+		$invalid=PersonalVerificationDomain::all();
 		return json_encode(array('status'=>'success','data'=>$invalid));
 	}
 	function find_email_api(Request $request)
