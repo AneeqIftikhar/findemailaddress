@@ -280,6 +280,10 @@ function verify_email_ajax()
                     {
                       newRow.cells[1].innerHTML='<div class="tooltip_container" data-toggle="tooltip" data-placement="top" data-html="true" title="" data-original-title="This domain does not have a mail server setup" style="font-weight:bold;color:red">'+response['server_status']+'</div>';
                     }
+                    else
+                    {
+                      newRow.cells[1].innerHTML='<div class="tooltip_container" data-toggle="tooltip" data-placement="top" data-html="true" title="" data-original-title="This domain does not have a mail server setup" style="font-weight:bold;color:red">'+response['server_status']+'</div>';
+                    }
                     
 
                     
