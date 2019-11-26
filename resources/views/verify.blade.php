@@ -166,6 +166,15 @@ function populate_emails()
             container.setAttribute('data-html', 'true');
             container.setAttribute('title', 'Email appears to be valid but you might not be authorised to send email to this domain');
           }
+          else if (data[i]['status']=="Unknown")
+          {
+            newRow.style.border= "1px solid var(--main-bg-color)";
+            container.style.color = "red";
+            container.setAttribute('data-toggle', 'tooltip');
+            container.setAttribute('data-placement', 'bottom');
+            container.setAttribute('data-html', 'true');
+            container.setAttribute('title', 'Sorry, we are unable to verify this email at the moment');
+          }
           else
           {
             newRow.style.border= "1px solid var(--main-bg-color)";
@@ -312,6 +321,16 @@ function verify_email_ajax()
                     container.setAttribute('data-placement', 'top');
                     container.setAttribute('data-html', 'true');
                     container.setAttribute('title', 'Email appears to be valid but you might not be authorised to send email to this domain');
+                }
+                else if(response['email_status']=="Unknown")
+                {
+                    newRow.style.border= "1px solid var(--main-bg-color)";
+                    container.style.color = "red";
+                    container.setAttribute('data-toggle', 'tooltip');
+                    container.setAttribute('data-placement', 'bottom');
+                    container.setAttribute('data-html', 'true');
+                    container.setAttribute('title', 'Sorry, we are unable to verify this email at the moment');
+                  
                 }
                 else
                 {

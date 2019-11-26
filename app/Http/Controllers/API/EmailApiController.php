@@ -14,12 +14,13 @@ use App\Helpers\CurlRequest;
 use App\Helpers\Functions;
 use Mail;
 use App\Invalid_Domains;
+use App\PersonalVerificationDomain;
 class EmailApiController extends Controller
 {
 
 	function invalid_domains_api(Request $request)
 	{
-		$invalid=Invalid_Domains::all();
+		$invalid=PersonalVerificationDomain::all();
 		return json_encode(array('status'=>'success','data'=>$invalid));
 	}
 	function find_email_api(Request $request)
@@ -112,46 +113,60 @@ class EmailApiController extends Controller
 			    return response()->json(["errors"=>$errors],422);
 			}
 			$email=strtolower(Functions::removeAccentsEmail($request->email));
-			$server_output=CurlRequest::verify_email($email);
-			$json_output=json_decode($server_output);
+			$domain = explode('@', $email)[1];
+            $first_name="";
+            $last_name="";
+            $email_status="";
+            $server_status="";
+            $type="verify";
+            $error="";
+            if ((strpos($domain, 'yahoo.')!== false) || (strpos($domain, 'aol.com')!== false)) 
+            {
 
-			$first_name="";
-			$last_name="";
-			$domain="";
-			$email_status="";
-			$server_status="";
-			$type="verify";
-			$error="";
+              $e_status="Unknown";
+              $s_status="Valid";
+              $server_output=array("type"=>"PersonalVerificationDomain",'status'=>"Catch All");
+              $server_output=json_encode($server_output);
 
-			if($json_output && array_key_exists('curl_error',$json_output))
-			{
-				$error=$json_output->curl_error;
-				$email_status="Not Found";
-				$server_status="-";
+              PluginEmails::insert_email($first_name,$last_name,$domain,$email,$e_status,$type,$server_output,$s_status);
+              return json_encode(array('email_status'=>$e_status,'server_status'=>$s_status,'error'=>$error));
+            }
+            else
+            {
+				$server_output=CurlRequest::verify_email($email);
+				$json_output=json_decode($server_output);
+
+
+				if($json_output && array_key_exists('curl_error',$json_output))
+				{
+					$error=$json_output->curl_error;
+					$email_status="Not Found";
+					$server_status="-";
+				}
+				else
+				{
+					$email_status="Valid";
+					$server_status="Valid";
+		            if($json_output[0]->mx==null || $json_output[0]->mx=='')
+		            {
+		               $server_status="No Mailbox";
+		               $email_status="-";
+		            }
+		            else
+		            {
+						if($json_output[0]->status==null || $json_output[0]->status==''|| $json_output[0]->status=='Not Found')
+						{
+							$email_status="Invalid";
+						}
+						else
+						{
+							$email_status=$json_output[0]->status;
+						}
+		            }
+				}
+				PluginEmails::insert_email($first_name,$last_name,$domain,$email,$email_status,$type,$server_output,$server_status);
+				return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status));
 			}
-			else
-			{
-				$email_status="Valid";
-				$server_status="Valid";
-	            if($json_output[0]->mx==null || $json_output[0]->mx=='')
-	            {
-	               $server_status="No Mailbox";
-	               $email_status="-";
-	            }
-	            else
-	            {
-					if($json_output[0]->status==null || $json_output[0]->status==''|| $json_output[0]->status=='Not Found')
-					{
-						$email_status="Invalid";
-					}
-					else
-					{
-						$email_status=$json_output[0]->status;
-					}
-	            }
-			}
-			PluginEmails::insert_email($first_name,$last_name,$domain,$email,$email_status,$type,$server_output,$server_status);
-			return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status));
 		}
 		catch(Exception $e)
 		{

@@ -71,8 +71,26 @@ class VerifyEmailsImport implements ToModel, WithChunkReading, ShouldQueue, With
         $user_id=$this->user->id;
         $file_id=$this->file->id;
         $email = $this->email;
+
+        $email_field=strtolower(Functions::removeAccentsEmail($row[$email]));
+        $domain = explode('@', $email_field)[1];
+        if ((strpos($domain, 'yahoo.')!== false) || (strpos($domain, 'aol.com')!== false)) 
+        {
+            $server_output=array("type"=>"PersonalVerificationDomain",'status'=>"Catch All");
+            $server_output=json_encode($server_output);
+
+            return new Emails([
+                'email' => $email_field,
+                'status' => 'Unknown',
+                'server_status' => 'Valid',
+                'user_id'=>$user_id,
+                'user_file_id'=>$file_id,
+                'type'=>'verify',
+                'server_json_dump'=>$server_output,
+            ]);
+        }
         return new Emails([
-            'email' => strtolower($row[$email]),
+            'email' => $email_field,
             'status' => 'Unverified',
             'user_id'=>$user_id,
             'user_file_id'=>$file_id,
