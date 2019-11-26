@@ -74,7 +74,7 @@ class VerifyEmailsImport implements ToModel, WithChunkReading, ShouldQueue, With
 
         $email_field=strtolower(Functions::removeAccentsEmail($row[$email]));
         $domain = explode('@', $email_field)[1];
-        if ((strpos($domain, 'yahoo.')!== false) || (strpos($domain, 'aol.com')!== false)) 
+        if ((strpos($domain, 'yahoo.')!== false) || (strpos($domain, 'aol.com')!== false) || (strpos($domain, 'ymail.com')!== false)) 
         {
             $server_output=array("type"=>"PersonalVerificationDomain",'status'=>"Catch All");
             $server_output=json_encode($server_output);
@@ -82,7 +82,7 @@ class VerifyEmailsImport implements ToModel, WithChunkReading, ShouldQueue, With
             return new Emails([
                 'email' => $email_field,
                 'status' => 'Unknown',
-                'server_status' => 'Valid',
+                'server_status' => '-',
                 'user_id'=>$user_id,
                 'user_file_id'=>$file_id,
                 'type'=>'verify',

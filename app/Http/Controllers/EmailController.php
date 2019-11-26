@@ -219,11 +219,11 @@ class EmailController extends Controller
             $server_status="";
             $type="verify";
             $error="";
-            if ((strpos($domain, 'yahoo.')!== false) || (strpos($domain, 'aol.com')!== false)) 
+            if ((strpos($domain, 'yahoo.')!== false) || (strpos($domain, 'aol.com')!== false) || (strpos($domain, 'ymail.com')!== false)) 
             {
 
               $e_status="Unknown";
-              $s_status="Valid";
+              $s_status="-";
               $server_output=array("type"=>"PersonalVerificationDomain",'status'=>"Catch All");
               $server_output=json_encode($server_output);
 
