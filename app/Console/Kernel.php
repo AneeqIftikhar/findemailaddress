@@ -13,7 +13,6 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\FreePackageCreditsMonthly::class,
-        Commands\SendNewsletter::class,
     ];
 
     /**
@@ -25,7 +24,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('free:credits')->daily();
-        $schedule->command('newsletter:daily')->daily();
     }
 
     /**
