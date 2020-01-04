@@ -14,6 +14,7 @@ use App\UserPackagesLogs;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use App\Helpers\CurlRequest;
 class SocialAuthLinkedinController extends Controller
 {
     public function redirect()
@@ -80,6 +81,10 @@ class SocialAuthLinkedinController extends Controller
 	            $user_package_log->user()->associate($user);
 	            $user_package_log->save();
             	DB::commit();
+                if (config('app.env')=='production') {
+
+                    $server_output=CurlRequest::add_automizy_contact($user);
+                }
                 Auth::loginUsingId($user->id);
                 return redirect()->to('/upgrade_account');
             }

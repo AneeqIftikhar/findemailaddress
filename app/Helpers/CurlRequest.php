@@ -62,4 +62,37 @@ class CurlRequest{
 			return $server_output;
 		}
     }
+    public static function add_automizy_contact($user)
+    {
+        $endpoint = "https://gateway.automizy.com/v2/smart-lists/1/contacts";
+        $postdata='{
+                    "email":"'.$user->email.'",
+                    "customFields":{
+                        "firstname":"'.$user->first_name.'",
+                        "lastname":"'.$user->last_name.'"
+                    }
+                }';
+        $authorization = "Authorization: Bearer ".env('AUTOMIZY_TOKEN','');
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,$endpoint);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$postdata);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Accept: application/json',$authorization));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $server_output = curl_exec ($ch);
+        if (curl_errno($ch)) 
+        {
+            $error_message = curl_error($ch);
+        }
+        curl_close ($ch);
+        if (isset($error_message)) 
+        {
+            return json_encode(['curl_error'=>$error_message]);
+        }
+        else
+        {
+            return $server_output;
+        }
+    }
 }

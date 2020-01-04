@@ -48,3 +48,6 @@ Route::middleware('cors')->group(function () {
 	Route::post('add_emails_api','API\EmailApiController@add_emails_api');
 	Route::post('failed_response_notification','API\EmailApiController@failed_response_notification');
 });
+
+
+Route::get('testAutomizy','UserController@testAutomizy');

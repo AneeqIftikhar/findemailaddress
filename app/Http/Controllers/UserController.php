@@ -14,6 +14,7 @@ use App\UserPackagesLogs;
 use Session;
 use App\Subscriptions;
 use App\PendingSubscriptions;
+use App\Helpers\CurlRequest;
 class UserController extends Controller
 {
     public function update_personal_info(Request $request)
@@ -193,6 +194,17 @@ class UserController extends Controller
         $data=$twocheckoutapi->getCustomerSubscriptions($user->two_checkout_user_reference);
         return redirect()->back()->with(['data'=>$data]);
     }
-
+    public function testAutomizy(Request $request)
+    {
+        $user=User::find(1);
+        $server_output=CurlRequest::add_automizy_contact($user);      
+        $json_output=json_decode($server_output);
+        if($json_output && array_key_exists('curl_error',$json_output))
+        {
+            $error=$json_output->curl_error;
+            return json_encode(['status'=>'fail','message'=>$error]);
+        }
+        return json_encode(['status'=>'success','data'=>$json_output]);
+    }
     
 }
