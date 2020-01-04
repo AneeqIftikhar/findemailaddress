@@ -83,7 +83,8 @@ class SocialAuthLinkedinController extends Controller
             	DB::commit();
                 if (config('app.env')=='production') {
 
-                    $server_output=CurlRequest::add_automizy_contact($user);
+                    //adding comment to be removed later
+                    // $server_output=CurlRequest::add_automizy_contact($user);
                 }
                 Auth::loginUsingId($user->id);
                 return redirect()->to('/upgrade_account');
