@@ -15,6 +15,7 @@ use App\TwoCheckout\TwoCheckoutApi;
 use App\FastSpring\FastSpringApi;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\CurlRequest;
 class RegisterController extends Controller
 {
     /*
@@ -121,6 +122,15 @@ class RegisterController extends Controller
             $user_package_log->user()->associate($user);
             $user_package_log->save();
             DB::commit();
+
+            if (config('app.env')=='production') {
+
+                $server_output=CurlRequest::add_automizy_contact($user);
+            }
+            
+
+
+
             return $user;
 
         }
