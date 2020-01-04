@@ -65,13 +65,42 @@ class CurlRequest{
     public static function add_automizy_contact($user)
     {
         $endpoint = "https://gateway.automizy.com/v2/smart-lists/1/contacts";
-        $postdata='{
+        $name=explode(" ",$user->name);
+        if(count($name)>2)
+        {
+            $first_name=$name[0];
+            $last_name=$name[count($name)-1];
+        }
+        else if (count($name)>1)
+        {
+            $first_name=$name[0];
+            $last_name=$name[1];
+        }
+        else
+        {
+            $first_name=$name[0];
+            $last_name=" ";
+        }
+        if($last_name==" ")
+        {
+            $postdata='{
                     "email":"'.$user->email.'",
                     "customFields":{
-                        "firstname":"'.$user->first_name.'",
+                        "firstname":"'.$first_name.'"
+                    }
+                }';
+        }
+        else
+        {
+            $postdata='{
+                    "email":"'.$user->email.'",
+                    "customFields":{
+                        "firstname":"'.$first_name.'",
                         "lastname":"'.$user->last_name.'"
                     }
                 }';
+        }
+        
         $authorization = "Authorization: Bearer ".env('AUTOMIZY_TOKEN','');
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,$endpoint);
