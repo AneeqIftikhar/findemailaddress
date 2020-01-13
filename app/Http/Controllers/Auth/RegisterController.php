@@ -126,7 +126,7 @@ class RegisterController extends Controller
             if (config('app.env')=='production') {
 
                 //adding comment to be removed later
-                // $server_output=CurlRequest::add_automizy_contact($user);
+                $server_output=CurlRequest::add_automizy_contact($user);
             }
             
 
