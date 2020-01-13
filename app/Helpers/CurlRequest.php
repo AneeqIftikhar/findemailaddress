@@ -64,7 +64,7 @@ class CurlRequest{
     }
     public static function add_automizy_contact($user)
     {
-        $endpoint = "https://gateway.automizy.com/v2/smart-lists/1/contacts";
+        $endpoint = "https://gateway.automizy.com/v2/smart-lists/2/contacts";
         $name=explode(" ",$user->name);
         if(count($name)>2)
         {
