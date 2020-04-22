@@ -352,6 +352,7 @@
 
 
                                      <a class="dropdown-item" href="{{url('tickets')}}"><span class="padding_right"><i class="fas fa-ticket-alt fa-sm"></i></span>My Tickets</a>
+                                     <!-- <a class="dropdown-item" href="{{url('api')}}"><span class="padding_right"><i class="fas fa-ticket-alt fa-sm"></i></span>API</a> -->
                                     <a class="dropdown-item" href="{{URL::route('account_settings')}}"><span class="padding_right"><i class="fas fa-user-cog fa-sm"></i></span>Account Settings</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
@@ -409,6 +410,43 @@
                 window.location.href = "{{ route('files_find') }}";
             }
           });
+          $('#skip_header_map_verify').change(function() {
+                if(this.checked) 
+                {
+                    bulk_verify_modal_button_html_text=$('#bulk_verify_modal_button').html();
+                    var res = bulk_verify_modal_button_html_text.split(" ");
+                    verify_limit=parseInt(res[1]);
+                    verify_limit=verify_limit-1;
+                    $('#bulk_verify_modal_button').html('Import '+verify_limit+' Rows');
+                }
+                else
+                {
+                    bulk_verify_modal_button_html_text=$('#bulk_verify_modal_button').html();
+                    var res = bulk_verify_modal_button_html_text.split(" ");
+                    verify_limit=parseInt(res[1]);
+                    verify_limit=verify_limit+1;
+                    $('#bulk_verify_modal_button').html('Import '+verify_limit+' Rows');
+                }
+            });
+          $('#skip_header_map_find').change(function() {
+                if(this.checked) 
+                {
+                    bulk_find_modal_button_html_text=$('#bulk_find_modal_button').html();
+                    var res = bulk_find_modal_button_html_text.split(" ");
+                    find_limit=parseInt(res[1]);
+                    find_limit=find_limit-1;
+                    $('#bulk_find_modal_button').html('Import '+find_limit+' Rows');
+                }
+                else
+                {
+                    bulk_find_modal_button_html_text=$('#bulk_find_modal_button').html();
+                    var res = bulk_find_modal_button_html_text.split(" ");
+                    find_limit=parseInt(res[1]);
+                    find_limit=find_limit+1;
+                    $('#bulk_find_modal_button').html('Import '+find_limit+' Rows');
+                }
+            });
+          
         });
         $(function () {
           $('[data-toggle="tooltip"]').tooltip()
