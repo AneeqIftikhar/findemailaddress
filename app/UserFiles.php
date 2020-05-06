@@ -27,7 +27,7 @@ class UserFiles extends Model
      */
     protected $fillable = ['user_id', 'name','total_rows','title','type','status', 'created_at', 'updated_at'];
 
-    protected $appends = ['processed_emails_count'];
+    protected $appends = ['processed_emails_count','file_failure_count'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -43,6 +43,15 @@ class UserFiles extends Model
     public function emails()
     {
         return $this->hasMany('App\Email');
+    }
+
+    public function failures()
+    {
+        return $this->hasMany('App\File_Failure','user_file_id');
+    }
+    public function failuresDistinctRows()
+    {
+        return $this->hasMany('App\File_Failure','user_file_id')->distinct('row');
     }
 
     public function processedEmailsCountRelation()
@@ -62,6 +71,10 @@ class UserFiles extends Model
             return 0;
         }
         
+    }
+    public function getFileFailureCountAttribute()
+    {
+        return $this->failures()->count();
     }
 
 }

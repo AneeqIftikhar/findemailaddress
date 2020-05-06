@@ -24,6 +24,8 @@ use App\Helpers\Functions;
 use Carbon\Carbon;
 use App\FastSpring\FastSpringApi;
 use App\PersonalVerificationDomain;
+use App\File_Failure;
+use App\Rules\WithoutSpaces;
 class EmailController extends Controller
 {
 
@@ -76,7 +78,7 @@ class EmailController extends Controller
 
 			$this->validate($request, [
 			    'first_name' => ['required', 'string', 'max:50'],
-			    'last_name' => ['required', 'string', 'max:50'],
+			    'last_name' => ['required', 'string', 'max:50', new WithoutSpaces],
 			    'domain' => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
 			]);
 
@@ -314,6 +316,22 @@ class EmailController extends Controller
       {
          $files=Auth::user()->userFiles()->where('type', 'verify')->orderBy('id', 'DESC')->get();
          return json_encode(array('files'=>$files));
+      }
+      public function getUserFilesErrorsAjax(Request $request,$id)
+      {
+         
+        $errors=File_Failure::where('user_file_id',$id)->get();
+        return json_encode(array('errors'=>$errors));
+      }
+      public function getUserFilesErrors(Request $request,$id)
+      {
+        $user=Auth::user();
+        $user_file=UserFiles::where('id',$id)->where('user_id',$user->id)->first();
+        if($user_file)
+        {
+          $errors=File_Failure::where('user_file_id',$id)->get();
+          return view('file_errors',compact('errors'));
+        }
       }
       public function getUserFoundEmails(Request $request)
       {
