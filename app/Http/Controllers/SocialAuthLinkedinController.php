@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use App\Helpers\CurlRequest;
-use Jenssegers\Agent\Agent;
+use App\Helpers\UserAgent;
+use App\LoginLog;
 class SocialAuthLinkedinController extends Controller
 {
     public function redirect()
@@ -34,6 +35,15 @@ class SocialAuthLinkedinController extends Controller
             $existUser = User::where('email',$linkdinUser->email)->first();
             if($existUser) {
                 Auth::loginUsingId($existUser->id);
+                $user_agent=UserAgent::get_user_agent(request()->ip());
+                $data=[];
+                $data['user_agent']=json_encode($user_agent);
+                $data['country']=$user_agent['country'];
+                $data['ip']=$user_agent['ip'];
+                $data['login_at']=Carbon::now();
+                $data['user_id']=$existUser->id;
+                LoginLog::create($data);
+                DB::commit();
                 return redirect()->to('/find');
             }
             else {
@@ -89,19 +99,7 @@ class SocialAuthLinkedinController extends Controller
                 }
 
                 // Adding user agent
-                $agent = new Agent();
-                $browser = $agent->browser();// Chrome, IE, Safari, Firefox, ...
-                $browser_version = $agent->version($browser);
-                $platform = $agent->platform();// Ubuntu, Windows, OS X, ...
-                $platform_version = $agent->version($platform);
-                $device=$agent->device();
-                $ip=request()->ip();
-                $user_agent['ip']=$ip;
-                $user_agent['browser']=$browser;
-                $user_agent['browser_version']=$browser_version;
-                $user_agent['platform']=$platform;
-                $user_agent['platform_version']=$platform_version;
-                $user_agent['device']=$device;
+                $user_agent=UserAgent::get_user_agent(request()->ip());
 
                 $user->user_agent=json_encode($user_agent);
                 $user->save();
@@ -111,10 +109,6 @@ class SocialAuthLinkedinController extends Controller
             }
             
         } 
-        catch (Exception $e) {
-            DB::rollback();
-            return $e;
-        }
         catch (\Exception $e) {
             DB::rollback();
             return $e;

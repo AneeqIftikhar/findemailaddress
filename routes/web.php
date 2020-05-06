@@ -60,6 +60,10 @@ Route::get('account_settings', function()
 {
     return view('account_settings');
 })->name('account_settings')->middleware('verified');
+Route::get('api', function()
+{
+    return view('api');
+})->name('api')->middleware('verified');
 Route::post('update_personal_info','UserController@update_personal_info')->middleware('verified');
 Route::post('update_password','UserController@update_password')->middleware('verified');
 
@@ -96,16 +100,27 @@ Route::get('bulk_find', function()
 {
     return view('bulk_find');
 })->name('bulk_find')->middleware('verified');
+
 Route::get('bulk_verify', function()
 {
     return view('bulk_verify');
 })->name('bulk_verify')->middleware('verified');
+
+
 Route::get('list','EmailController@getUserFiles')->name('list')->middleware('verified');
+
+
+Route::get('file_errors/{id}','EmailController@getUserFilesErrors')->name('file_errors')->middleware('verified');
+
+
+
 Route::get('files_find','EmailController@getUserFilesFind')->name('files_find')->middleware('verified');
 Route::get('files_verify','EmailController@getUserFilesVerify')->name('files_verify')->middleware('verified');
 
 Route::get('get_user_files_ajax','EmailController@getUserFilesAjax')->name('get_user_files')->middleware('verified');
 Route::get('get_user_files_find_ajax','EmailController@getUserFilesFindAjax')->name('get_user_files_find_ajax')->middleware('verified');
+Route::get('get_user_files_errors_ajax','EmailController@getUserFilesErrorsAjax')->name('get_user_files_errors_ajax')->middleware('verified');
+
 Route::get('get_user_files_verify_ajax','EmailController@getUserFilesVerifyAjax')->name('get_user_files_verify_ajax')->middleware('verified');
 
 Route::get('emails/{id}','EmailController@getEmailsFromFile')->name('emails')->middleware('verified');

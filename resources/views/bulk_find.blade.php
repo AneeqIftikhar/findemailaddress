@@ -135,9 +135,40 @@ $(document).ready(function (e) {
                 }
                 
             },
-            error: function(e) 
+            error: function(jqXHR, textStatus, errorThrown) 
             {
-                $("#bulk_find_error").html(e).fadeIn();
+                if( jqXHR.status === 422 )
+                {
+                        $errors = jqXHR.responseJSON;
+
+                         $.each( $errors.errors , function( key, value ) {
+
+                                
+                                if(value[0].search("The excel file must be a file of type: csv, txt.")!=-1)
+                                {
+                                    $("#bulk_find_error").html(e).fadeIn();
+                                    $('#submit_file_upload').html('Upload');
+                                    $('#bulk_find_file_error').html("Allowed File Formats: TXT, CSV");
+                                }
+                                else
+                                {
+                                   
+                                    $("#bulk_find_error").html(e).fadeIn();
+                                    $('#submit_file_upload').html('Upload');
+                                    $('#bulk_find_file_error').html("Something Went Wrong");
+                                }
+                                
+                            
+                        });
+                        
+                }
+                else
+                {
+                    $("#bulk_find_error").html(e).fadeIn();
+                    $('#submit_file_upload').html('Upload');
+                    $('#bulk_find_file_error').html("Something Went Wrong");
+                }
+                
             }          
         });
     }));

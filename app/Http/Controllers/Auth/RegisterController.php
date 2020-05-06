@@ -16,7 +16,7 @@ use App\FastSpring\FastSpringApi;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\CurlRequest;
-use Jenssegers\Agent\Agent;
+use App\Helpers\UserAgent;
 class RegisterController extends Controller
 {
     /*
@@ -126,25 +126,13 @@ class RegisterController extends Controller
 
             if (config('app.env')=='production') {
 
-                //adding comment to be removed later
                 $server_output=CurlRequest::add_automizy_contact($user);
             }
             
 
-            $agent = new Agent();
-            $browser = $agent->browser();// Chrome, IE, Safari, Firefox, ...
-            $browser_version = $agent->version($browser);
-            $platform = $agent->platform();// Ubuntu, Windows, OS X, ...
-            $platform_version = $agent->version($platform);
-            $device=$agent->device();
-            $ip=request()->ip();
-            $user_agent['ip']=$ip;
-            $user_agent['browser']=$browser;
-            $user_agent['browser_version']=$browser_version;
-            $user_agent['platform']=$platform;
-            $user_agent['platform_version']=$platform_version;
-            $user_agent['device']=$device;
+            $user_agent=UserAgent::get_user_agent(request()->ip());
 
+            
             $user->user_agent=json_encode($user_agent);
             $user->save();
 

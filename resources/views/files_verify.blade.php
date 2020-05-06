@@ -142,14 +142,60 @@ function populate_files(data)
             newText  = document.createTextNode(data[i]['created_at']);
             newCell.appendChild(newText);
 
-            newCell  = newRow.insertCell(3);
-            newButton = document.createElement("a"); 
-            newButton.className="btn btn-primary";
-            newButton.innerHTML = "Details"; 
-            var url = '{{ route("emails", ":id") }}';
-            url = url.replace(':id', data[i]['id']);
-            newButton.setAttribute('href',url);
-            newCell.appendChild(newButton);
+
+            if(data[i]['status']=="Import Completed" || data[i]['status']=="Completed")
+            {
+
+                if(data[i]['total_rows']==0)
+              {
+                newCell  = newRow.insertCell(3);
+                newButton = document.createElement("a"); 
+                newButton.className="btn btn-danger";
+                newButton.innerHTML = data[i]['file_failure_count']+" "+"Errors"; 
+                var url = '{{ route("file_errors", ":id") }}';
+                url = url.replace(':id', data[i]['id']);
+                newButton.setAttribute('href',url);
+                newCell.appendChild(newButton);
+              }
+              else if(data[i]['file_failure_count']>0)
+              {
+                newCell  = newRow.insertCell(3);
+                newButton = document.createElement("a"); 
+                newButton.className="btn btn-primary";
+                newButton.innerHTML = "Details"; 
+                newButton.style.marginRight="2px";
+                var url = '{{ route("emails", ":id") }}';
+                url = url.replace(':id', data[i]['id']);
+                newButton.setAttribute('href',url);
+                newCell.appendChild(newButton);
+
+                newButton = document.createElement("a"); 
+                newButton.className="btn btn-danger";
+                newButton.innerHTML = data[i]['file_failure_count']+" "+"Errors"; 
+                var url = '{{ route("file_errors", ":id") }}';
+                url = url.replace(':id', data[i]['id']);
+                newButton.setAttribute('href',url);
+                newCell.appendChild(newButton);
+              }
+              else
+              {
+                newCell  = newRow.insertCell(3);
+                newButton = document.createElement("a"); 
+                newButton.className="btn btn-primary";
+                newButton.innerHTML = "Details"; 
+                var url = '{{ route("emails", ":id") }}';
+                url = url.replace(':id', data[i]['id']);
+                newButton.setAttribute('href',url);
+                newCell.appendChild(newButton);
+              }
+
+            }
+
+            
+
+
+
+            
                
         }
         if(!interval && total_pending>0)

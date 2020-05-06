@@ -16,6 +16,7 @@ use Maatwebsite\Excel\Concerns\WithLimit;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use App\Rules\BlackListDomains;
 use App\Rules\IsValidDomain;
+use App\Rules\WithoutSpaces;
 use App\Helpers\Functions;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
@@ -70,7 +71,7 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
         
         return [
             $first_name => ['required', 'string', 'max:50'],
-            $last_name => ['required', 'string', 'max:50'],
+            $last_name => ['required', 'string', 'max:50',new WithoutSpaces],
             $domain => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
         ];
 
