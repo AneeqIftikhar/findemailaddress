@@ -28,7 +28,7 @@ Route::post('get_webhook','WebhookController@get_webhook');
 
 
 Route::middleware('LimitRequestAPI')->group(function () {
-	
+
     Route::post('find_email_api','API\EmailApiController@find_email_api');
 	Route::post('verify_email_api','API\EmailApiController@verify_email_api');
 });
@@ -43,10 +43,13 @@ Route::get('invalid_domains','API\EmailApiController@invalid_domains_api');
 
 
 Route::middleware('cors')->group(function () {
-	
+
     Route::post('get_emails_api','API\EmailApiController@get_emails_api');
 	Route::post('add_emails_api','API\EmailApiController@add_emails_api');
 	Route::post('failed_response_notification','API\EmailApiController@failed_response_notification');
+    Route::post('admin_login','Admin\AdminController@login');
+    Route::get('admin_get_users','Admin\AdminController@get_users');
+
 });
 
 

@@ -179,7 +179,8 @@ return [
         Kordy\Ticketit\TicketitServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
-        
+
+
 
     ],
 

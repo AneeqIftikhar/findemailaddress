@@ -13,13 +13,13 @@ class FastSpringApi
         $this->username =  env('FASTSPRING_USERNAME', '');
         $this->password = env('FASTSPRING_PASSWORD', '');
     }
-    
+
 
     public function getSession($account,$product_name)
     {
 
       $payload ='{
-       "account": "'.$account.'",                                        
+       "account": "'.$account.'",
        "items": [
                  {
                      "product": "'.$product_name.'",
@@ -43,17 +43,17 @@ class FastSpringApi
     }
     public function createCustomer($first,$last='',$email,$user_uuid)
     {
-    	$payload ='{  
+    	$payload ='{
            "contact":
-           {  
-              "first":"'.$first.'",         
+           {
+              "first":"'.$first.'",
               "last":"'.$last.'",
               "email":"'.$email.'"
            },
            "language":"en",
            "country":"US",
            "lookup":
-           {               
+           {
               "custom":"'.$user_uuid.'"
            }
       }';
@@ -73,17 +73,17 @@ class FastSpringApi
     }
     public function updateCustomer()
     {
-      $payload ='{  
+      $payload ='{
            "contact":
-           {  
-              "first":"John",         
+           {
+              "first":"John",
               "last":"Doe",
               "email":"aneeq@gmail.com"
            },
            "language":"en",
            "country":"US",
            "lookup":
-           {               
+           {
               "custom":"customKey"
            }
       }';
@@ -120,7 +120,7 @@ class FastSpringApi
     }
     public function getCustomer($account)
     {
-      
+
 
       try {
           $FastSpringClient = new FastSpringClient();
@@ -159,7 +159,7 @@ class FastSpringApi
           if($prorate)
           {
             $payload ='{"subscriptions": [{
-             "subscription": "'.$subscription_id.'",                                        
+             "subscription": "'.$subscription_id.'",
               "product": "'.$product_name.'",
               "quantity": 1,
               "prorate": true
@@ -169,12 +169,12 @@ class FastSpringApi
           {
             $payload ='{"subscriptions": [
             {
-             "subscription": "'.$subscription_id.'",                                        
+             "subscription": "'.$subscription_id.'",
               "product": "'.$product_name.'",
               "quantity": 1
             }]}';
           }
-        
+
           $FastSpringClient = new FastSpringClient();
             $response = json_decode($FastSpringClient->post('subscriptions', ['body' => $payload])->getBody()->getContents(),true);
             return $response;
@@ -192,7 +192,7 @@ class FastSpringApi
     public function cancelSubscription($subscription_id)
     {
       try {
-        
+
           $FastSpringClient = new FastSpringClient();
             $response = json_decode($FastSpringClient->delete('subscriptions/'.$subscription_id)->getBody()->getContents(),true);
             return $response;
@@ -211,10 +211,10 @@ class FastSpringApi
       try {
 
             $payload ='{"subscriptions": [{
-             "subscription": "'.$subscription_id.'",                                        
+             "subscription": "'.$subscription_id.'",
               "deactivation": null
             }]}';
-        
+
           $FastSpringClient = new FastSpringClient();
             $response = json_decode($FastSpringClient->post('subscriptions', ['body' => $payload])->getBody()->getContents(),true);
             return $response;
@@ -228,5 +228,5 @@ class FastSpringApi
           return $responseBody;
       }
     }
-      
+
 }
