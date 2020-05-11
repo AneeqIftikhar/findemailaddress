@@ -6,6 +6,8 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
+
 class AdminController extends Controller
 {
     public function __construct()
@@ -41,28 +43,23 @@ class AdminController extends Controller
         {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        $min=0;
-        $max=0;
-        if($request->has('min'))
-            $min=$request->input('min');
-        if($request->has('max'))
-            $max=$request->input('max');
-
+        $min=$request->input('min');
+        $max=$request->input('max');
         if($min==0 && $max==0)
         {
             $all_users=User::where('ticketit_admin',0)->get();
         }
         else if($min==0 && $max!=0)
         {
-            $all_users=User::where('ticketit_admin',0)->where('user_id','<=',$max)->get();
+            $all_users=User::where('ticketit_admin',0)->where('id','<=',$max)->get();
         }
         else if($min!=0 && $max==0)
         {
-            $all_users=User::where('ticketit_admin',0)->where('user_id','>=',$min)->get();
+            $all_users=User::where('ticketit_admin',0)->where('id','>=',$min)->get();
         }
         else
         {
-            $all_users=User::where('ticketit_admin',0)->where('user_id','>=',$min)->where('user_id','<=',$max)->get();
+            $all_users=User::where('ticketit_admin',0)->where('id','>=',$min)->where('id','<=',$max)->get();
         }
         return response()->json(['users' => $all_users], 200);
 
