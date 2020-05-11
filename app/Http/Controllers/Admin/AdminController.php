@@ -61,6 +61,10 @@ class AdminController extends Controller
         {
             $all_users=User::where('ticketit_admin',0)->where('id','>=',$min)->where('id','<=',$max)->get();
         }
+        foreach ($all_users as $key=>$value)
+        {
+            $all_users[$key]->user_agent=($all_users[$key]->user_agent) ? json_decode($all_users[$key]->user_agent):'';
+        }
         return response()->json(['users' => $all_users], 200);
 
     }
