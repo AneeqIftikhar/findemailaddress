@@ -32,15 +32,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c8396272-2304-44b8-8f28-46867c926e80" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/emailfinder.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/emailfinder.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Middleware/Cors.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Middleware/Cors.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Helpers/CurlRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Helpers/CurlRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/EmailController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/EmailController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution />
   </component>
@@ -195,6 +197,7 @@
       <option name="presentableId" value="Default" />
       <updated>1589141852932</updated>
       <workItem from="1589141856017" duration="7956000" />
+      <workItem from="1591733150385" duration="1856000" />
     </task>
     <servers />
   </component>
@@ -221,10 +224,10 @@
       <screen x="0" y="0" width="1707" height="920" />
     </state>
     <state x="664" y="353" key="#Composer/0.0.1707.920@0.0.1707.920" timestamp="1589141882413" />
-    <state x="559" y="193" width="589" height="534" key="find.popup" timestamp="1589151467989">
+    <state x="559" y="193" width="589" height="534" key="find.popup" timestamp="1591733222887">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="559" y="193" width="589" height="534" key="find.popup/0.0.1707.920@0.0.1707.920" timestamp="1589151467989" />
+    <state x="559" y="193" width="589" height="534" key="find.popup/0.0.1707.920@0.0.1707.920" timestamp="1591733222887" />
     <state x="516" y="195" width="672" height="678" key="search.everywhere.popup" timestamp="1589158145761">
       <screen x="0" y="0" width="1707" height="920" />
     </state>

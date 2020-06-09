@@ -121,17 +121,17 @@ class EmailController extends Controller
               {
                 $server_output=$exists_email->server_json_dump;
               }
-              
+
             }
             else
             {
-              $server_output=CurlRequest::find_email($first_name,$last_name,$domain);      
+              $server_output=CurlRequest::find_email($first_name,$last_name,$domain);
             }
           }
         }
         else
         {
-          $server_output=CurlRequest::find_email($first_name,$last_name,$domain);      
+          $server_output=CurlRequest::find_email($first_name,$last_name,$domain);
         }
         if($check_server_dump==1)
         {
@@ -173,23 +173,23 @@ class EmailController extends Controller
               {
                 $email=$json_output[0]->email;
                 $user->decrement('credits');
-              } 
-            } 
+              }
+            }
           }
         }
-        
+
 
         Emails::insert_email($first_name,$last_name,$domain,$email,$status,$user->id,$type,$server_output,$server_status);
 
         return json_encode(array('status'=>$status,'emails'=>$email,'credits_left'=>$user->credits,'error'=>$error));
-        
+
       }
       else
       {
         return response()->json(['errors'=>['message'=>['Insufficient credits to perform this request']]], 422 );
       }
 
-  			
+
 		}
 		catch(Exception $e)
 		{
@@ -221,7 +221,7 @@ class EmailController extends Controller
             $server_status="";
             $type="verify";
             $error="";
-            if ((strpos($domain, 'yahoo.')!== false) || (strpos($domain, 'aol.com')!== false) || (strpos($domain, 'ymail.com')!== false)) 
+            if ((strpos($domain, 'yahoo.')!== false) || (strpos($domain, 'aol.com')!== false) || (strpos($domain, 'ymail.com')!== false))
             {
 
               $e_status="Unknown";
@@ -241,7 +241,7 @@ class EmailController extends Controller
               if($json_output && array_key_exists('curl_error',$json_output))
               {
                 $error=$json_output->curl_error;
-                $email_status="Not Found";
+                $email_status="Unknown";
                 $server_status="-";
               }
               else
@@ -277,7 +277,7 @@ class EmailController extends Controller
           {
             return response()->json(['errors'=>['message'=>['Insufficient credits to perform this request']]], 422 );
           }
-            
+
          }
          catch(Exception $e)
          {
@@ -286,7 +286,7 @@ class EmailController extends Controller
    	}
 
 
-      
+
       public function getUserFiles(Request $request)
       {
          $files=Auth::user()->userFiles()->orderBy('id', 'DESC')->get();
@@ -319,7 +319,7 @@ class EmailController extends Controller
       }
       public function getUserFilesErrorsAjax(Request $request,$id)
       {
-         
+
         $errors=File_Failure::where('user_file_id',$id)->get();
         return json_encode(array('errors'=>$errors));
       }
@@ -358,7 +358,7 @@ class EmailController extends Controller
          {
             return back()->with('error_message','Request Not Allowed');
          }
-         
+
       }
       public function downloadExcel(Request $request,$id,$type,$records)
        {
@@ -368,13 +368,13 @@ class EmailController extends Controller
          {
             $email_export=new EmailsExport();
             $email_export->set_details($id,$records,'file',$user_file->type);
-            return Excel::download($email_export, 'emails.'.$type);         
+            return Excel::download($email_export, 'emails.'.$type);
          }
          else
          {
             return back()->with('error_message','Request Not Allowed');
          }
-         
+
        }
        public function downloadFoundRecords(Request $request,$type,$records)
        {
@@ -413,7 +413,7 @@ class EmailController extends Controller
             $bounce->user_id = $user->id;
             $bounce->status = "Bounce Reported";
             $bounce->message = $request->bounce_message;
-            $bounce->save(); 
+            $bounce->save();
 
           if($request->bounce_email_type=="find")
           {
@@ -425,9 +425,9 @@ class EmailController extends Controller
             $emails=Auth::user()->emails()->where('type','verify')->with('bounce')->get();
             return view('verify_history',compact('emails'));
           }
-          
 
-            
+
+
        }
 
 
@@ -436,7 +436,7 @@ class EmailController extends Controller
        Old Commenmted Codes
        */
 
-    /*   
+    /*
     function find_email_ajax(Request $request)
    	{
          try
@@ -447,7 +447,7 @@ class EmailController extends Controller
                 'last_name' => ['required', 'string', 'max:50'],
                 'domain' => ['required', 'string', 'max:50', new BlackListDomains,new IsValidDomain],
             ]);
-            
+
             $user=Auth::user();
             // return json_encode(array('status'=>"Catch All",'emails'=>'aneeq@dev-rec.com','logs'=>[],'proxy'=>'Proxy','credits_left'=>$user->credits));
 
@@ -476,16 +476,16 @@ class EmailController extends Controller
                $emails_db->type = 'find';
                $emails_db->save();
                 if (in_array($error_number, array(CURLE_OPERATION_TIMEDOUT, CURLE_OPERATION_TIMEOUTED))) {
-                  
 
-                  return json_encode(array('status'=>"Not Found",'emails'=>"",'logs'=>[],'proxy'=>[],'credits_left'=>$user->credits,'commands'=>[],'MX'=>"",'Catch All Test'=>"","error"=>"curl timed out")); 
+
+                  return json_encode(array('status'=>"Not Found",'emails'=>"",'logs'=>[],'proxy'=>[],'credits_left'=>$user->credits,'commands'=>[],'MX'=>"",'Catch All Test'=>"","error"=>"curl timed out"));
                 }
                 else
                 {
-                   return json_encode(array('status'=>"Not Found",'emails'=>"",'logs'=>[],'proxy'=>[],'credits_left'=>$user->credits,'commands'=>[],'MX'=>"",'Catch All Test'=>"","error"=>curl_error($ch))); 
+                   return json_encode(array('status'=>"Not Found",'emails'=>"",'logs'=>[],'proxy'=>[],'credits_left'=>$user->credits,'commands'=>[],'MX'=>"",'Catch All Test'=>"","error"=>curl_error($ch)));
                 }
             }
-            
+
 
             curl_close ($ch);
 
@@ -498,7 +498,7 @@ class EmailController extends Controller
                $status=$json_output[0]->status;
                if($json_output[0]->status != 'Valid')
                {
-                  
+
                   if($json_output[0]->mx==null || $json_output[0]->mx=='')
                   {
                      $status="No Mailbox";
@@ -510,7 +510,7 @@ class EmailController extends Controller
                   $emails_db->status = $status;
                   $emails_db->user_id = $user->id;
                   $emails_db->type = 'find';
-                  $emails_db->save(); 
+                  $emails_db->save();
                   if($json_output[0]->status=='Catch All')
                   {
                      $json_output[0]->email=strtolower($request->first_name).'@'.strtolower($request->domain);
@@ -519,7 +519,7 @@ class EmailController extends Controller
                }
                else
                {
-                  
+
                   $user->decrement('credits');
                   $emails_db = new Emails;
                   $emails_db->first_name = strtolower($request->first_name);
@@ -529,11 +529,11 @@ class EmailController extends Controller
                   $emails_db->email = $json_output[0]->email;
                   $emails_db->user_id = $user->id;
                   $emails_db->type = 'find';
-                  $emails_db->save(); 
+                  $emails_db->save();
                }
-               
-            } 
-            
+
+            }
+
 
             return json_encode(array('status'=>$status,'emails'=>$json_output[0]->email,'logs'=>$json_output[0]->logs,'proxy'=>$json_output[0]->proxy,'credits_left'=>$user->credits,'commands'=>$json_output[0]->commands,'MX'=>$json_output[0]->mx,'Catch All Test'=>$json_output[0]->catch_all_test));
          }
@@ -564,7 +564,7 @@ class EmailController extends Controller
             $server_output = curl_exec ($ch);
 
             curl_close ($ch);
-            
+
             $email_status="Valid";
             $server_status="Valid";
             $json_output=json_decode($server_output);
@@ -592,7 +592,7 @@ class EmailController extends Controller
             $emails_db->status = $email_status;
             $emails_db->server_status = $server_status;
             $emails_db->type = 'verify';
-            $emails_db->save(); 
+            $emails_db->save();
             //return json_encode($json_output[0]);
             return json_encode(array('email_status'=>$email_status,'server_status'=>$server_status,'credits_left'=>$user->credits,'MX'=>$json_output[0]->mx));
          }

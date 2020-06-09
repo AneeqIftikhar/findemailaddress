@@ -7,26 +7,26 @@ class CurlRequest{
 
     public static function find_email($first_name,$last_name,$domain){
 
-        
+
     	$endpoint = env('PYTHON_SERVER_IP','http://3.17.231.9:5000/')."find";
         $postdata='data=[{"'.'firstName":"'.$first_name.'", "'.'lastName":"'.$last_name.'", "'.'domainName": "'.$domain.'"}]';
         $ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL,$endpoint);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS,$postdata);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 180);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 240);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$server_output = curl_exec ($ch);
 
 
-        if (curl_errno($ch)) 
+        if (curl_errno($ch))
         {
             $error_message = curl_error($ch);
         }
         curl_close ($ch);
 
-        if (isset($error_message)) 
+        if (isset($error_message))
         {
 		    return json_encode(['curl_error'=>$error_message]);
 		}
@@ -34,7 +34,7 @@ class CurlRequest{
 		{
 			return $server_output;
 		}
-       	
+
     }
     public static function verify_email($email)
     {
@@ -44,16 +44,16 @@ class CurlRequest{
         curl_setopt($ch, CURLOPT_URL,$endpoint);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS,$postdata);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 180);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $server_output = curl_exec ($ch);
-        if (curl_errno($ch)) 
+        if (curl_errno($ch))
         {
             $error_message = curl_error($ch);
         }
         curl_close ($ch);
-        if (isset($error_message)) 
+        if (isset($error_message))
         {
 		    return json_encode(['curl_error'=>$error_message]);
 		}
@@ -100,7 +100,7 @@ class CurlRequest{
                     }
                 }';
         }
-        
+
         $authorization = "Authorization: Bearer ".env('AUTOMIZY_TOKEN','');
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,$endpoint);
@@ -110,12 +110,12 @@ class CurlRequest{
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Accept: application/json',$authorization));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $server_output = curl_exec ($ch);
-        if (curl_errno($ch)) 
+        if (curl_errno($ch))
         {
             $error_message = curl_error($ch);
         }
         curl_close ($ch);
-        if (isset($error_message)) 
+        if (isset($error_message))
         {
             return json_encode(['curl_error'=>$error_message]);
         }
