@@ -25,18 +25,18 @@
             <ul class="fa-ul">
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Find & Verify <strong>100</strong> Emails</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Only Pay for Verified Emails</li>
-              
+
               <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Unused credits rollover</li>
               <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Claim Credits on Bounce</li>
               <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Money Back Gaurantee</li>
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
-            @if ( Auth::user()->package->name=="free" ) 
-              <button id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</button>              
+            @if ( Auth::user()->package->name=="free" )
+              <button id="subscribed" class="btn btn-block btn-danger text-uppercase">Subscribed</button>
             @else
               <button href="#" id="cancel" onClick="cancel_subscription()" class="btn btn-block btn-primary text-uppercase">Cancel Subscription</button>
             @endif
-            
+
           </div>
         </div>
       </div>
@@ -48,11 +48,11 @@
             <h6 class="card-price text-center">$29.99<span class="period">/month</span></h6>
             <hr>
             <ul class="fa-ul">
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Find & Verify <strong>1000</strong> 
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Find & Verify <strong>1000</strong>
                 Emails
               </li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Only Pay for Verified Emails</li>
-              
+
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Unused credits rollover</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Claim Credits on Bounce</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Money Back Gaurantee</li>
@@ -72,7 +72,7 @@
             @else
               <button href="#" id="select_disabled" class="btn btn-block btn-danger text-uppercase">Select</button>
             @endif
-            
+
           </div>
         </div>
       </div>
@@ -86,13 +86,13 @@
             <ul class="fa-ul">
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Find & Verify <strong>2500</strong> Emails</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Only Pay for Verified Emails</li>
-              
+
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Unused credits rollover</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Claim Credits on Bounce</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Money Back Gaurantee</li>
              <li><span class="fa-li"><i class="fas fa-check"></i></span>Build Contact & Export CSV</li>
             </ul>
-            
+
 
              @if (Auth::user()->package->name=="free" && $data['pending_status']=="")
               <button href="#buy" id="buy_extended" onClick="buy('extended')" class="btn btn-block btn-primary text-uppercase">Buy Now!</button>
@@ -107,7 +107,7 @@
             @else
               <button href="#" id="select_disabled_extended" class="btn btn-block btn-danger text-uppercase">Select</button>
             @endif
-            
+
           </div>
         </div>
       </div>
@@ -121,7 +121,7 @@
             <ul class="fa-ul">
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Find & Verify <strong>10000</strong> Emails</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Only Pay for Verified Emails</li>
-              
+
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Unused credits rollover</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Claim Credits on Bounce</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Money Back Gaurantee</li>
@@ -141,27 +141,33 @@
             @else
               <button href="#" id="select_disabled_corporate" class="btn btn-block btn-danger text-uppercase">Select</button>
             @endif
-            
+
           </div>
         </div>
       </div>
-      
+
 
     </div>
   </div>
 </section>
-    
+
 </div>
 @endsection
 @push('scripts')
 
-<script
-        id="fsc-api"
-        src="https://d1f8f9xcsvx3ha.cloudfront.net/sbl/0.8.1/fastspring-builder.min.js"
-        type="text/javascript"
-        data-popup-closed="onFSPopupClosed"
-        data-storefront="devrec.onfastspring.com/popup-devrec">
+{{--<script--}}
+{{--        id="fsc-api"--}}
+{{--        src="https://d1f8f9xcsvx3ha.cloudfront.net/sbl/0.8.3/fastspring-builder.min.js"--}}
+{{--        type="text/javascript"--}}
+{{--        data-popup-closed="onFSPopupClosed"--}}
+{{--        data-storefront="devrec.onfastspring.com/popup-devrec">--}}
 
+{{--</script>--}}
+<script
+    id="fsc-api"
+    src="https://d1f8f9xcsvx3ha.cloudfront.net/sbl/0.8.3/fastspring-builder.min.js"
+    type="text/javascript"
+    data-storefront="devrec.onfastspring.com/popup-devrec">
 </script>
 <script type="text/javascript">
 
@@ -172,7 +178,7 @@
     $("#action_button").click(cancel_subscription_ajax);
     $("#action_modal").modal();
 
-    
+
   }
   function cancel_subscription_ajax()
   {
@@ -181,10 +187,10 @@
       $('#cancel').attr('disabled',true);
       $.ajax({
             method: 'POST',
-            dataType: 'json', 
-            url: 'cancel_subscription', 
-            data: {"_token": "{{ csrf_token() }}"}, 
-            success: function(response){ 
+            dataType: 'json',
+            url: 'cancel_subscription',
+            data: {"_token": "{{ csrf_token() }}"},
+            success: function(response){
               location.reload();
               // console.log(response);
 
@@ -192,10 +198,10 @@
             error: function(jqXHR, textStatus, errorThrown) {
 
                 // console.log(jqXHR);
-                
+
             }
         });
-    
+
   }
   function uncancel(package_name)
   {
@@ -212,10 +218,10 @@
     $('#uncancel_'+package_name).attr('disabled',true);
     $.ajax({
           method: 'POST',
-          dataType: 'json', 
-          url: 'uncancel_subscription', 
-          data: {'package_name' : package_name,"_token": "{{ csrf_token() }}"}, 
-          success: function(response){ 
+          dataType: 'json',
+          url: 'uncancel_subscription',
+          data: {'package_name' : package_name,"_token": "{{ csrf_token() }}"},
+          success: function(response){
             location.reload();
             // console.log(response);
 
@@ -225,7 +231,7 @@
               $('#uncancel_'+package_name).attr('disabled',false);
               alert("Something Went Wrong");
               // console.log(error);
-              
+
           }
       });
   }
@@ -236,7 +242,7 @@
     $("#action_modal_message").html('Are You Sure You Want to Select This Subscription');
     $("#action_button").click({'package_name': package_name}, select_ajax);
     $("#action_modal").modal();
-    
+
   }
   function select_ajax(event)
   {
@@ -246,10 +252,10 @@
     $('#select_'+package_name).attr('disabled',true);
     $.ajax({
           method: 'POST',
-          dataType: 'json', 
-          url: 'update_subscription', 
-          data: {'package_name' : package_name,"_token": "{{ csrf_token() }}"}, 
-          success: function(response){ 
+          dataType: 'json',
+          url: 'update_subscription',
+          data: {'package_name' : package_name,"_token": "{{ csrf_token() }}"},
+          success: function(response){
             location.reload();
             // console.log(response);
 
@@ -258,7 +264,7 @@
               $('#select_'+package_name).html('Select');
               $('#select_'+package_name).attr('disabled',false);
               // console.log(jqXHR);
-              
+
           }
       });
   }
@@ -268,10 +274,10 @@
     $('#buy_'+$package_name).attr('disabled',true);
     $.ajax({
           method: 'GET',
-          dataType: 'json', 
-          url: 'get_fastspring_session', 
-          data: {'package_name' : $package_name,"_token": "{{ csrf_token() }}"}, 
-          success: function(response){ 
+          dataType: 'json',
+          url: 'get_fastspring_session',
+          data: {'package_name' : $package_name,"_token": "{{ csrf_token() }}"},
+          success: function(response){
             // console.log(response);
             $('#buy_'+$package_name).html('Buy Now!');
             $('#buy_'+$package_name).attr('disabled',false);
@@ -282,22 +288,22 @@
               $('#buy1').attr('disabled',false);
               // console.log(jqXHR);
 
-              
+
           }
       });
   }
 
-function onFSPopupClosed(orderReference) 
+function onFSPopupClosed(orderReference)
 {
   if (orderReference)
   {
-    
+
     fastspring.builder.reset();
     $("#success_modal_message").html('Order Placed. Please Revisit in 5 Minutes For Changes To Take Effect');
     $("#success_modal").modal();
-             
-  } 
-  else 
+
+  }
+  else
   {
     // console.log("no order ID");
   }

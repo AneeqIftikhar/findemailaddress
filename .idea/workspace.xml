@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -32,10 +35,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c8396272-2304-44b8-8f28-46867c926e80" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/emailfinder.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/emailfinder.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Helpers/CurlRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Helpers/CurlRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/EmailController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/EmailController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/EmailApiController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/EmailApiController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/upgrade_account.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/upgrade_account.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +50,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration">
     <include_path>
@@ -179,13 +184,17 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="vue.rearranger.settings.migration" value="true" />
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -197,12 +206,41 @@
       <option name="presentableId" value="Default" />
       <updated>1589141852932</updated>
       <workItem from="1589141856017" duration="7956000" />
-      <workItem from="1591733150385" duration="1856000" />
+      <workItem from="1591733150385" duration="2474000" />
+      <workItem from="1591744501027" duration="1182000" />
+      <workItem from="1592734131335" duration="1395000" />
+      <workItem from="1593072406521" duration="687000" />
+      <workItem from="1593428416398" duration="864000" />
+      <workItem from="1593438148054" duration="2692000" />
+      <workItem from="1593541615917" duration="1974000" />
+      <workItem from="1593613842890" duration="707000" />
+      <workItem from="1593713326401" duration="815000" />
+      <workItem from="1593720439895" duration="1238000" />
+      <workItem from="1593775824465" duration="619000" />
+      <workItem from="1593814305266" duration="2822000" />
+      <workItem from="1593937555200" duration="491000" />
+      <workItem from="1593938521867" duration="3487000" />
+      <workItem from="1594048284122" duration="2276000" />
+      <workItem from="1594115601825" duration="613000" />
+      <workItem from="1594140337045" duration="68000" />
+      <workItem from="1594225503682" duration="1668000" />
+      <workItem from="1594233386658" duration="137000" />
+      <workItem from="1594471493858" duration="600000" />
+      <workItem from="1594644114935" duration="609000" />
+      <workItem from="1594719690668" duration="504000" />
+      <workItem from="1597398639394" duration="35000" />
+      <workItem from="1597925433296" duration="1938000" />
+      <workItem from="1600251156410" duration="621000" />
+      <workItem from="1602005378945" duration="646000" />
+      <workItem from="1602161732906" duration="1767000" />
+      <workItem from="1602743958414" duration="1248000" />
+      <workItem from="1602841100636" duration="13000" />
+      <workItem from="1602857009708" duration="2135000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -220,17 +258,17 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="664" y="353" key="#Composer" timestamp="1589141882413">
+    <state x="634" y="215" key="FileChooserDialogImpl" timestamp="1602841110573">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="664" y="353" key="#Composer/0.0.1707.920@0.0.1707.920" timestamp="1589141882413" />
-    <state x="559" y="193" width="589" height="534" key="find.popup" timestamp="1591733222887">
+    <state x="634" y="215" key="FileChooserDialogImpl/0.0.1707.920@0.0.1707.920" timestamp="1602841110573" />
+    <state x="510" y="211" key="run.anything.popup" timestamp="1594719713058">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="559" y="193" width="589" height="534" key="find.popup/0.0.1707.920@0.0.1707.920" timestamp="1591733222887" />
-    <state x="516" y="195" width="672" height="678" key="search.everywhere.popup" timestamp="1589158145761">
+    <state x="510" y="211" key="run.anything.popup/0.0.1707.920@0.0.1707.920" timestamp="1594719713058" />
+    <state x="516" y="195" width="672" height="678" key="search.everywhere.popup" timestamp="1602858253106">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="516" y="195" width="672" height="678" key="search.everywhere.popup/0.0.1707.920@0.0.1707.920" timestamp="1589158145761" />
+    <state x="516" y="195" width="672" height="678" key="search.everywhere.popup/0.0.1707.920@0.0.1707.920" timestamp="1602858253106" />
   </component>
 </project>

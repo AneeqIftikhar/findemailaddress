@@ -46,7 +46,7 @@ class EmailApiController extends Controller
 
 			$json_output=json_decode($server_output);
 
-			
+
 			$status="";
 			$type="find";
 			$email="";
@@ -64,7 +64,7 @@ class EmailApiController extends Controller
 				   $server_status="Valid";
 				   if($json_output[0]->status != 'Valid')
 				   {
-				      
+
 				      if($json_output[0]->mx==null || $json_output[0]->mx=='')
 				      {
 				         $status="No Mailbox";
@@ -88,8 +88,8 @@ class EmailApiController extends Controller
 				   {
 				      $email=$json_output[0]->email;
 				   }
-				   
-				} 
+
+				}
 			}
 			PluginEmails::insert_email($first_name,$last_name,$domain,$email,$status,$type,$server_output,$server_status);
 			return json_encode(array('status'=>$status,'emails'=>$email,'error'=>$error));
@@ -120,7 +120,7 @@ class EmailApiController extends Controller
             $server_status="";
             $type="verify";
             $error="";
-            if ((strpos($domain, 'yahoo.')!== false) || (strpos($domain, 'aol.com')!== false) || (strpos($domain, 'ymail.com')!== false)) 
+            if ((strpos($domain, 'yahoo.')!== false) || (strpos($domain, 'aol.com')!== false) || (strpos($domain, 'ymail.com')!== false))
             {
 
               $e_status="Unknown";
@@ -140,7 +140,7 @@ class EmailApiController extends Controller
 				if($json_output && array_key_exists('curl_error',$json_output))
 				{
 					$error=$json_output->curl_error;
-					$email_status="Not Found";
+					$email_status="Unknown";
 					$server_status="-";
 				}
 				else
@@ -187,9 +187,9 @@ class EmailApiController extends Controller
 			{
 				abort(404);
 			}
-			
-			
-			
+
+
+
 		}
 		catch(Exception $e)
 		{
@@ -229,9 +229,9 @@ class EmailApiController extends Controller
 			{
 				abort(404);
 			}
-			
-			
-			
+
+
+
 		}
 		catch(Exception $e)
 		{
@@ -241,6 +241,9 @@ class EmailApiController extends Controller
 
     function failed_response_notification(Request $request)
     {
+        try {
+
+
     	$data = $request->json_response;
     	$server_output=json_decode($data);
     	$failed_logs=new Failed_Logs;
@@ -250,15 +253,24 @@ class EmailApiController extends Controller
     		$failed_logs->proxy=json_encode($server_output->proxy);
     	}
     	$failed_logs->save();
-    	if($request->send=="true")
+    	if($request->send=="true" || $request->send==true || $request->send==1)
     	{
+
     		$email_address=env('FAILED_RESPONSE_EMAIL','notifications@findemailaddress.co');
         	Mail::send('emails.failed_response', ['json_response' => $data], function ($m) use ($data,$email_address) {
             $m->to($email_address)->subject('Failed Response');
+
         });
     	}
-    	
-        return json_encode(array('status'=>'success'));
+    	return json_encode(array('status'=>'success'));
+
+        }
+        catch(\Exception $ex)
+        {
+            return json_encode(array('status'=>'fail'));
+        }
+
+
     }
-    
+
 }
