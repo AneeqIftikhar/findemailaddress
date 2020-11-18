@@ -54,3 +54,6 @@ Route::middleware('cors')->group(function () {
 
 
 Route::get('testAutomizy','UserController@testAutomizy');
+Route::get('/debug-sentry', function () {
+    throw new Exception('My first Sentry error!');
+});
