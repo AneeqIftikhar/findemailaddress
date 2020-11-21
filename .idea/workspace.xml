@@ -35,13 +35,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c8396272-2304-44b8-8f28-46867c926e80" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/config/sentry.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/emailfinder.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/emailfinder.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/CompaniesController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/company.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/excel/16059451883160168515fb8c7644ab67.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/excel/16059504544596228285fb8dbf6d2363.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/excel/160595057220814374745fb8dc6c2b6f6.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/excel/16059515936315782845fb8e06946769.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/excel/160595162110518558485fb8e085eeed6.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/excel/16059520288592613995fb8e21c6ed40.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/excel/16059520939886580135fb8e25d9513b.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/excel/160595482018445564835fb8ed0483334.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/excel/16059549851559979105fb8eda90a0b5.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/excel/160595536819304016415fb8ef28237fd.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/company-logo-placeholder.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/coverCompany.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/people.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/user.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/companies/all_companies.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/companies/company.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/companies/people.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/storage/tmp/laravel-excel-0YsuXn91HogbdyLxASVfBjGa8UNaErXq.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/storage/tmp/laravel-excel-FkTU0JVCBdNGB1pOMB2p2OavtG8ehLq2.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/storage/tmp/laravel-excel-IPn6ZZ9VgHyUduuqy9gWlmHj3bjr05gn.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/storage/tmp/laravel-excel-aKwgQj9P2xzE9iaYRGNoKskCcQmcunkD.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/storage/tmp/laravel-excel-fKPPCcgSLyHlJXLzl9QwFqHERA8f7fxW.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/storage/tmp/laravel-excel-jM9g61FlKeT4qRxSoCIOrBtPKHC5NFM3.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/storage/tmp/laravel-excel-sVrNgAvyAsFWjBLDDQt6tKcLqMF2zoFb.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Exceptions/Handler.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Exceptions/Handler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Helpers/CurlRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Helpers/CurlRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/EmailController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/EmailController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/emails.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/file_errors.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/file_errors.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/find_history.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/find_history.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/verify_history.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/verify_history.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +78,9 @@
   </component>
   <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
-    <execution />
+    <execution>
+      <executable />
+    </execution>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -217,7 +247,7 @@
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -280,12 +310,13 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
@@ -299,9 +330,10 @@
       <screen x="0" y="0" width="1707" height="920" />
     </state>
     <state x="634" y="215" key="FileChooserDialogImpl/0.0.1707.920@0.0.1707.920" timestamp="1605707426463" />
-    <state x="516" y="195" width="672" height="678" key="search.everywhere.popup" timestamp="1605639733517">
-      <screen x="0" y="0" width="1707" height="920" />
+    <state x="580" y="223" width="756" height="774" key="search.everywhere.popup" timestamp="1605981228957">
+      <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="516" y="195" width="672" height="678" key="search.everywhere.popup/0.0.1707.920@0.0.1707.920" timestamp="1605639733517" />
+    <state x="580" y="223" width="756" height="774" key="search.everywhere.popup/0.0.1920.1050@0.0.1920.1050" timestamp="1605981228957" />
   </component>
 </project>

@@ -1,0 +1,37 @@
+{
+    "status": "success",
+    "data": {
+        "id": 1,
+        "industry": [
+            {
+                "id": 5,
+                "name": "Entertainment",
+                "urn": "urn:li:fs_industry:28"
+            }
+        ],
+        "speciality": [
+            {
+                "id": 1,
+                "name": "Media and Entertainment"
+            }
+        ],
+        "created": "2020-11-11T18:15:38.467200Z",
+        "modified": "2020-11-11T18:15:38.467200Z",
+        "name": "WarnerMedia",
+        "domain": "https://www.warnermedia.com/",
+        "staff_range": 10001,
+        "staff_count": 23555,
+        "founded_on_year": null,
+        "phone": null,
+        "type": "PUBLIC_COMPANY",
+        "description": "WHO WE ARE\nWarnerMedia is a powerful portfolio of iconic entertainment, news and sports brands including HBO, Warner Bros., Adult Swim, Bleacher Report, Boomerang, Cartoon Network, CNN, ELEAGUE, RoosterTeeth, TBS, Turner Classic Movies (TCM), TNT, truTV, Turner Sports and more. \n\nWe bring people, technology, and the world’s best storytellers together to drive culture and meaningful connection.\n\nWHAT WE DO\nIt's our aim every day to inspire, inform and entertain our audiences with high-quality, diverse content—bringing them stories that have purpose and impact and voices that need to be heard.\n\nAt WarnerMedia we invite diverse stories, skills and perspectives; we inspire everyone to contribute creative ways forward; we respond to people’s unique points of view and desire for meaningful connection; we strive for exceptional quality and lasting cultural impact. \n\nOUR SPIRIT\nWe believe everyone deserves authentic, meaningful connection—to each other, to culture, and a shared sense of belonging.\n\nThat’s why we empower fearless storytellers who bring our world into focus—and create cultural touchstones with the power to draw us together. ",
+        "tagline": null,
+        "linkedin_url": "https://www.linkedin.com/company/warnermedia",
+        "logo": null,
+        "cover": null,
+        "external_id": 1000,
+        "external_src": "LINKEDIN",
+        "email_pattern": null,
+        "slug": "warnermedia"
+    }
+}

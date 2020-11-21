@@ -10,7 +10,7 @@
     <title> @yield('page') - {{ config('app.name', 'Find Email Address') }}</title>
 
     <!-- Scripts -->
-    
+
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
 
     <!-- Fonts -->
@@ -24,20 +24,19 @@
     <!-- Place your kit's code here -->
     <!-- <script src="https://kit.fontawesome.com/5099c5b4c2.js"></script> -->
 
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    
+
 
 </head>
 <body>
-    
+
     <div style="display: flex;flex-flow: column;height: 100%">
         <div class="modal" tabindex="-1" role="dialog" id="login_again">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="alert alert-danger" style="display:none"></div>
               <div class="modal-header">
-                
+
                 <h5 class="modal-title">Session Expired</h5>
                         <button type="button" class="close" data-dismiss="modal" onClick="logout_modal()" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
@@ -58,7 +57,7 @@
             <div class="modal-content">
                 <div class="alert alert-danger" style="display:none"></div>
               <div class="modal-header">
-                
+
                 <h5 class="modal-title">Successful</h5>
                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -76,12 +75,12 @@
             <div class="modal-content">
                 <div class="alert alert-danger" style="display:none"></div>
               <div class="modal-header">
-                
+
                 <h5 class="modal-title" id="action_modal_title"></h5>
                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-               
+
               </div>
               <div class="modal-body">
                 <p id="action_modal_message"></p>
@@ -89,7 +88,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
                         No!
-                    </button>                    
+                    </button>
                     <button type="button" class="btn btn-primary" id="action_button">
                         Yes!
                     </button>
@@ -103,7 +102,7 @@
             <div class="modal-content">
                 <div class="alert alert-danger" style="display:none"></div>
               <div class="modal-header">
-                
+
                 <h5 class="modal-title">Report Bounce</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
@@ -112,7 +111,7 @@
               <div class="modal-body">
                 <form method="POST" action="{{ route('report_bounce') }}" enctype="multipart/form-data" aria-label="{{ __('Report Bounce') }}">
                     @csrf
-                        
+
                         <input type="hidden" name="bounce_email_id" id="bounce_email_id">
                         <input type="hidden" name="bounce_email_type" id="bounce_email_type">
                         <div class="form-group row">
@@ -121,7 +120,7 @@
                                 </textarea>
                             </div>
                         </div>
-                        
+
                         <div class="modal-footer">
                             <div class="form-group row">
                                 <div class="col-sm-4 col-form-label text-md-right">
@@ -129,22 +128,22 @@
                                 <div class="col-md-6">
                                     <button type="submit" class="btn btn-primary">Report</button>
                                 </div>
-                                
+
                             </div>
                         </div>
-                            
+
                     </form>
               </div>
-              
+
                 <!-- <button  class="btn btn-success" onClick="report_bounce_ajax()" id="ajaxSubmit">Report</button> -->
-               
+
             </div>
           </div>
         </div>
         <div class="modal" tabindex="-1" role="dialog" id="bulk_find_modal">
               <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                  
+
                   <div class="modal-body">
                     <input type="hidden" name="bulk_import_file_id" id="bulk_import_file_id">
                     <div class="card activity_log" style="height: 100%">
@@ -172,12 +171,12 @@
                                 <span class="invalid-feedback-custom">
                                     <strong id="bulk_map_find_error"></strong>
                                 </span>
-                            
+
                                 <button id="bulk_find_modal_button" class="btn btn-success" onClick="map_find()">Import</button>
-                         
-                        
-                        
-                        
+
+
+
+
                     </div>
                 </div>
               </div>
@@ -185,7 +184,7 @@
             <div class="modal" tabindex="-1" role="dialog" id="bulk_verify_modal">
               <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                  
+
                   <div class="modal-body">
                     <input type="hidden" name="bulk_import_file_id" id="bulk_import_verify_file_id">
                     <div class="card activity_log" style="height: 100%">
@@ -233,7 +232,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         @guest
-                            
+
                         @else
                             <li class="nav-item">
                                 <a class="nav-link" href="{{URL::route('find')}}"><span class="padding_right"><i class="fas fa-search fa-sm"></i></span>Find</a>
@@ -245,14 +244,14 @@
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     <span class="padding_right"><i class="fas fa-server fa-sm"></i></span>History <span class="caret"></span>
                                 </a>
-                                
+
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{URL::route('find_history')}}">Find
                                         <small id="fileHelp" class="form-text text-muted">History of found emails</small>
                                     </a>
                                     <a class="dropdown-item" href="{{URL::route('verify_history')}}">Verify
                                         <small id="fileHelp" class="form-text text-muted">History of verified emails</small></a>
-                                    
+
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
@@ -260,34 +259,35 @@
                                     <span class="padding_right"><i class="fas fa-file-import fa-sm"></i></span>Bulk  <span class="caret"></span>
                                     <!-- <img src="{{ asset('images/coming-soon.png') }}" style="max-height: 100px;"> -->
                                 </a>
-                                
+
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{URL::route('bulk_find')}}">Find Emails
                                         <small id="fileHelp" class="form-text text-muted">Find list of names and domains</small>
                                     </a>
                                     <a class="dropdown-item" href="{{URL::route('bulk_verify')}}">Verify Emails
                                         <small id="fileHelp" class="form-text text-muted">Verify a list of Emails</small></a>
-                                    
+
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     <span class="padding_right"><i class="fas fa-file-import fa-sm"></i></span>Files  <span class="caret"></span>
-                                   
+
                                 </a>
-                                
+
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{URL::route('files_find')}}">Find
                                         <small id="fileHelp" class="form-text text-muted">List of find files</small>
                                     </a>
                                     <a class="dropdown-item" href="{{URL::route('files_verify')}}">Verify
                                         <small id="fileHelp" class="form-text text-muted">Liist of verify files</small></a>
-                                    
+
                                 </div>
                             </li>
                         @endguest
                     </ul>
                     <ul class="navbar-nav ml-auto">
+
                         @guest
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -315,12 +315,12 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    
-                                    
-                                    
-                                    
+
+
+
+
                                 </a>
-                                
+
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown" style="right:0px">
 
                                         <div class="container">
@@ -343,11 +343,11 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
 
 
-                                        
+
                                    <!--  <a class="dropdown-item" href="{{URL::route('subscriptions')}}"><span class="padding_right"><i class="fas fa-file-invoice-dollar fa-sm"></i></span>My Subscription</a> -->
 
 
@@ -376,7 +376,7 @@
             @yield('content')
         </main>
     </div>
-    <script src="{{ asset('js/jquery-3.3.1.min.js') }}" ></script> 
+    <script src="{{ asset('js/jquery-3.3.1.min.js') }}" ></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/jquery.toaster.js') }}" defer></script>
     <script src="{{ asset('js/popper.min.js') }}" defer></script>
@@ -391,9 +391,9 @@
         gtag('config', 'UA-148373168-2');
 
         </script>
-    @endif 
+    @endif
     @stack('scripts')
-   
+
     @yield('footer')
      <script>
         $(document).ready(function(e) {
@@ -402,7 +402,7 @@
             {
                 window.location.href = "{{ route('files_verify') }}";
             }
-            
+
           });
           $('#bulk_find_modal').on('hidden.bs.modal', function(e) {
             if(window.location.href!="{{ route('files_find') }}")
@@ -411,7 +411,7 @@
             }
           });
           $('#skip_header_map_verify').change(function() {
-                if(this.checked) 
+                if(this.checked)
                 {
                     bulk_verify_modal_button_html_text=$('#bulk_verify_modal_button').html();
                     var res = bulk_verify_modal_button_html_text.split(" ");
@@ -429,7 +429,7 @@
                 }
             });
           $('#skip_header_map_find').change(function() {
-                if(this.checked) 
+                if(this.checked)
                 {
                     bulk_find_modal_button_html_text=$('#bulk_find_modal_button').html();
                     var res = bulk_find_modal_button_html_text.split(" ");
@@ -446,7 +446,7 @@
                     $('#bulk_find_modal_button').html('Import '+find_limit+' Rows');
                 }
             });
-          
+
         });
         $(function () {
           $('[data-toggle="tooltip"]').tooltip()
@@ -465,7 +465,7 @@
           $('#bounce_email_id').val(id);
           $('#bounce_email_type').val(type);
           $("#bounce_message").val('');
-          $("#report_bounce").modal();        
+          $("#report_bounce").modal();
         }
         function map_find()
         {
@@ -522,7 +522,7 @@
                     }
                 }
                 var exclude_header="0";
-                if (document.getElementById('skip_header_map_find').checked) 
+                if (document.getElementById('skip_header_map_find').checked)
                 {
                     exclude_header="1";
                 }
@@ -530,49 +530,49 @@
                 $('#bulk_find_modal_button').html('<i class="fa fa-spinner fa-spin"></i>');
                  $.ajax({
                         method: 'POST',
-                        dataType: 'json', 
-                        url: 'process_import', 
-                        data: {'first_name' : first_name,'last_name':last_name,'domain':domain,'exclude_header':exclude_header,'file_id':file_id,"_token": "{{ csrf_token() }}"}, 
+                        dataType: 'json',
+                        url: 'process_import',
+                        data: {'first_name' : first_name,'last_name':last_name,'domain':domain,'exclude_header':exclude_header,'file_id':file_id,"_token": "{{ csrf_token() }}"},
                         success: function(response)
-                        { 
-                            
+                        {
+
                             console.log(response);
                             // $('#bulk_find_modal_button').html('Import');
                             window.location.href = "{{ route('files_find') }}";
-                            
+
 
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            
+
                             if( jqXHR.status === 422 )
                             {
-                                
+
                             }
                             else if( jqXHR.status === 419 )
                             {
 
                                 $("#login_again").modal();
-                                
+
                             }
                             else if(jqXHR.status === 403)
                             {
                                 $("#login_again").modal()
-                                
+
                             }
                             else
                             {
                                  console.log(jqXHR);
-                               
+
                             }
                         },
                         timeout: 60000 // sets timeout to 60 seconds
                     });
             }
 
-            
+
         }
         function bulk_find_popup_populate_emails(data)
-        {       
+        {
                 var tableRef = document.getElementById('bulk_find_popup_table').getElementsByTagName('tbody')[0];
                 for(var i = tableRef.rows.length - 1; i >= 0; i--)
                 {
@@ -587,7 +587,7 @@
                           newText  = document.createTextNode(data[i][j]);
                           newCell.appendChild(newText);
                     }
-                       
+
                 }
                 newRow   = tableRef.insertRow();
                 for(var j = 0;j<data[1].length;j++)
@@ -602,7 +602,7 @@
                     select.options.add( new Option("Domain Name","domain") );
                     newCell.appendChild(select);
                 }
-                
+
         }
         function map_verify()
         {
@@ -632,52 +632,52 @@
                 }
                 var file_id=$('#bulk_import_verify_file_id').val();
                 var exclude_header="0";
-                if (document.getElementById('skip_header_map_verify').checked) 
+                if (document.getElementById('skip_header_map_verify').checked)
                 {
                     exclude_header="1";
                 }
-                $('#bulk_verify_modal_button').html('<i class="fa fa-spinner fa-spin"></i>'); 
+                $('#bulk_verify_modal_button').html('<i class="fa fa-spinner fa-spin"></i>');
                  $.ajax({
                         method: 'POST',
-                        dataType: 'json', 
-                        url: 'process_import', 
-                        data: {'email' : email,'file_id':file_id,'exclude_header':exclude_header,"_token": "{{ csrf_token() }}"}, 
+                        dataType: 'json',
+                        url: 'process_import',
+                        data: {'email' : email,'file_id':file_id,'exclude_header':exclude_header,"_token": "{{ csrf_token() }}"},
                         success: function(response)
-                        { 
-                            
+                        {
+
                             console.log(response);
                             window.location.href = "{{ route('files_verify') }}";
-                            
+
 
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            
+
                             if( jqXHR.status === 422 )
                             {
-                                
+
                             }
                             else if( jqXHR.status === 419 )
                             {
 
                                 $("#login_again").modal();
-                                
+
                             }
                             else if(jqXHR.status === 403)
                             {
                                 $("#login_again").modal()
-                                
+
                             }
                             else
                             {
                                  console.log(jqXHR);
-                               
+
                             }
                         },
                         timeout: 60000 // sets timeout to 60 seconds
                     });
             }
 
-            
+
         }
         function bulk_verify_popup_populate_emails(data)
         {
@@ -695,7 +695,7 @@
                           newText  = document.createTextNode(data[i][j]);
                           newCell.appendChild(newText);
                     }
-                       
+
                 }
                 newRow   = tableRef.insertRow();
                 for(var j = 0;j<data[1].length;j++)
@@ -711,7 +711,7 @@
         }
     </script>
 </body>
- 
+
 </html>
 
 

@@ -15,8 +15,8 @@ Auth::routes(['verify' => true]);
 
 
 Route::get('/', function () {
-    // return view('auth/login');
-    return Redirect::to(env('APP_HOME_ADDRESS', 'https://findemailaddress.co'));
+     return view('auth/login');
+//    return Redirect::to(env('APP_HOME_ADDRESS', 'https://findemailaddress.co'));
 });
 
 
@@ -52,7 +52,7 @@ Route::get('downloadcsv/{id}/{type}/{records}','EmailController@downloadExcel')-
 
 
 
-//Auth 
+//Auth
 Auth::routes();
 
 //Account Settings
@@ -160,3 +160,11 @@ Route::post('enableRecurringBilling','UserController@enableRecurringBilling')->n
 
 Route::get('linkedin_redirect', 'SocialAuthLinkedinController@redirect')->name('linkedin_redirect');
 Route::get('linkedin_callback', 'SocialAuthLinkedinController@callback')->name('linkedin_callback');
+
+
+
+//Companies Routes
+
+//Route::get('companies','CompaniesController@index');
+Route::get('/company/{slug}','CompaniesController@company');
+Route::get('/people/{slug}','CompaniesController@people');

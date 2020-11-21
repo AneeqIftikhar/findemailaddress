@@ -329,18 +329,18 @@ class EmailController extends Controller
         $user_file=UserFiles::where('id',$id)->where('user_id',$user->id)->first();
         if($user_file)
         {
-          $errors=File_Failure::where('user_file_id',$id)->get();
+          $errors=File_Failure::where('user_file_id',$id)->paginate(100);
           return view('file_errors',compact('errors'));
         }
       }
       public function getUserFoundEmails(Request $request)
       {
-         $emails=Auth::user()->emails()->where('type','find')->where('status','!=','Unverified')->whereNull('user_file_id')->orderBy('id', 'DESC')->with('bounce')->get();
+         $emails=Auth::user()->emails()->where('type','find')->where('status','!=','Unverified')->whereNull('user_file_id')->orderBy('id', 'DESC')->with('bounce')->paginate(100);
          return view('find_history',compact('emails'));
       }
       public function getUserVerifiedEmails(Request $request)
       {
-         $emails=Auth::user()->emails()->where('type','verify')->where('status','!=','Unverified')->whereNull('user_file_id')->orderBy('id', 'DESC')->with('bounce')->get();
+         $emails=Auth::user()->emails()->where('type','verify')->where('status','!=','Unverified')->whereNull('user_file_id')->orderBy('id', 'DESC')->with('bounce')->paginate(100);
          return view('verify_history',compact('emails'));
       }
 
@@ -350,7 +350,7 @@ class EmailController extends Controller
          $user_file=UserFiles::where('id',$id)->where('user_id',$user->id)->first();
          if($user_file)
          {
-            $emails=Emails::where('user_file_id',$id)->get();
+            $emails=Emails::where('user_file_id',$id)->paginate(100);
             $data=['emails'=>$emails,'file'=>$user_file];
             return view('emails',compact('data',$data));
          }
