@@ -140,7 +140,7 @@
                     newCell.appendChild(newText);
 
                     newCell = newRow.insertCell(4);
-                    if (data[i]['bounce'].length > 0) {
+                    if (data['data'][i]['bounce'].length > 0) {
                         container = document.createElement("span");
                         text = document.createTextNode(data['data'][i]['bounce'][0]['status']);
                         container.style.fontWeight = "bold";
@@ -215,7 +215,7 @@
 
                     newCell = newRow.insertCell(4);
                     if (data['data'][i]['status'] == "Valid" && data['data'][i]['server_status'] == "Valid") {
-                        if (data[i]['bounce'].length > 0) {
+                        if (data['data'][i]['bounce'].length > 0) {
                             container = document.createElement("span");
                             text = document.createTextNode(data['data'][i]['bounce'][0]['status']);
                             container.style.fontWeight = "bold";

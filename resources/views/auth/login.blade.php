@@ -12,8 +12,8 @@
 
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header"><h4>{{ __('Login') }}</h4></div>
+            <div class="card border-0 shadow-lg" style="border-radius: 1.25rem !important;">
+                <div class="card-header border-0"><h4>{{ __('Login') }}</h4></div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
@@ -68,7 +68,7 @@
                                   <i class="fab fa-linkedin-in" aria-hidden="true">&nbsp&nbsp|</i>
                                    Connect with Linkedin
                                 </a>
-                                
+
                             </div>
                         </div>
                         <div class="form-group row mt-1 mb-0">
@@ -78,9 +78,9 @@
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                                 @endif
-                                
+
                             </div>
-                           
+
                         </div>
                     </form>
                 </div>

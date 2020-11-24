@@ -92,7 +92,6 @@
         var data = null;
         $(document).ready(function () {
             data = {!! json_encode($data, JSON_HEX_TAG) !!};
-            console.log(data);
             if (data['file']['type'] == "find") {
                 populate_emails_find('all');
                 $("#show_emails").click(function () {
