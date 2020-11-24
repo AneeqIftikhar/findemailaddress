@@ -36,31 +36,31 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
     protected $exclude_header=false;
     protected $limit=10;
     protected $chunk_size=1;
-    public function setUser($user) 
-    {     
-        $this->user = $user;        
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
-    public function setLimit($limit) 
-    {     
-        $this->limit=$limit;        
+    public function setLimit($limit)
+    {
+        $this->limit=$limit;
     }
-    public function setChunkSize($chunk_size) 
-    {     
+    public function setChunkSize($chunk_size)
+    {
         $this->chunk_size=$chunk_size;
-        
+
     }
-    public function setUserFile($file) 
-    {     
+    public function setUserFile($file)
+    {
         $this->file = $file;
     }
-    public function setHeaderMappings($first_name,$last_name,$domain) 
-    {     
+    public function setHeaderMappings($first_name,$last_name,$domain)
+    {
         $this->first_name = $first_name;
         $this->last_name = $last_name;
         $this->domain = $domain;
     }
-    public function setExcludeHeader($exclude_header) 
-    {     
+    public function setExcludeHeader($exclude_header)
+    {
         $this->exclude_header = $exclude_header;
     }
     public function rules(): array
@@ -68,7 +68,7 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
         $first_name = strval($this->first_name);
         $last_name = strval($this->last_name);
         $domain = strval($this->domain);
-        
+
         return [
             $first_name => ['required', 'string', 'max:50'],
             $last_name => ['required', 'string', 'max:50',new WithoutSpaces],
@@ -96,7 +96,7 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
         {
           $server_output=$exists_email->server_json_dump;
           $json_output=json_decode($server_output);
-          if($json_output && array_key_exists('OVERRIDE',$json_output))
+          if($json_output && isset($json_output['OVERRIDE']))
           {
 
             $this->user->decrement('credits');
@@ -113,7 +113,7 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
                 'server_json_dump'=>$server_output,
             ]);
 
-            
+
 
           }
           else
@@ -153,7 +153,7 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
                     'server_json_dump'=>$server_output,
                 ]);
               }
-              
+
             }
             else
             {
@@ -165,7 +165,7 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
                     'user_id'=>$user_id,
                     'user_file_id'=>$file_id,
                     'type'=>'find',
-                ]);      
+                ]);
             }
           }
         }
@@ -179,12 +179,12 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
                 'user_id'=>$user_id,
                 'user_file_id'=>$file_id,
                 'type'=>'find',
-            ]);      
+            ]);
         }
 
-        
+
     }
-    
+
     public function chunkSize(): int
     {
         return $this->chunk_size;
@@ -210,7 +210,7 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
         foreach ($failures as $failure) {
             $failure_db=new File_Failure();
             $failure_db->user_file_id=$this->file->id;
-            $failure_db->row=$failure->row(); 
+            $failure_db->row=$failure->row();
             if($failure->attribute()==$this->first_name)
             {
                 $attribute="Firstname";
