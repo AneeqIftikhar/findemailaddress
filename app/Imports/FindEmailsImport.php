@@ -96,7 +96,7 @@ class FindEmailsImport implements ToModel, WithChunkReading, ShouldQueue, WithSt
         {
           $server_output=$exists_email->server_json_dump;
           $json_output=json_decode($server_output);
-          if($json_output && isset($json_output['OVERRIDE']))
+          if($json_output && isset($json_output->OVERRIDE))
           {
 
             $this->user->decrement('credits');
