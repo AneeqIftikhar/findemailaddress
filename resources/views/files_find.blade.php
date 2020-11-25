@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow-lg border-0">
                 <div class="card-header"><h3>Files Find</h3></div>
 
                 <div class="card-body">
@@ -24,7 +24,7 @@
                       </thead>
                       <tbody>
                        <!--  @foreach($files as $file)
-                          <tr class="table-row" data-href="{{URL::route('emails', ['id' => $file->id])}}" value="{{$file->id}}">        
+                          <tr class="table-row" data-href="{{URL::route('emails', ['id' => $file->id])}}" value="{{$file->id}}">
                               <td> {{$file->title}} </td>
                               <td> {{$file->status}} </td>
                               <td> {{$file->created_at}} </td>
@@ -43,7 +43,7 @@
 <script type="text/javascript">
 var interval = null;
 function populate_files(data)
-{       
+{
         var total_pending=0;
         var tableRef = document.getElementById('files_table').getElementsByTagName('tbody')[0];
         for(var i = tableRef.rows.length - 1; i >= 0; i--)
@@ -53,9 +53,9 @@ function populate_files(data)
         for(var i = 0;i<data.length;i++)
         {
             newRow   = tableRef.insertRow();
-            
+
             // newRow.setAttribute('class',"table-row");
-            
+
 
             newCell  = newRow.insertCell(0);
             newText  = document.createTextNode(data[i]['title']);
@@ -69,7 +69,7 @@ function populate_files(data)
               spinner.className="fa fa-spinner fa-spinner fa-spin";
               newCell.appendChild(spinner);
               total_pending++;
-              
+
             }
             else if(data[i]['status']=="Mapping Required")
             {
@@ -81,7 +81,7 @@ function populate_files(data)
               // newText  = document.createTextNode(data[i]['status']);
               // newCell.appendChild(newText);
 
-              newButton = document.createElement("a"); 
+              newButton = document.createElement("a");
               newButton.className="btn btn-warning";
               newButton.innerHTML = "Mapping Required";
               newButton.setAttribute('id',data[i]['id']);
@@ -100,10 +100,10 @@ function populate_files(data)
               // newText  = document.createTextNode(data[i]['processed_emails_count']+'/'+data[i]['total_rows']+" Processed");
               // newCell.appendChild(newText);
 
-              newDiv = document.createElement("div"); 
+              newDiv = document.createElement("div");
               newDiv.className="progress md-progress";
 
-              newDiv2 = document.createElement("div"); 
+              newDiv2 = document.createElement("div");
               newDiv2.className="progress-bar progress-bar-striped progress-bar-animated";
               newDiv2.setAttribute('role',"progressbar");
               percent=(data[i]['processed_emails_count']*100)/data[i]['total_rows'];
@@ -116,10 +116,10 @@ function populate_files(data)
               newDiv2.id=data[i]['id']+"_progress_bar";
 
               newText  = document.createTextNode(data[i]['processed_emails_count']+'/'+data[i]['total_rows']+" Processed");
-              
+
               newDiv2.appendChild(newText);
               newDiv.appendChild(newDiv2);
-              
+
               newCell.appendChild(newDiv);
 
               $("#"+data[i]['id']+"_progress_bar").css("width", percent + "%")
@@ -136,7 +136,7 @@ function populate_files(data)
               newText  = document.createTextNode(data[i]['status']);
               newCell.appendChild(newText);
             }
-            
+
 
             newCell  = newRow.insertCell(2);
             newText  = document.createTextNode(data[i]['created_at']);
@@ -145,9 +145,9 @@ function populate_files(data)
             if(data[i]['total_rows']==0)
             {
               newCell  = newRow.insertCell(3);
-              newButton = document.createElement("a"); 
+              newButton = document.createElement("a");
               newButton.className="btn btn-danger";
-              newButton.innerHTML = data[i]['file_failure_count']+" "+"Errors"; 
+              newButton.innerHTML = data[i]['file_failure_count']+" "+"Errors";
               var url = '{{ route("file_errors", ":id") }}';
               url = url.replace(':id', data[i]['id']);
               newButton.setAttribute('href',url);
@@ -156,18 +156,18 @@ function populate_files(data)
             else if(data[i]['file_failure_count']>0)
             {
               newCell  = newRow.insertCell(3);
-              newButton = document.createElement("a"); 
+              newButton = document.createElement("a");
               newButton.className="btn btn-primary";
-              newButton.innerHTML = "Details"; 
+              newButton.innerHTML = "Details";
               newButton.style.marginRight="2px";
               var url = '{{ route("emails", ":id") }}';
               url = url.replace(':id', data[i]['id']);
               newButton.setAttribute('href',url);
               newCell.appendChild(newButton);
 
-              newButton = document.createElement("a"); 
+              newButton = document.createElement("a");
               newButton.className="btn btn-danger";
-              newButton.innerHTML = data[i]['file_failure_count']+" "+"Errors"; 
+              newButton.innerHTML = data[i]['file_failure_count']+" "+"Errors";
               var url = '{{ route("file_errors", ":id") }}';
               url = url.replace(':id', data[i]['id']);
               newButton.setAttribute('href',url);
@@ -176,17 +176,17 @@ function populate_files(data)
             else
             {
               newCell  = newRow.insertCell(3);
-              newButton = document.createElement("a"); 
+              newButton = document.createElement("a");
               newButton.className="btn btn-primary";
-              newButton.innerHTML = "Details"; 
+              newButton.innerHTML = "Details";
               var url = '{{ route("emails", ":id") }}';
               url = url.replace(':id', data[i]['id']);
               newButton.setAttribute('href',url);
               newCell.appendChild(newButton);
             }
-            
 
-               
+
+
         }
         if(!interval && total_pending>0)
         {
@@ -195,19 +195,19 @@ function populate_files(data)
         else if(interval && total_pending==0)
         {
           get_user_files_interval_stop();
-        }  
+        }
 }
 function get_user_files_interval_set()
 {
 
    $.ajax({
           method: 'GET',
-          dataType: 'json', 
-          url: 'get_user_files_find_ajax', 
-          data: {"_token": "{{ csrf_token() }}"}, 
+          dataType: 'json',
+          url: 'get_user_files_find_ajax',
+          data: {"_token": "{{ csrf_token() }}"},
           success: function(response)
-          { 
-              
+          {
+
               populate_files(response['files']);
               $(".table-row").click(function() {
                   window.document.location = $(this).data("href");
@@ -215,30 +215,30 @@ function get_user_files_interval_set()
              $(".mapping-row").click(function() {
                 bulk_import_find_with_file_id($(this).attr("value"));
             });
-              
+
 
           },
           error: function(jqXHR, textStatus, errorThrown) {
-             
+
           },
-          timeout: 1000 
+          timeout: 1000
       });
 }
-function get_user_files_interval_stop() 
+function get_user_files_interval_stop()
 {
   clearInterval(interval);
 }
 function bulk_import_find_with_file_id(event)
 {
-  
+
   id=event.target.id;
   $.ajax({
           method: 'POST',
-          dataType: 'json', 
-          url: 'bulk_import_find_with_file_id', 
-          data: {"file_id":id,"_token": "{{ csrf_token() }}"}, 
+          dataType: 'json',
+          url: 'bulk_import_find_with_file_id',
+          data: {"file_id":id,"_token": "{{ csrf_token() }}"},
           success: function(response)
-          { 
+          {
               console.log(response);
               if(response['file_type']=="find")
               {
@@ -254,18 +254,18 @@ function bulk_import_find_with_file_id(event)
                 $('#bulk_verify_modal_button').html('Import '+response['limit']+' Rows');
                 $("#bulk_verify_modal").modal()
               }
-              
-              
+
+
           },
           error: function(jqXHR, textStatus, errorThrown) {
-             
+
           },
-          timeout: 6000 
+          timeout: 6000
       });
 }
 $(document).ready(function() {
       data = {!! json_encode($files->toArray(), JSON_HEX_TAG) !!};
-      populate_files(data); 
+      populate_files(data);
       $(".table-row").click(function() {
           window.document.location = $(this).data("href");
       });
@@ -273,7 +273,7 @@ $(document).ready(function() {
 
           bulk_import_find_with_file_id($(this).attr("value"));
       });
-         
+
   });
 </script>
 @endpush

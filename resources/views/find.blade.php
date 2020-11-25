@@ -7,7 +7,7 @@
 <div class="container" style="height: 100%">
     <div class="row justify-content-center" style="height: 100%">
         <div class="col-md-6">
-            <div class="card" style="height: 100%">
+            <div class="card shadow border-0" style="height: 100%">
                 <div class="card-header"><h4>Find Email</h4></div>
                 <div class="card-body p-0 py-4">
                     <!-- <div style="position: relative;top: 50% !important;transform: translateY(-50%);"> -->
@@ -32,7 +32,7 @@
                                 </span>
                             </div>
                         </div>
-                        
+
                         <div class="row m-0">
                             <div class="col-12 px-4 pt-0 pb-0" id="find_help_text">
                                 Enter first name, last name and the domain name of the email address (for example "ripcordsystems.com").
@@ -42,12 +42,12 @@
                             <div id="email-verifier-result-container"></div>
                         </div>
                     <!-- </div> -->
-                    
+
                 </div>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card activity_log" style="height: 100%">
+            <div class="card shadow border-0 activity_log" style="height: 100%">
                 <div class="card-header"><h4>Activity Log</h4></div>
                 <div class="card-body p-0 py-4" style="overflow-y: auto; max-height: 68vh;">
                     <div class="row m-0 mb-4">
@@ -67,7 +67,7 @@
 								  </tbody>
 								</table>
 							</div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -87,19 +87,19 @@ $( document ).ready(function() {
     $("#first-name-field").keyup(function(event) {
         if (event.keyCode === 13) {
             $("#find_email_button").click();
-            
+
         }
     });
     $("#last-name-field").keyup(function(event) {
         if (event.keyCode === 13) {
             $("#find_email_button").click();
-            
+
         }
     });
     $("#domain-field").keyup(function(event) {
         if (event.keyCode === 13) {
         	$("#find_email_button").click();
-            
+
         }
     });
     $('body').tooltip({
@@ -115,7 +115,7 @@ function populate_emails()
       }
       for(var i = 0;i<data.length;i++)
       {
-        
+
         var newRow   = tableRef.insertRow();
         newCell  = newRow.insertCell(0);
         newCell.style.padding="3px";
@@ -137,7 +137,7 @@ function populate_emails()
           {
             newText  = document.createTextNode(data[i]['domain']);
           }
-          
+
           newCell.style.border="0px";
           newCell.appendChild(newText);
 
@@ -194,11 +194,11 @@ function populate_emails()
                 container.setAttribute('title', 'No valid email found');
             }
           }
-          
+
 
           newCell.appendChild(container);
 
-       
+
       }
 }
 
@@ -216,7 +216,7 @@ function find_email_ajax()
 {
 
 
-        
+
         document.getElementById('find_error').innerHTML='';
 
 
@@ -289,30 +289,30 @@ function find_email_ajax()
               newCell.appendChild(spinner);
 
 
-            
+
             $.ajax({
                 method: 'POST',
-                dataType: 'json', 
-                url: 'find_email', 
-                data: {'first_name' : first_name,'last_name':last_name,'domain':domain,"_token": "{{ csrf_token() }}"}, 
+                dataType: 'json',
+                url: 'find_email',
+                data: {'first_name' : first_name,'last_name':last_name,'domain':domain,"_token": "{{ csrf_token() }}"},
                 success: function(response){ // What to do if we succeed
                     // console.log(response);
-                    
+
 
                     if('status' in response && 'emails' in response)
                     {
-                        
+
                         var container = document.createElement("div");
                         container.className="tooltip_container";
                         var text = document.createTextNode(response['status']);
                         newRow.deleteCell(2);
                         var newCell  = newRow.insertCell(2);
                         newCell.style.border="0px";
-                        
+
                         container.appendChild(text);
                         container.style.fontWeight="bold";
                         if(response['status']=="Valid" || response['status']=="Multiple Emails")
-                        {   
+                        {
                             newRow.style.border= "1px solid var(--main-bg-color)";
                             container.style.color = "green";
 
@@ -334,7 +334,7 @@ function find_email_ajax()
                             container.setAttribute('data-html', 'true');
                             container.setAttribute('title', 'This will catch emails sent to any email address under this domain');
 
-                            
+
 
 
                         }
@@ -342,7 +342,7 @@ function find_email_ajax()
                         {
                             newRow.style.border= "1px solid var(--main-bg-color)";
                             //newRow.style.background="rgba(255,165,0,0.2)";
- 
+
 
                             container.style.color = "orange";
                             container.setAttribute('data-toggle', 'tooltip');
@@ -383,16 +383,16 @@ function find_email_ajax()
                             newRow.cells[1].innerHTML='<div>'+response['emails']+'</div>';
                         }
                         document.getElementById('credits_left_span').innerHTML=response['credits_left'];
-                        
 
-                        
+
+
                     }
                     document.getElementById("find_email_button").disabled = false;
                     request_counter--;
 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    
+
                     if( jqXHR.status === 422 )
                     {
                         $errors = jqXHR.responseJSON;
@@ -406,10 +406,10 @@ function find_email_ajax()
                                 else
                                 {
                                     document.getElementById('find_error').innerHTML="You cannot search for emails at personal domains. Please provide a company domain.";
-                                    
+
                                 }
-                                
-                            
+
+
                         });
                         tableRef.deleteRow(0);
                         tableRef.deleteRow(0);
@@ -429,7 +429,7 @@ function find_email_ajax()
                         $("#login_again").modal()
                         document.getElementById("find_email_button").disabled = false;
                         request_counter--;
-                        
+
                     }
                     else if (jqXHR.status === 429)
                     {
@@ -468,8 +468,8 @@ function find_email_ajax()
         {
             document.getElementById("find_email_button").disabled = true;
         }
-  
-    
+
+
 }
 
 </script>

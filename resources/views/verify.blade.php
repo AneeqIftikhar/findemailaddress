@@ -6,7 +6,7 @@
 <div class="container" style="height: 100%">
     <div class="row justify-content-center" style="height: 100%">
         <div class="col-md-6">
-            <div class="card" style="height: 100%">
+            <div class="card shadow border-0" style="height: 100%">
               <div class="card-header"><h4>Verify Email</h4></div>
                 <div class="card-body p-0 py-4">
                   <!-- <div style="position: relative;top: 50% !important;transform: translateY(-50%);"> -->
@@ -18,7 +18,7 @@
                             <div class="input-group mt-4">
                                 <button class="btn btn-primary" type="button" id="verify_email_button" style="min-width: 120px; font-weight: 700;" onclick="verify_email_ajax()">Verify</button>
                             </div>
-                        
+
                             <span class="invalid-feedback-custom">
                                 <strong id="email_error"></strong>
                             </span>
@@ -30,13 +30,13 @@
                             Enter an email address to verify its accuracy.
                         </div>
                     </div>
-                    
+
                 <!-- </div> -->
               </div>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card activity_log" style="height: 100%">
+            <div class="card  shadow border-0 activity_log" style="height: 100%">
               <div class="card-header"><h4>Activity Log</h4></div>
                 <div class="card-body p-0 py-4"  style="overflow-y: auto; max-height: 68vh;">
                     <div class="row m-0 mb-4">
@@ -51,11 +51,11 @@
                                         </tr>
                                     </thead>
                                   <tbody>
-                                   
+
                                   </tbody>
                                 </table>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@ $( document ).ready(function() {
     $("#email-field").keyup(function(event) {
         if (event.keyCode === 13) {
             $("#verify_email_button").click();
-          
+
         }
     });
     $('body').tooltip({
@@ -88,7 +88,7 @@ function populate_emails()
       }
       for(var i = 0;i<data.length;i++)
       {
-        
+
         var newRow   = tableRef.insertRow();
         newCell  = newRow.insertCell(0);
         newCell.style.padding="3px";
@@ -194,11 +194,11 @@ function populate_emails()
               container.setAttribute('title', 'Email is Invalid');
             }
           }
-          
+
 
           newCell.appendChild(container);
 
-       
+
       }
 }
 function validateEmail(email) {
@@ -207,7 +207,7 @@ function validateEmail(email) {
 }
 function verify_email_ajax()
 {
-   
+
     document.getElementById('email_error').innerHTML='';
     $('#verify_help_text').css('display','block');
 
@@ -257,12 +257,12 @@ function verify_email_ajax()
 
         $.ajax({
             method: 'POST',
-            dataType: 'json',  
-            url: 'verify_email', 
-            data: {'email' : email,"_token": "{{ csrf_token() }}"}, 
+            dataType: 'json',
+            url: 'verify_email',
+            data: {'email' : email,"_token": "{{ csrf_token() }}"},
             success: function(response){ // What to do if we succeed
 
-                
+
                 if(response['server_status']=="Valid")
                 {
                     newRow.style.border= "1px solid var(--main-bg-color)";
@@ -284,9 +284,9 @@ function verify_email_ajax()
                     {
                       newRow.cells[1].innerHTML='<div class="tooltip_container" data-toggle="tooltip" data-placement="top" data-html="true" title="" data-original-title="This domain does not have a mail server setup" style="font-weight:bold;color:red">'+response['server_status']+'</div>';
                     }
-                    
 
-                    
+
+
                 }
                 var container = document.createElement("div");
                 container.className="tooltip_container";
@@ -294,7 +294,7 @@ function verify_email_ajax()
                 newRow.deleteCell(2);
                 var newCell  = newRow.insertCell(2);
                 newCell.style.border="0px";
-                
+
                 container.appendChild(text);
                 container.style.fontWeight="bold";
                 if(response['email_status']=="Valid")
@@ -334,7 +334,7 @@ function verify_email_ajax()
                     container.setAttribute('data-placement', 'bottom');
                     container.setAttribute('data-html', 'true');
                     container.setAttribute('title', 'Sorry, we are unable to verify this email at the moment');
-                  
+
                 }
                 else
                 {
@@ -348,7 +348,7 @@ function verify_email_ajax()
                 newCell.appendChild(container);
                 document.getElementById('credits_left_span').innerHTML=response['credits_left'];
 
-                
+
 
 
             },
@@ -364,12 +364,12 @@ function verify_email_ajax()
                         }
                         else
                         {
-                            
+
                           document.getElementById('email_error').innerHTML="You cannot search for emails at personal domains. Please provide a company domain.";
                         }
-                       
-                       
-                        
+
+
+
                     });
                     tableRef.deleteRow(0);
                     tableRef.deleteRow(0);
@@ -382,7 +382,7 @@ function verify_email_ajax()
                     $("#login_again").modal()
                     document.getElementById("verify_email_button").disabled = false;
                     request_counter--;
-                    
+
                 }
                 else if (jqXHR.status === 429)
                 {
@@ -403,8 +403,8 @@ function verify_email_ajax()
             timeout: 100000
         });
     }
-    
-    
+
+
 }
 
 </script>

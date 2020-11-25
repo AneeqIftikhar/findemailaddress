@@ -44,10 +44,10 @@
         }
     </style>
 
-    <div class="container pb-3 pt-0 mt-2" style="">
+    <div class="container pb-3 pt-0 mt-4" style="">
         <div class="justify-content-center">
             <div
-                class="card border-0 shadow rounded p-0 col-md-4 mr-5 cardSkew min-height float-left">
+                class="card border-0 shadow rounded p-0 col-md-4 mr-5 cardSkew min-height float-left mb-3">
                 <div class="col-md-12 p-0 ">
                     <img src="{{url('images/companyCover2.jpg')}}" class="img-fluid p-0"
                          style="border-top-left-radius: 15px;border-top-right-radius: 15px" alt="">
@@ -77,7 +77,7 @@
                                         class="fab fa-linkedin-in" aria-hidden="true"></i></a></h4>
 
                             <small class="text-dark"><b>Industry: </b>{{$json->industry[0]->name}}</small>
-                            <p class="mb-1"><a href="{{$json->domain}}" class="card-text mb-0">Visit Website</a></p>
+                            <p class="mb-1"><a rel="nofollow" href="{{$json->domain}}" class="card-text mb-0">Visit Website</a></p>
 
                             @if($json->tagline != null)
                                 <p class="card-text font-italic">"{{$json->tagline}}"</p>
@@ -90,13 +90,13 @@
 
             <div class="card border-0 shadow rounded mb-4 col-md-7 mh-100 px-0 pb-3"
                  style="background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,1));">
-                <ul class="nav nav-pills nav-justified">
+                <ul class="nav nav-pills nav-justified ">
                     <li class="nav-item"><a data-toggle="pill" href="#home"
-                                            class="nav-link active show">About</a></li>
-                    <li class="nav-item"><a data-toggle="tab" href="#menu1" class="nav-link">Locations &
+                                            class="nav-link active show rounded-0 border-top border-bottom">About</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#menu1" class="nav-link rounded-0 border">Locations &
                             Specialities</a>
                     </li>
-                    <li class="nav-item"><a data-toggle="tab" href="#menu2" class="nav-link">Employees <span
+                    <li class="nav-item"><a data-toggle="tab" href="#menu2" class="nav-link rounded-0 border-top border-bottom">Employees <span
                                 class="badge badge-success">{{count($json->people)}}</span></a></li>
                 </ul>
 

@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow-lg border-0">
                 <div class="card-header"><h3>Bulk Find Email</h3></div>
 
                 <div class="card-body">
@@ -13,7 +13,7 @@
 					@endif
                    <form id="bulk_find_form" method="POST" action="{{ route('bulk_import_find') }}" enctype="multipart/form-data" aria-label="{{ __('Upload') }}">
                     @csrf
-                    	
+
 	                    <div class="form-group row">
 	                        <label for="title" class="col-sm-12 col-form-label text-md-left">{{ __('Title') }}</label>
 	                        <div class="col-md-12">
@@ -29,7 +29,7 @@
                             <div class="col-md-7">
                                 <h3>Upload your file (CSV)</h3>
                             </div>
-                            
+
                         </div>
                         <div class="form-group row">
                             <div class="col-md-8">
@@ -47,11 +47,11 @@
                                 </ul>
                             </div>
                             <div class="col-md-4">
-                                <img src="{{ asset('images/csv_bulk_find.png') }}" style="max-width: 100%; "> 
+                                <img src="{{ asset('images/csv_bulk_find.png') }}" style="max-width: 100%; ">
                             </div>
 
                         </div>
-                        
+
 	                    <div class="form-group row">
                     		<label for="excel_file" class="col-sm-4 col-form-label text-md-left">{{ __('File') }}</label>
                     		<div class="col-md-12">
@@ -67,18 +67,18 @@
                                 <span class="invalid-feedback-custom">
                                     <strong id="bulk_find_file_error"></strong>
                                 </span>
-                                
+
                             </div>
-                            
+
                         </div>
                         <div class="form-group row">
                         	<div class="col-md-6">
-                                
+
                         		<button type="submit" id="submit_file_upload" class="btn btn-primary">Upload</button>
                         	</div>
-                        	
+
                         </div>
-                            
+
                     </form>
             	</div>
                 <div class="card-footer">
@@ -90,7 +90,7 @@
                     </ul>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </div>
@@ -100,20 +100,20 @@
 
 
 $(document).ready(function (e) {
-    
+
  $("#bulk_find_form").on('submit',(function(e) {
   e.preventDefault();
       $.ajax({
             url: "bulk_import_find",
             type: "POST",
             data:  new FormData(this),
-            dataType: 'json', 
+            dataType: 'json',
             contentType: false,
             cache: false,
             processData:false,
             beforeSend : function()
             {
-                $("#bulk_find_form")[0].reset(); 
+                $("#bulk_find_form")[0].reset();
                 $("#bulk_find_error").fadeOut();
                 $('#submit_file_upload').html('<i class="fa fa-spinner fa-spin"></i>');
                 $('#bulk_find_file_error').html('');
@@ -133,9 +133,9 @@ $(document).ready(function (e) {
                     $('#bulk_find_modal_button').html('Import '+data['limit']+' Rows');
                     $("#bulk_find_modal").modal()
                 }
-                
+
             },
-            error: function(jqXHR, textStatus, errorThrown) 
+            error: function(jqXHR, textStatus, errorThrown)
             {
                 if( jqXHR.status === 422 )
                 {
@@ -143,7 +143,7 @@ $(document).ready(function (e) {
 
                          $.each( $errors.errors , function( key, value ) {
 
-                                
+
                                 if(value[0].search("The excel file must be a file of type: csv, txt.")!=-1)
                                 {
                                     $("#bulk_find_error").html(e).fadeIn();
@@ -152,15 +152,15 @@ $(document).ready(function (e) {
                                 }
                                 else
                                 {
-                                   
+
                                     $("#bulk_find_error").html(e).fadeIn();
                                     $('#submit_file_upload').html('Upload');
                                     $('#bulk_find_file_error').html("Something Went Wrong");
                                 }
-                                
-                            
+
+
                         });
-                        
+
                 }
                 else
                 {
@@ -168,8 +168,8 @@ $(document).ready(function (e) {
                     $('#submit_file_upload').html('Upload');
                     $('#bulk_find_file_error').html("Something Went Wrong");
                 }
-                
-            }          
+
+            }
         });
     }));
 });
