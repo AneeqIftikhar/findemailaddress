@@ -35,27 +35,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c8396272-2304-44b8-8f28-46867c926e80" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Helpers/ApiKey.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Http/Middleware/VerifyApiToken.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/UserApiKey.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/WebhookEndpoint.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/WebhookEndpointEvent.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/WebhookEvent.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_11_094709_create_user_api_keys_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_11_123340_create_webhook_events_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_11_123615_create_webhook_endpoints_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_12_11_123756_create_webhook_endpoint_events_table.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/emailfinder.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/emailfinder.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/API/EmailApiController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/API/EmailApiController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/WebhookController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/WebhookController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Kernel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/api.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/api.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -284,7 +265,7 @@
       <workItem from="1605362275857" duration="2446000" />
       <workItem from="1605564291200" duration="3840000" />
       <workItem from="1605690054286" duration="4582000" />
-      <workItem from="1607679522432" duration="13788000" />
+      <workItem from="1607679522432" duration="15417000" />
     </task>
     <servers />
   </component>

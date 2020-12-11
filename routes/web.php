@@ -171,8 +171,8 @@ Route::get('/people/{slug}','CompaniesController@people');
  *  Api
  */
 
-Route::get('/api', 'API\EmailAPIController@index')->name('api')->middleware('verified');;
-Route::get('/generate/api/key', 'API\EmailAPIController@generateNewApiKey');
+Route::get('/api', 'API\EmailApiController@index')->name('api')->middleware('verified');
+Route::get('/generate/api/key', 'API\EmailApiController@generateNewApiKey')->middleware('verified');
 Route::get('/api/add/endpoint', 'WebhookController@addWebhookEndpoint');
 Route::get('/api/update/endpoint/{endpoint}', 'WebhookController@updateWebhookEndpoint');
 Route::get('/api/delete/endpoint/{endpoint}', 'WebhookController@deleteWebhookEndpoint');
