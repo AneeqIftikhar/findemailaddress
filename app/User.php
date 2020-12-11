@@ -83,4 +83,12 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     {
         return $this->belongsTo('App\Package');
     }
+    public function endpoint()
+    {
+        return $this->hasMany('App\WebhookEndpoints')->with('events');
+    }
+    public function api_key()
+    {
+        return $this->hasMany('App\UserApiKey');
+    }
 }

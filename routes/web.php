@@ -60,10 +60,7 @@ Route::get('account_settings', function()
 {
     return view('account_settings');
 })->name('account_settings')->middleware('verified');
-Route::get('api', function()
-{
-    return view('api');
-})->name('api')->middleware('verified');
+
 Route::post('update_personal_info','UserController@update_personal_info')->middleware('verified');
 Route::post('update_password','UserController@update_password')->middleware('verified');
 
@@ -168,3 +165,14 @@ Route::get('linkedin_callback', 'SocialAuthLinkedinController@callback')->name('
 //Route::get('companies','CompaniesController@index');
 Route::get('/company/{slug}','CompaniesController@company');
 Route::get('/people/{slug}','CompaniesController@people');
+
+
+/*
+ *  Api
+ */
+
+Route::get('/api', 'API\EmailAPIController@index')->name('api')->middleware('verified');;
+Route::get('/generate/api/key', 'API\EmailAPIController@generateNewApiKey');
+Route::get('/api/add/endpoint', 'WebhookController@addWebhookEndpoint');
+Route::get('/api/update/endpoint/{endpoint}', 'WebhookController@updateWebhookEndpoint');
+Route::get('/api/delete/endpoint/{endpoint}', 'WebhookController@deleteWebhookEndpoint');

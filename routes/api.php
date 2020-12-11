@@ -50,6 +50,11 @@ Route::middleware('cors')->group(function () {
     Route::post('admin_login','Admin\AdminController@login');
     Route::get('admin_get_users','Admin\AdminController@get_users');
 
+    Route::middleware(['verify.api_token'])->group(function () {
+        Route::post('verify/email','API\EmailApiController@public_verify_email_api');
+        Route::post('find/email','API\EmailApiController@public_find_email_api');
+    });
+
 });
 
 

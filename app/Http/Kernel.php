@@ -35,7 +35,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\UserActive::class 
+            \App\Http\Middleware\UserActive::class
         ],
 
         'api' => [
@@ -63,6 +63,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'LimitRequestAPI'=>\App\Http\Middleware\LimitRequestAPI::class,
         'cors' => \App\Http\Middleware\Cors::class,
+        'verify.api_token' => \App\Http\Middleware\VerifyApiToken::class,
     ];
 
     /**

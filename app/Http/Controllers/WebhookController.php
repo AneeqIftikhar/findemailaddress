@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\WebhookEndpoint;
+use App\WebhookEndpointEvent;
 use Illuminate\Http\Request;
 use App\User;
 use App\Package;
@@ -12,20 +14,23 @@ use App\FastSpring\FastSpringApi;
 use App\PendingSubscriptions;
 class WebhookController extends Controller
 {
+    /*
+     * Webhooks From Fast Spring
+     */
     public function webhook(Request $request)
     {
         $signature = $request->header('X-FS-Signature');
         $json_dump=$request->getContent();
         $s = base64_encode(hash_hmac('sha256', $json_dump, env('FASTSPRING_WEBHOOK_HMAC_SECRET','12345678'), true));
         if($s==$signature)
-        {   
+        {
             $response=json_decode($json_dump,true);
 
             if($response)
             {
                 if($response['events'])
                 {
-                    foreach ($response['events'] as $key => $event) 
+                    foreach ($response['events'] as $key => $event)
                     {
                         if($event['type']=="subscription.activated")
                         {
@@ -123,19 +128,19 @@ class WebhookController extends Controller
                                 $subscription->is_active=0;
                                 $subscription->credits=$user->credits;
                                 $subscription->save();
-                            } 
-                            
+                            }
+
                             $free=Package::where('name','free')->first();
                             $user->package_id=$free->id;
                             $user->save();
-                           
+
 
                             $Webhook=new Webhooks();
                             $Webhook->webhook_dump=$json_dump;
                             $Webhook->user_id=$user->id;
                             $Webhook->save();
 
-                            
+
                         }
                         else if($event['type']=="subscription.deactivated")
                         {
@@ -168,7 +173,7 @@ class WebhookController extends Controller
     	{
     		return "ops";
     	}
-    	
+
     }
     public function update_subscription(Request $request)
     {
@@ -200,7 +205,7 @@ class WebhookController extends Controller
             $subscription->credits=$user->credits;
             $subscription->status=$status;
             $subscription->save();
-           
+
         }
         return $resp;
     }
@@ -227,7 +232,7 @@ class WebhookController extends Controller
             $free=Package::where('name','free')->first();
             $user->package_id=$free->id;
             $user->save();
-           
+
         }
         return $resp;
     }
@@ -252,10 +257,75 @@ class WebhookController extends Controller
                     $subscription->is_active=1;
                     $subscription->save();
                 }
-                
+
             }
-           
+
         }
         return $resp;
+    }
+
+    /*
+     * Our Webhook Management
+     */
+    public function addWebhookEndpoint(Request $request){
+
+        $validatedData = $request->validate([
+            'webhook_url' => 'required|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
+            'webhook_description' => 'string',
+            'webhook_secret' => 'required|string',
+            'webhook_events' => 'required|array|min:1',
+        ]);
+
+        $url = $request->input('webhook_url');
+        $secret = $request->input('webhook_secret');
+        $desc = $request->input('webhook_description');
+        $events = $request->input('webhook_events');
+        $webhook_endpoint = new WebhookEndpoints();
+        $webhook_endpoint->url = $url;
+        $webhook_endpoint->secret = $secret;
+        $webhook_endpoint->description = $desc;
+        $webhook_endpoint->user_id = \Illuminate\Support\Facades\Auth::user()->id;
+        $webhook_endpoint->save();
+
+
+        $endpoint_event_data=[];
+        $endpoint_event_array=[];
+        foreach ($events as $key => $event)
+        {
+            $endpoint_event_data['event_id'] = $event;
+            $endpoint_event_data['endpoint_id'] = $webhook_endpoint->id;
+            $endpoint_event_data['updated_at'] = now();
+            $endpoint_event_data['created_at'] = now();
+            array_push($endpoint_event_array,$endpoint_event_data);
+        }
+        WebhookEndpointEvent::insert($endpoint_event_array);
+
+        return Redirect("api")->with('success', 'Endpoint Added Successfully');
+
+    }
+
+    public function updateWebhookEndpoint(Request $request, WebhookEndpoint $endpoint){
+        $input = $request->all();
+        // dd($input);
+
+        $url = $request->input('webhook_url');
+        $secret = $request->input('webhook_secret');
+        $desc = $request->input('webhook_description');
+        $events = $request->input('webhook_events');
+
+        $endpoint->url = $url;
+        $endpoint->secret = $secret;
+        $endpoint->description = $desc;
+        $endpoint->user_id = Auth::user()->id;
+        $endpoint->save();
+
+        $endpoint->events()->sync($events);
+
+        return Redirect("api")->with('success', 'Endpoint Updated Successfully');
+
+    }
+    public function deleteWebhookEndpoint(WebhookEndpoint $endpoint){
+        $endpoint->delete();
+        return Redirect("api")->with('success', 'Endpoint Deleted Successfully');
     }
 }
