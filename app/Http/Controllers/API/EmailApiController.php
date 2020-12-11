@@ -484,7 +484,7 @@ class EmailApiController extends Controller
                         }
                     }
                     Emails::insert_email($first_name, $last_name, $domain, $email, $status, $user->id, $type, $server_output, $server_status);
-                    return json_encode(array('status' => $status, 'emails' => $email, 'credits_left' => $user->credits));
+                    return json_encode(array('status' => $status, 'email' => $email, 'credits_left' => $user->credits));
                 }
                 else
                 {
