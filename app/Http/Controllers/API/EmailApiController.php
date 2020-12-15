@@ -15,6 +15,7 @@ use App\Failed_Logs;
 use App\Rules\BlackListDomains;
 use App\Rules\IsValidDomain;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Validator;
 use App\Helpers\CurlRequest;
 use App\Helpers\Functions;
@@ -289,7 +290,6 @@ class EmailApiController extends Controller
 
     public function index(){
 
-
         $api = UserApiKey::where('user_id', '=', Auth::id())->get();
         $event = WebhookEvent::all();
         $webhook = WebhookEndpoint::where('user_id', '=', Auth::id())->with('events')->get();
@@ -301,19 +301,27 @@ class EmailApiController extends Controller
     public function generateNewApiKey(){
 
         $user=Auth::user();
-        $api_key_data['api_key']=\App\Helpers\ApiKey::generate_api_key($user);
-
-        if(count($user->api_key)==0)
+        if($user->package->name!='free')
         {
-            $updateAPI = UserApiKey::create(array('api_key' => $api_key_data['api_key'],'expires_at'=>Carbon::now()->addMonths(6),'user_id'=>$user->id));
+            $api_key_data['api_key']=\App\Helpers\ApiKey::generate_api_key($user);
 
+            if(count($user->api_key)==0)
+            {
+                $updateAPI = UserApiKey::create(array('api_key' => $api_key_data['api_key'],'expires_at'=>Carbon::now()->addMonths(6),'user_id'=>$user->id));
+
+            }
+            else
+            {
+                $updateAPI = $user->api_key()->update(array('api_key' => $api_key_data['api_key'],'expires_at'=>Carbon::now()->addMonths(6)));
+
+            }
+            return Redirect("api")->with('success', 'New API key Generated');
         }
         else
         {
-            $updateAPI = $user->api_key()->update(array('api_key' => $api_key_data['api_key'],'expires_at'=>Carbon::now()->addMonths(6)));
-
+            return Redirect::back()->withErrors(['Please upgrade your package to access API']);
         }
-        return Redirect("api")->with('success', 'New API key Generated');
+
 
     }
 

@@ -18,6 +18,9 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
+                                    @if($errors->any())
+                                        <div class="alert alert-danger">{{$errors->first()}}</div>
+                                    @endif
                                     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 mb-md-5 pb-3 border-bottom">
                                         <a role="button" href="{{ url('/generate/api/key') }}" class="btn btn-sm btn-success rounded-pill m-0"><i class="fa fa-refresh mr-1" aria-hidden="true"></i> Generate New Key</a>
                                     </div>
