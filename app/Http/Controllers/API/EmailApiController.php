@@ -65,6 +65,7 @@ class EmailApiController extends Controller
 			{
 				$error=$json_output->curl_error;
 				$status="Not Found";
+                $server_status="-";
 			}
 			else
 			{
