@@ -8,6 +8,7 @@ use App\LoginLog;
 use App\Helpers\UserAgent;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+
 class LoginController extends Controller
 {
     /*
@@ -44,27 +45,29 @@ class LoginController extends Controller
      * The user has been authenticated.
      * Called when user logs in
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed  $user
+     * @param \Illuminate\Http\Request $request
+     * @param mixed $user
      * @return mixed
      */
     function authenticated(Request $request, $user)
     {
-        $data=[];
+        $data = [];
 
-        $user_agent=UserAgent::get_user_agent(request()->ip());
-        $data['user_agent']=json_encode($user_agent);
-        $data['country']=$user_agent['country'];
-        $data['ip']=$user_agent['ip'];
-        $data['login_at']=Carbon::now();
-        $data['user_id']=$user->id;
+        $user_agent = UserAgent::get_user_agent(request()->ip());
+        $data['user_agent'] = json_encode($user_agent);
+        $data['country'] = $user_agent['country'];
+        $data['ip'] = $user_agent['ip'];
+        $data['login_at'] = Carbon::now();
+        $data['user_id'] = $user->id;
         LoginLog::create($data);
     }
+
     public function showLoginForm()
     {
-        if(!session()->has('url.intended'))
-        {
-            session(['url.intended' => url()->previous()]);
+        if (!session()->has('url.intended')) {
+            if (strpos(url()->previous(), 'company') !== false || strpos(url()->previous(), 'people') !== false) {
+                session(['url.intended' => url()->previous()]);
+            }
         }
         return view('auth.login');
     }
