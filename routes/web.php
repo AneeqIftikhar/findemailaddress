@@ -165,6 +165,7 @@ Route::get('linkedin_callback', 'SocialAuthLinkedinController@callback')->name('
 //Route::get('companies','CompaniesController@index');
 Route::get('/company/{slug}','CompaniesController@company');
 Route::get('/people/{slug}','CompaniesController@people');
+Route::post('/getEmail', 'CompaniesController@getEmail')->middleware('verified');
 
 
 /*

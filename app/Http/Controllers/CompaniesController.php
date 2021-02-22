@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Helpers\CurlRequest;
+use Auth;
 
 class CompaniesController extends Controller
 {
@@ -46,8 +47,7 @@ class CompaniesController extends Controller
                 $n_format = number_format($staffCount / 1000000000000, $precision);
                 $suffix = 'T';
             }
-        }
-        else{
+        } else {
             $n_format = "";
             $suffix = "";
         }
@@ -64,5 +64,33 @@ class CompaniesController extends Controller
         $response = json_decode($response);
         $data = $response->data;
         return view('companies.people')->with('json', $data);
+    }
+
+    public function getEmail(Request $request)
+    {
+        $data = [];
+        $slug = $request->slug;
+
+        $user = Auth::user();
+        if ($user->credits > 0) {
+            $url = env('GET_PEOPLES_EMAIL_SERVER_IP') . $slug;
+            $curl = new CurlRequest();
+            $response = $curl->companiesCurl($url);
+            $response = json_decode($response);
+            $data['email'] = $response->data->email;
+            $data['email_status'] = $response->data->email_status;
+            $data['credits'] = $user->credits;
+            $data['credits_left'] = $user->credits-1;
+            $data['email_found'] = 'yes';
+
+            if ($response->data->email_status == 'VALID') {
+                $user->decrement('credits');
+            }
+        } else {
+            $data['credits'] = $user->credits;
+            $data['email_found'] = 'no';
+        }
+        $data = json_encode($data);
+        return $data;
     }
 }

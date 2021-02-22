@@ -18,7 +18,8 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            return redirect('/find');
+//            return redirect('/find');
+            return redirect()->intended('/find');
         }
 
         return $next($request);

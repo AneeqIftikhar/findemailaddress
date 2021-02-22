@@ -29,7 +29,6 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = '/find';
-   
 
     /**
      * Create a new controller instance.
@@ -52,7 +51,7 @@ class LoginController extends Controller
     function authenticated(Request $request, $user)
     {
         $data=[];
-        
+
         $user_agent=UserAgent::get_user_agent(request()->ip());
         $data['user_agent']=json_encode($user_agent);
         $data['country']=$user_agent['country'];
@@ -60,5 +59,13 @@ class LoginController extends Controller
         $data['login_at']=Carbon::now();
         $data['user_id']=$user->id;
         LoginLog::create($data);
+    }
+    public function showLoginForm()
+    {
+        if(!session()->has('url.intended'))
+        {
+            session(['url.intended' => url()->previous()]);
+        }
+        return view('auth.login');
     }
 }

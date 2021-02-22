@@ -9,43 +9,43 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow border-0">
                 <div class="card-header">
                 	<h4>Account Settings</h4>
                 </div>
 
-                	
+
 
                 <div class="card-body">
-                	<div class="card mb-2">
+                	<div class="card mb-4 shadow">
 					  <div class="card-body">
 					    <h5 class="card-title">Account Information</h5>
 		                    <div class="input-group">
-							  
-							  <strong>Package: </strong><p class="ml-2 text-muted">{{strtoupper(Auth::user()->package->name)}}</p>
+
+							  <strong>Package: </strong><p class="ml-2 text-muted"><span class="badge badge-success">{{strtoupper(Auth::user()->package->name)}}</span></p>
 							</div>
 							<div class="input-group mb-2">
-							 
-							  <strong>Credits: </strong><p class="ml-2 text-muted">{{ Auth::user()->credits }}</p>
+
+							  <strong>Credits: </strong><p class="ml-2 text-muted"><span class="badge badge-primary">{{ Auth::user()->credits }}</span></p>
 							</div>
-							
-					    
+
+
 					  </div>
 					</div>
-                	<div class="card mb-2">
+                	<div class="card mb-4 shadow ">
 					  <div class="card-body">
 					    <h5 class="card-title">Personal Information</h5>
 		                    <div class="input-group mb-2 mt-2">
 							  <input type="text" class="form-control" id="full_name" placeholder="Full Name" aria-label="Full Name" aria-describedby="basic-addon2" value="{{ Auth::user()->name }}">
-							  
+
 							</div>
 							<div class="input-group mb-2 mt-2">
 							  <input type="text" class="form-control" id="company_name" placeholder="Company Name" aria-label="Company Name" aria-describedby="basic-addon2" value="{{ Auth::user()->company_name }}">
-							  
+
 							</div>
 							<div class="input-group mb-2 mt-2">
 							  <input type="text" class="form-control" autocomplete="phone" id="phone" placeholder="Phone" aria-label="Phone" aria-describedby="basic-addon2" value="{{ Auth::user()->phone }}">
-							  
+
 							</div>
 							<div class="input-group mb-2 mt-2">
 							  <input type="text" class="form-control" id="email" placeholder="Email" aria-label="Email" aria-describedby="Email" value="{{ Auth::user()->email }}" disabled>
@@ -59,22 +59,22 @@
 							<div class="input-group mb-2 mt-2">
 							    <button class="btn btn-primary" type="button" onclick="update_personal_info()">Update Information</button>
 							</div>
-							
-					    
+
+
 					  </div>
 					</div>
 
-					<div class="card mb-2">
+					<div class="card mb-2 shadow">
 					  <div class="card-body">
 					    <h5 class="card-title">Change Password</h5>
-						   
+
 		                    <div class="input-group mb-2 mt-2">
 							  <input type="password" class="form-control" autocomplete="new-password" placeholder="New Password" aria-label="New Password" aria-describedby="basic-addon2" id="password">
-							  
+
 							</div>
 							<div class="input-group mb-2 mt-2">
 							  <input type="password" class="form-control" placeholder="Confirm Password" aria-label="Confirm Password" aria-describedby="basic-addon2" id="c_password">
-							  
+
 							</div>
 							<span class="invalid-feedback-custom">
                                 <strong id="password_error"></strong>
@@ -85,12 +85,12 @@
 							<div class="input-group">
 							    <button class="btn btn-primary" id="change_password_button" type="button" onclick="update_password()">Update Password</button>
 							</div>
-					    
+
 					  </div>
 					</div>
-                	
 
-					
+
+
                 </div>
             </div>
         </div>
@@ -124,11 +124,11 @@ function update_personal_info()
     }
     else if (company_name && company_name.length>50)
     {
-        document.getElementById('personal_error').innerHTML="Company Name too Long";        
+        document.getElementById('personal_error').innerHTML="Company Name too Long";
     }
     else if (phone && phone.length>20)
     {
-       document.getElementById('personal_error').innerHTML="Phone too Long";  
+       document.getElementById('personal_error').innerHTML="Phone too Long";
     }
     else
     {
@@ -144,29 +144,29 @@ function update_personal_info()
         data['_token']="{{ csrf_token() }}";
         $.ajax({
             method: 'POST',
-            dataType: 'json', 
-            url: 'update_personal_info', 
-            data: data, 
+            dataType: 'json',
+            url: 'update_personal_info',
+            data: data,
             success: function(response){ // What to do if we succeed
-                
+
                 // console.log(response['status']);
                 // console.log(response['message']);
                 localStorage.setItem("status","Success");
                 localStorage.setItem("message",response['message']);
                 window.location.reload();
 
-                
-               
+
+
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                
+
                 if( jqXHR.status === 422 )
                 {
                     $errors = jqXHR.responseJSON;
 
                      $.each( $errors.errors , function( key, value ) {
                             document.getElementById('personal_error').innerHTML=value[0];
-                        
+
                     });
                 }
                 else
@@ -178,7 +178,7 @@ function update_personal_info()
             timeout: 5000 // sets timeout to 5 seconds
         });
     }
-    
+
 }
 function update_password()
 {
@@ -214,11 +214,11 @@ function update_password()
         $('#change_password_button').html('<i class="fa fa-spinner fa-spin"></i>');
     	$.ajax({
         method: 'POST',
-        dataType: 'json', 
-        url: 'update_password', 
-        data: {'password' : password,"_token": "{{ csrf_token() }}"}, 
+        dataType: 'json',
+        url: 'update_password',
+        data: {'password' : password,"_token": "{{ csrf_token() }}"},
         success: function(response){ // What to do if we succeed
-            
+
             // console.log(response['status']);
             // console.log(response['message']);
             if(response['status'] && response['status']=='success')
@@ -231,7 +231,7 @@ function update_password()
                 ({
                     type: 'POST',
                     url: 'logout',
-                    data: {"_token": "{{ csrf_token() }}"}, 
+                    data: {"_token": "{{ csrf_token() }}"},
                     success: function()
                     {
                         $('#change_password_button').html('Update Password');
@@ -245,18 +245,18 @@ function update_password()
             	document.getElementById('password_error').innerHTML=response['message'];
             }
 
-            
-           
+
+
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            
-            
+
+
 
         },
         timeout: 5000 // sets timeout to 5 seconds
     });
     }
-    
+
 }
 
 </script>

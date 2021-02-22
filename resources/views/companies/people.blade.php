@@ -26,7 +26,7 @@
     <div class="container pb-3 pt-0 mt-4" style="">
         <div class="justify-content-center ">
             <div
-                class="card border-0 shadow rounded p-0 col-md-4 mr-5 cardSkew min-height float-left mb-3">
+                class="card border-0 shadow p-0 col-md-4 mr-5 cardSkew min-height float-left mb-3">
                 <div class="col-md-12 p-0 ">
                     <img src="{{url('images/companyCover2.jpg')}}" class="img-fluid p-0"
                          style="border-top-left-radius: 15px;border-top-right-radius: 15px" alt="">
@@ -55,7 +55,7 @@
 
 
             @if($json->position_description != null)
-                <div class="card border-0 shadow rounded p-4 col-md-7">
+                <div class="card border-0 shadow rounded p-4 col-md-7" style="border-radius: 15px !important;">
                     <div class="row ">
 
                         <div class="col-md-12 px-3 py-3">
