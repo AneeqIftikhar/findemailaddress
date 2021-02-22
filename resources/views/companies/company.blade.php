@@ -278,6 +278,7 @@
                                                                                         <a href="{{ route('login') }}" class="btn btn-primary w-100 text-light">Login</a>
                                                                                     </div>
                                                                                     <div class="col-sm-12">
+                                                                                        
                                                                                         <a href="{{ route('register') }}">Don't have an account? Signup</a>
                                                                                     </div>
 
