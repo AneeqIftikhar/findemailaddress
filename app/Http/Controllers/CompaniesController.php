@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CompanyEmails;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Helpers\CurlRequest;
@@ -52,6 +53,7 @@ class CompaniesController extends Controller
             $suffix = "";
         }
         $staffCountShort = $n_format . $suffix;
+
         return view('companies.company')->with('json', $data)->with('staffCount', $staffCountShort);
     }
 
@@ -70,22 +72,46 @@ class CompaniesController extends Controller
     {
         $data = [];
         $slug = $request->slug;
-
         $user = Auth::user();
-        if ($user->credits > 0) {
-            $url = env('GET_PEOPLES_EMAIL_SERVER_IP') . $slug;
-            $curl = new CurlRequest();
-            $response = $curl->companiesCurl($url);
-            $response = json_decode($response);
-            $data['email'] = $response->data->email;
-            $data['email_status'] = $response->data->email_status;
-            $data['credits'] = $user->credits;
-            $data['credits_left'] = $user->credits-1;
-            $data['email_found'] = 'yes';
+        $companyId = $request->companyId;
+        $peopleId = $request->peopleId;
+        $companyEmailsCheck = CompanyEmails::where('user_id', $user->id)->where('company_id', $companyId)->where('people_id', $peopleId)->first();
 
-            if ($response->data->email_status == 'VALID') {
-                $user->decrement('credits');
+
+        if ($user->credits > 0) {
+            if ($companyEmailsCheck == null) {
+                $url = env('GET_PEOPLES_EMAIL_SERVER_IP') . $slug;
+                $curl = new CurlRequest();
+                $response = $curl->companiesCurl($url);
+                $response = json_decode($response);
+                $data['email'] = $response->data->email;
+                $data['email_status'] = $response->data->email_status;
+                $data['credits'] = $user->credits;
+
+                $data['email_found'] = 'yes';
+
+                if ($response->data->email_status == 'VALID') {
+                    $data['credits_left'] = $user->credits - 1;
+                    $user->decrement('credits');
+
+                    $companyEmailAdd = new CompanyEmails();
+                    $companyEmailAdd->user_id = $user->id;
+                    $companyEmailAdd->company_id = $companyId;
+                    $companyEmailAdd->people_id = $peopleId;
+                    $companyEmailAdd->save();
+                }
+            } else {
+                $url = env('GET_PEOPLES_EMAIL_SERVER_IP') . $slug;
+                $curl = new CurlRequest();
+                $response = $curl->companiesCurl($url);
+                $response = json_decode($response);
+                $data['email'] = $response->data->email;
+                $data['email_status'] = $response->data->email_status;
+                $data['credits'] = $user->credits;
+                $data['credits_left'] = $user->credits;
+                $data['email_found'] = 'yes';
             }
+
         } else {
             $data['credits'] = $user->credits;
             $data['email_found'] = 'no';

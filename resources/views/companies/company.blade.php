@@ -177,8 +177,9 @@
                                             class="fab fa-linkedin-in" aria-hidden="true"></i></a></h4>
 
                                 <small class="text-dark"><b>Industry: </b>{{$json->industry[0]->name}}</small>
+                                @if($json->domain != null)
                                 <p class="mb-1"><a rel="nofollow" href="{{$json->domain}}" class="card-text mb-0">Visit Website</a></p>
-
+                                @endif
                                 @if($json->tagline != null)
                                     <p class="card-text font-italic">"{{$json->tagline}}"</p>
                                 @endif
@@ -258,15 +259,15 @@
 
                                                             <div
                                                                 class="col-sm-6 px-0 py-3 pr-3 px-3 d-flex justify-content-center">
-                                                                <div class=" text-center  align-self-center w-75">
+                                                                <div class=" text-center  align-self-center w-100">
                                                                     @auth
-                                                                        <button data-id="{{$people->id}}" data-slug="{{$people->slug}}" data-first="{{$people->first_name}}" data-last="{{$people->last_name}}" data-domain="{{$json->domain}}" class="btn btn-outline-primary btn-sm w-100 getEmail">
-                                                                            Get {{$people->first_name."'s"}} Email
+                                                                        <button data-id="{{$people->id}}" data-companyid="{{$json->id}}" data-slug="{{$people->slug}}" data-first="{{$people->first_name}}" data-last="{{$people->last_name}}" data-domain="{{$json->domain}}" class="btn btn-outline-primary btn-sm w-50 getEmail">
+                                                                            Get Email
                                                                         </button>
                                                                     @endauth
                                                                     @guest
-                                                                        <button data-toggle="modal" data-target=".bd-example-modal-sm" class="btn btn-outline-primary btn-sm w-100">
-                                                                            Get {{$people->first_name."'s"}} Email
+                                                                        <button data-toggle="modal" data-target=".bd-example-modal-sm" class="btn btn-outline-primary btn-sm w-50">
+                                                                            Get Email
                                                                         </button>
 
                                                                         <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -334,6 +335,8 @@
             $('.getEmail').click(function () {
                 var buttonid = $(this).attr('data-id');
                 var slug = $(this).attr('data-slug');
+                var companyId = $(this).attr('data-companyid');
+                var peopleId = $(this).attr('data-id');
                 var buttonOldText = $('button[data-id=' + buttonid + ']').text();
 
                 $('button[data-id=' + buttonid + ']').text('Loading');
@@ -342,7 +345,7 @@
                 $.ajax({
                     method: 'POST',
                     dataType: 'json',
-                    data: {'slug': slug, "_token": "{{ csrf_token() }}"},
+                    data: {'slug': slug, 'companyId': companyId, 'peopleId': peopleId ,"_token": "{{ csrf_token() }}"},
                     url: '{{url('/getEmail')}}',
                     success: function (response) {
                         if ((response['email'] != null) && (response['email_found'] == 'yes') && (response['email_status'] == 'VALID')) {

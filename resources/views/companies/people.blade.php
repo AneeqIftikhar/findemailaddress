@@ -46,7 +46,7 @@
                             <small class="text-muted">{{$json->position}} at<b> {{$json->company->name}} </b></small>
                             <p class="card-text">{{$json->geo_region}}</p>
 
-                            <button class="btn btn-outline-primary btn-sm w-100">Get {{$json->first_name."'s"}} Email
+                            <button class="btn btn-outline-primary btn-sm w-100">Get Email
                             </button>
                         </div>
                     </div>
