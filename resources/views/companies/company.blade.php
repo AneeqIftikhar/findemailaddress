@@ -318,7 +318,7 @@
                                 <h4 class="modal-title">Sorry!</h4>
                             </div>
                             <div class="modal-body">
-                                <p class="text-center errorTextModal">Your transaction has failed. Please go back and try again.</p>
+                                <p class="text-center errorTextModal">Your request has failed. Please go back and try again.</p>
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-danger btn-block" data-dismiss="modal">OK</button>

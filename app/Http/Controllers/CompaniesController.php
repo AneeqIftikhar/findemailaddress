@@ -65,6 +65,7 @@ class CompaniesController extends Controller
         $response = $curl->companiesCurl($url);
         $response = json_decode($response);
         $data = $response->data;
+
         return view('companies.people')->with('json', $data);
     }
 
