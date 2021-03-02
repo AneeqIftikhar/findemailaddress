@@ -8,6 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title> @yield('page') - {{ config('app.name', 'Find Email Address') }}</title>
+    <meta name="description" content="@yield('description')">
 
     <!-- Scripts -->
 

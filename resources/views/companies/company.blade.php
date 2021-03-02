@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('page', $json->name."'s Employees Email | ".  $json->name."'s Emails")
+@section('description', $json->name."'s Employees Email, ".  $json->name."'s C-level Executives and Directors Email Addresses")
 @section('content')
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
