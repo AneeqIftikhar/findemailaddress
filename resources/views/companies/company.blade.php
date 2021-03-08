@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('page', $json->name."'s Employees Email | ".  $json->name."'s Emails")
+@section('page', $json->name." Employees Email Addresses")
 @section('description', $json->name."'s Employees Email, ".  $json->name."'s C-level Executives and Directors Email Addresses")
 @section('content')
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -145,6 +145,7 @@
     </style>
 
     <div class="container pb-3 pt-0 mt-4" style="">
+
         <div class="justify-content-center">
             <div>
                 <div
@@ -179,7 +180,7 @@
 
                                 <small class="text-dark"><b>Industry: </b>{{$json->industry[0]->name}}</small>
                                 @if($json->domain != null)
-                                <p class="mb-1"><a rel="nofollow" href="{{$json->domain}}" class="card-text mb-0">Visit Website</a></p>
+                                    <p class="mb-1"><a rel="nofollow" href="{{$json->domain}}" class="card-text mb-0">Visit Website</a></p>
                                 @endif
                                 @if($json->tagline != null)
                                     <p class="card-text font-italic">"{{$json->tagline}}"</p>
@@ -262,7 +263,8 @@
                                                                 class="col-sm-6 px-0 py-3 pr-3 px-3 d-flex justify-content-center">
                                                                 <div class=" text-center  align-self-center w-100">
                                                                     @auth
-                                                                        <button data-id="{{$people->id}}" data-companyid="{{$json->id}}" data-slug="{{$people->slug}}" data-first="{{$people->first_name}}" data-last="{{$people->last_name}}" data-domain="{{$json->domain}}" class="btn btn-outline-primary btn-sm w-50 getEmail">
+                                                                        <button data-id="{{$people->id}}" data-companyid="{{$json->id}}" data-slug="{{$people->slug}}" data-first="{{$people->first_name}}" data-last="{{$people->last_name}}" data-domain="{{$json->domain}}"
+                                                                                class="btn btn-outline-primary btn-sm w-50 getEmail">
                                                                             Get Email
                                                                         </button>
                                                                     @endauth
@@ -330,44 +332,45 @@
 
             </div>
         </div>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
 
-            $('.getEmail').click(function () {
-                var buttonid = $(this).attr('data-id');
-                var slug = $(this).attr('data-slug');
-                var companyId = $(this).attr('data-companyid');
-                var peopleId = $(this).attr('data-id');
-                var buttonOldText = $('button[data-id=' + buttonid + ']').text();
+        $('.getEmail').click(function () {
+            var buttonid = $(this).attr('data-id');
+            var slug = $(this).attr('data-slug');
+            var companyId = $(this).attr('data-companyid');
+            var peopleId = $(this).attr('data-id');
+            var buttonOldText = $('button[data-id=' + buttonid + ']').text();
 
-                $('button[data-id=' + buttonid + ']').text('Loading');
-                $('button[data-id=' + buttonid + ']').attr('disabled', '');
+            $('button[data-id=' + buttonid + ']').text('Loading');
+            $('button[data-id=' + buttonid + ']').attr('disabled', '');
 
-                $.ajax({
-                    method: 'POST',
-                    dataType: 'json',
-                    data: {'slug': slug, 'companyId': companyId, 'peopleId': peopleId ,"_token": "{{ csrf_token() }}"},
-                    url: '{{url('/getEmail')}}',
-                    success: function (response) {
-                        if ((response['email'] != null) && (response['email_found'] == 'yes') && (response['email_status'] == 'VALID')) {
-                            $('button[data-id=' + buttonid + ']').replaceWith('<small class="text-success">' + response['email'] + '</small>');
-                            $('#credits_left_span').text(response['credits_left']);
-                        } else if ((response['email'] != null) && (response['email_found'] == 'yes') && (response['email_status'] == 'RISKY')) {
-                            $('button[data-id=' + buttonid + ']').replaceWith('<small class="text-danger">' + response['email'] + '</small>');
-                        } else if ((response['email'] != null) && (response['email_found'] == 'yes') && (response['email_status'] == 'CATCH_ALL')) {
-                            $('button[data-id=' + buttonid + ']').replaceWith('<small class="text-warning">' + response['email'] + '</small>');
-                        } else if (response['email_found'] == 'no') {
-                            $('button[data-id=' + buttonid + ']').removeAttr('disabled');
-                            $('button[data-id=' + buttonid + ']').text(buttonOldText);
-                            $('.errorTextModal').text('You do not have enough credits.');
-                            $('#errorModal').modal('show');
-                        }else{
-                            $('button[data-id=' + buttonid + ']').replaceWith('<small class="text-danger">Email Not Found</small>');
-                        }
+            $.ajax({
+                method: 'POST',
+                dataType: 'json',
+                data: {'slug': slug, 'companyId': companyId, 'peopleId': peopleId, "_token": "{{ csrf_token() }}"},
+                url: '{{url('/getEmail')}}',
+                success: function (response) {
+                    if ((response['email'] != null) && (response['email_found'] == 'yes') && (response['email_status'] == 'VALID')) {
+                        $('button[data-id=' + buttonid + ']').replaceWith('<small class="text-success">' + response['email'] + '</small>');
+                        $('#credits_left_span').text(response['credits_left']);
+                    } else if ((response['email'] != null) && (response['email_found'] == 'yes') && (response['email_status'] == 'RISKY')) {
+                        $('button[data-id=' + buttonid + ']').replaceWith('<small class="text-danger">' + response['email'] + '</small>');
+                    } else if ((response['email'] != null) && (response['email_found'] == 'yes') && (response['email_status'] == 'CATCH_ALL')) {
+                        $('button[data-id=' + buttonid + ']').replaceWith('<small class="text-warning">' + response['email'] + '</small>');
+                    } else if (response['email_found'] == 'no') {
+                        $('button[data-id=' + buttonid + ']').removeAttr('disabled');
+                        $('button[data-id=' + buttonid + ']').text(buttonOldText);
+                        $('.errorTextModal').text('You do not have enough credits.');
+                        $('#errorModal').modal('show');
+                    } else {
+                        $('button[data-id=' + buttonid + ']').replaceWith('<small class="text-danger">Email Not Found</small>');
                     }
-                });
+                }
             });
+        });
 
-        </script>
+    </script>
 
 @endsection
