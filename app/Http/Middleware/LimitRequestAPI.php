@@ -25,7 +25,7 @@ class LimitRequestAPI
         }
         if($pr=PluginRequest::where('ip',$ip)->first())
         {
-            if($pr->count==10)
+            if($pr->count>=5)
             {
                 $errors=array(
                     'Limit Reached'=>['You have reached your credit limit. Register to claim more credits.']
